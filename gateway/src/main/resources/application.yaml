@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        healthCheckPath: /actuator/health
+        healthCheckInterval: 20s
+        instanceId: ${spring.application.name}:${random.value}
+
+management:
+  endpoint:
+    health:
+      group:
+        custom:
+          include=diskSpace,ping
+
+server:
+  port: 8765
+  error:
+    whitelabel:
+      enabled: true
+
+logging:
+  level:
+    org.springframework.web: INFO
+
+# Secret to generate tokens, used in both auth service and in gateway
+auth-service:
+  jwtSecret: a3ZzApRSDQF5E9cH3JFV1LNBzOtQEiv6OumGJudd3Ao=
