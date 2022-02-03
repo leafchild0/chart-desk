@@ -17,6 +17,8 @@ import io.jsonwebtoken.security.Keys;
 /**
  * Provider for JWT tokens
  * Manages, generate and validate tokens
+ *
+ * @author vmalyshev
  */
 @Component
 public class JwtTokenProvider {

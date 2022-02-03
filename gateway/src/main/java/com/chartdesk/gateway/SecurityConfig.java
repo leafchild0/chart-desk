@@ -41,8 +41,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 // Allow login and register
                 .antMatchers("/auth/login", "/auth/register").permitAll()
-                // Allow health-check
-                .antMatchers("/health-check").permitAll()
+                // Allow all for actuator
+                .antMatchers("/actuator/**").permitAll()
                 .anyRequest()
                 .authenticated();
     }
