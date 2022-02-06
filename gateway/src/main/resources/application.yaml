@@ -9,13 +9,12 @@ spring:
         healthCheckPath: /actuator/health
         healthCheckInterval: 20s
         instanceId: ${spring.application.name}:${random.value}
-
-management:
-  endpoint:
-    health:
-      group:
-        custom:
-          include=diskSpace,ping
+    gateway:
+      routes:
+        # =====================================
+        # routes to be listed here
+        # Java routing can be used as well, but to change it - recompilation and restart would be needed
+        # Properties can be changed on the fly
 
 server:
   port: 8765
