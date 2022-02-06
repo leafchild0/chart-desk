@@ -1,50 +1,53 @@
 package com.chartdesk.gateway;
 
-import javax.servlet.http.HttpServletResponse;
-
 import com.chartdesk.gateway.security.JwtTokenAuthenticationFilter;
 import com.chartdesk.gateway.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.web.server.SecurityWebFilterChain;
+import reactor.core.publisher.Mono;
 
 /**
  * Security config for the gateway
  *
  * @author vmalyshev
  */
-@EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableWebFluxSecurity
+public class SecurityConfig {
     @Autowired
     private JwtTokenProvider tokenProvider;
 
-    @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception {
-
-        httpSecurity
-                .csrf().disable()
-                .logout().disable()
+    @Bean
+    SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) {
+        return http
+                .httpBasic().disable()
                 .formLogin().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .anonymous()
-                .and()
-                // Decided to not add error-handling here, but instead each service will do it
-                .exceptionHandling().authenticationEntryPoint(
-                        (req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED))
-                .and()
-                .addFilterAfter(new JwtTokenAuthenticationFilter(tokenProvider),
-                        UsernamePasswordAuthenticationFilter.class)
-                .authorizeRequests()
+                .logout().disable()
+                .exceptionHandling()
+                .authenticationEntryPoint((swe, e) ->
+                        Mono.fromRunnable(() -> {
+                            swe.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                        })
+                )
+                .accessDeniedHandler((swe, e) ->
+                        Mono.fromRunnable(() -> {
+                            swe.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
+                        })
+                ).and()
+                .addFilterAfter(new JwtTokenAuthenticationFilter(tokenProvider), SecurityWebFiltersOrder.CORS)
+                .csrf().disable().authorizeExchange()
+                //.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 // Allow login and register
-                .antMatchers("/auth/login", "/auth/register").permitAll()
+                .pathMatchers("/auth/login", "/auth/register").permitAll()
                 // Allow all for actuator
-                .antMatchers("/actuator/**").permitAll()
-                .anyRequest()
-                .authenticated();
+                .pathMatchers("/actuator/**").permitAll()
+                .anyExchange().authenticated()
+                .and()
+                .build();
     }
 }
 

@@ -1,26 +1,25 @@
 package com.chartdesk.gateway.security;
 
 import io.jsonwebtoken.Claims;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
-import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.WebFilter;
+import org.springframework.web.server.WebFilterChain;
+import reactor.core.publisher.Mono;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Filter that initiates token validation
+ * Filter that initiates token validation, works for all routes ONLY
  *
  * @author vmalyshev
  */
-public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
+public class JwtTokenAuthenticationFilter implements WebFilter {
     public static final String PREFIX = "Bearer ";
     private final JwtTokenProvider tokenProvider;
 
@@ -28,10 +27,18 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
         this.tokenProvider = tokenProvider;
     }
 
+    private String getJwtFromRequest(ServerHttpRequest request) {
+
+        String bearerToken = request.getHeaders().getFirst("Authorization");
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(PREFIX)) {
+            return bearerToken.substring(7);
+        }
+        return null;
+    }
+
     @Override
-    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse rsp, FilterChain filterChain)
-            throws ServletException, IOException {
-        String token = getJwtFromRequest(req);
+    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+        String token = getJwtFromRequest(exchange.getRequest());
         if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
             try {
 
@@ -50,15 +57,6 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.clearContext();
             }
         }
-        filterChain.doFilter(req, rsp);
-    }
-
-    private String getJwtFromRequest(HttpServletRequest request) {
-
-        String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(PREFIX)) {
-            return bearerToken.substring(7);
-        }
-        return null;
+        return chain.filter(exchange);
     }
 }
