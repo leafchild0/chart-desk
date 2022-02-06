@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.reactive.EnableWebFlux
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
 import reactor.core.publisher.Mono;
 
 /**
@@ -27,6 +28,8 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .formLogin().disable()
                 .logout().disable()
+                // Disable session
+                .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
                 .exceptionHandling()
                 .authenticationEntryPoint((swe, e) ->
                         Mono.fromRunnable(() -> {
@@ -40,7 +43,6 @@ public class SecurityConfig {
                 ).and()
                 .addFilterAfter(new JwtTokenAuthenticationFilter(tokenProvider), SecurityWebFiltersOrder.CORS)
                 .csrf().disable().authorizeExchange()
-                //.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 // Allow login and register
                 .pathMatchers("/auth/login", "/auth/register").permitAll()
                 // Allow all for actuator
