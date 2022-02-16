@@ -13,7 +13,7 @@ helm repo add test http://localhost:8080/
 helm plugin install https://github.com/chartmuseum/helm-push.git
 ```
 ```
-helm push mysql-1.6.0.tgz test
+helm cm-push mysql-1.6.0.tgz test
 ```
 optional params:
 --username=test

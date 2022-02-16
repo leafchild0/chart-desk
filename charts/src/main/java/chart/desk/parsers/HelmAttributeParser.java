@@ -29,24 +29,22 @@ public class HelmAttributeParser
     this.provenanceParser = provenanceParser;
   }
 
-  public HelmAttributes getAttributes(final AssetKind assetKind, final byte[] bytes) throws IOException {
-    try (InputStream is = new ByteArrayInputStream(bytes)) {
+  public HelmAttributes getAttributes(final AssetKind assetKind, final InputStream inputStream) throws IOException {
       switch (assetKind) {
         case HELM_PACKAGE:
-          return getAttributesFromInputStream(is);
+          return getAttributesFromInputStream(inputStream);
         case HELM_PROVENANCE:
-          return getAttributesProvenanceFromInputStream(is);
+          return getAttributesProvenanceFromInputStream(inputStream);
         default:
           return new HelmAttributes();
       }
-    }
   }
 
-  public HelmAttributes getAttributesProvenanceFromInputStream(final InputStream inputStream) throws IOException {
+  private HelmAttributes getAttributesProvenanceFromInputStream(final InputStream inputStream) throws IOException {
     return provenanceParser.parse(inputStream);
   }
 
-  public HelmAttributes getAttributesFromInputStream(final InputStream inputStream) throws IOException {
+  private HelmAttributes getAttributesFromInputStream(final InputStream inputStream) throws IOException {
     try (InputStream is = tgzParser.getChartFromInputStream(inputStream)) {
       return new HelmAttributes(yamlParser.load(is));
     }
