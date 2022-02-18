@@ -9,6 +9,9 @@ spring:
         healthCheckPath: /actuator/health
         healthCheckInterval: 20s
         instanceId: ${spring.application.name}:${random.value}
+      config:
+        enabled: true
+        format: yaml
     gateway:
       routes:
         # =====================================
