@@ -72,18 +72,9 @@ public class ChartController {
                 + "generated: 2016-10-06T16:23:20.499029981-06:00";
     }
 
-    // TODO: ext mapping
-    @GetMapping("/{filename}")
-    public byte[] getPackage(@RequestParam String filename) {
-        return null;
-    }
-
     @PostMapping(value = "/api/charts", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Mono<HelmAttributes>> process(@RequestPart("chart") Flux<FilePart> fileParts) {
-        Mono<HelmAttributes> attributes = fileParts.flatMap(Part::content)
-                .map(DataBuffer::asInputStream)
-                .reduce(SequenceInputStream::new)
-                .map(inputStream -> getHelmAttributes(inputStream, AssetKind.HELM_PACKAGE));
+    public ResponseEntity<Mono<HelmAttributes>> uploadChart(@RequestPart("chart") Flux<FilePart> fileParts) {
+        Mono<HelmAttributes> attributes = getHelmAttributes(fileParts, AssetKind.HELM_PACKAGE);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(attributes);
@@ -91,13 +82,17 @@ public class ChartController {
 
     @PostMapping("/api/prov")
     public ResponseEntity<Mono<HelmAttributes>> uploadProvinance(@RequestPart("chart") Flux<FilePart> fileParts) {
-        Mono<HelmAttributes> attributes = fileParts.flatMap(Part::content)
-                .map(DataBuffer::asInputStream)
-                .reduce(SequenceInputStream::new)
-                .map(inputStream -> getHelmAttributes(inputStream, AssetKind.HELM_PROVENANCE));
+        Mono<HelmAttributes> attributes = getHelmAttributes(fileParts, AssetKind.HELM_PROVENANCE);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(attributes);
+    }
+
+    private Mono<HelmAttributes> getHelmAttributes(Flux<FilePart> fileParts, AssetKind helmProvenance) {
+        return fileParts.flatMap(Part::content)
+                .map(DataBuffer::asInputStream)
+                .reduce(SequenceInputStream::new)
+                .map(inputStream -> getHelmAttributes(inputStream, helmProvenance));
     }
 
     private HelmAttributes getHelmAttributes(InputStream inputStream, AssetKind helmPackage) {
