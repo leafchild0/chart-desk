@@ -9,22 +9,19 @@ auth-service:
 
 spring:
   datasource:
-    url: jdbc:h2:~/test
+    driver-class-name: org.postgresql.Driver
+    username: chartdesk
+    password: Q1w2e3r4
+    url: jdbc:postgresql://localhost/chartdesk
+    platform: postgres
     initialization-mode: always
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-    schema: classpath:db/schema.sql
-    data: classpath:db/data.sql
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+    continue-on-error: true
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    generate-ddl: false
-    hibernate.ddl-auto: update
     show-sql: true
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    database: postgresql
   application:
     name: auth-service
   cloud:
