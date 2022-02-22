@@ -1,6 +1,6 @@
 package com.chartdesk.auth.security;
 
-import com.chartdesk.auth.jwt.JwtTokenProvider;
+import com.chartdesk.auth.jwt.JwtTokenUtil;
 import io.jsonwebtoken.Claims;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -21,18 +21,18 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class AuthenticationManager implements ReactiveAuthenticationManager {
 
-    private JwtTokenProvider jwtTokenProvider;
+    private JwtTokenUtil jwtTokenUtil;
 
     @Override
     @SuppressWarnings("unchecked")
     public Mono<Authentication> authenticate(Authentication authentication) {
         String authToken = authentication.getCredentials().toString();
-        String username = jwtTokenProvider.getUserIdFromJWT(authToken);
-        return Mono.just(jwtTokenProvider.validateToken(authToken))
+        String username = jwtTokenUtil.getUserIdFromJWT(authToken);
+        return Mono.just(jwtTokenUtil.validateToken(authToken))
                 .filter(valid -> valid)
                 .switchIfEmpty(Mono.empty())
                 .map(valid -> {
-                    Claims claims = jwtTokenProvider.getAllClaims(authToken);
+                    Claims claims = jwtTokenUtil.getAllClaims(authToken);
                     List<String> rolesMap = claims.get("role", List.class);
                     return new UsernamePasswordAuthenticationToken(
                             username,
