@@ -13,5 +13,6 @@ CREATE TABLE CHARTS
     sources     TEXT,
     maintainers TEXT,
     urls        TEXT,
+    prov_urls   TEXT,
     created     timestamp without time zone NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'UTC')
 );

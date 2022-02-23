@@ -20,6 +20,6 @@ public class ChartService {
     public ChartModel save(HelmAttributes attributes) {
         // TODO: store chart to s3 and set urls as second param
         // TODO: calculate digest
-        return chartRepository.save(new ChartModel(attributes, null, Collections.emptyList()));
+        return chartRepository.save(new ChartModel(attributes, null, Collections.emptyList(), Collections.emptyList()));
     }
 }
