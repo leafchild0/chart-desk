@@ -1,8 +1,11 @@
 package chart.desk.controllers;
 
 import chart.desk.model.AssetKind;
+import chart.desk.model.ChartEntry;
 import chart.desk.model.HelmAttributes;
+import chart.desk.model.db.ChartModel;
 import chart.desk.parsers.HelmAttributeParser;
+import chart.desk.services.ChartService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +17,6 @@ import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.http.codec.multipart.Part;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
@@ -23,6 +25,7 @@ import reactor.core.publisher.Mono;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.SequenceInputStream;
+import java.util.function.Function;
 
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @RestController
@@ -30,6 +33,7 @@ import java.io.SequenceInputStream;
 public class ChartController {
 
     private final HelmAttributeParser helmAttributeParser;
+    private final ChartService chartService;
 
     // TODO: just hardcode some index for push helm cmd
     // need to fetch it from database later and maybe cache here with caffeine cache etc
@@ -73,11 +77,13 @@ public class ChartController {
     }
 
     @PostMapping(value = "/api/charts", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Mono<HelmAttributes>> uploadChart(@RequestPart("chart") Flux<FilePart> fileParts) {
-        Mono<HelmAttributes> attributes = getHelmAttributes(fileParts, AssetKind.HELM_PACKAGE);
+    public ResponseEntity<Mono<ChartModel>> uploadChart(@RequestPart("chart") Flux<FilePart> fileParts) {
+        Mono<ChartModel> attributesMono = getHelmAttributes(fileParts, AssetKind.HELM_PACKAGE)
+                .map(chartService::save);
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(attributes);
+                .body(attributesMono);
     }
 
     @PostMapping("/api/prov")
