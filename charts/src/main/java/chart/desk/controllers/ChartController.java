@@ -78,12 +78,12 @@ public class ChartController {
 
     @PostMapping(value = "/api/charts", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Mono<ChartModel>> uploadChart(@RequestPart("chart") Flux<FilePart> fileParts) {
-        Mono<ChartModel> attributesMono = getHelmAttributes(fileParts, AssetKind.HELM_PACKAGE)
+        Mono<ChartModel> attributes = getHelmAttributes(fileParts, AssetKind.HELM_PACKAGE)
                 .map(chartService::save);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(attributesMono);
+                .body(attributes);
     }
 
     @PostMapping("/api/prov")
