@@ -8,6 +8,7 @@ subprojects {
     version = '0.0.1'
 
     apply plugin: 'java'
+    apply plugin: 'idea'
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'java-library'
 
@@ -17,7 +18,7 @@ subprojects {
 
     dependencyManagement {
         imports {
-            mavenBom("org.springframework.boot:spring-boot-dependencies:2.1.7.RELEASE")
+            mavenBom("org.springframework.boot:spring-boot-dependencies:2.2.2.RELEASE")
         }
     }
 
