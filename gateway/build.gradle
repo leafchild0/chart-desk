@@ -2,7 +2,7 @@ plugins {
     id 'application'
 }
 
-group = 'com.poc.auth-buddy'
+group = 'com.chartdesk.gateway'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
