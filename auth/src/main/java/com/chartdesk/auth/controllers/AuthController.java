@@ -2,6 +2,7 @@ package com.chartdesk.auth.controllers;
 
 import com.chartdesk.auth.dto.LoginDTO;
 import com.chartdesk.auth.dto.SignUpDTO;
+import com.chartdesk.auth.dto.UserDTO;
 import com.chartdesk.auth.jwt.JwtTokenUtil;
 import com.chartdesk.auth.service.CustomUserDetailsService;
 import lombok.extern.slf4j.Slf4j;
@@ -52,10 +53,10 @@ public class AuthController {
      * @return - token as string
      */
     @PostMapping("/register")
-    public Mono<ResponseEntity<Object>> register(@RequestBody SignUpDTO signUpDTO) {
+    public Mono<ResponseEntity<UserDTO>> register(@RequestBody SignUpDTO signUpDTO) {
 
         return userDetailsService.createNewUser(signUpDTO)
-                .map(user -> ResponseEntity.status(HttpStatus.CREATED).build())
-                .switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()));
+                .map(user -> ResponseEntity.ok(user.toDto()))
+                .switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build()));
     }
 }

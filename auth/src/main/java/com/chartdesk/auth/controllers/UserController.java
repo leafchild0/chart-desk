@@ -1,5 +1,6 @@
 package com.chartdesk.auth.controllers;
 
+import com.chartdesk.auth.dto.UserDTO;
 import com.chartdesk.auth.model.User;
 import com.chartdesk.auth.service.CustomUserDetailsService;
 import lombok.extern.slf4j.Slf4j;
@@ -8,10 +9,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * API to get infor about users
@@ -21,6 +26,7 @@ import java.util.List;
  */
 @RestController
 @Slf4j
+@RequestMapping("/user")
 public class UserController {
 
     private final CustomUserDetailsService userDetailsService;
@@ -35,21 +41,34 @@ public class UserController {
      * @param userId - id of the user
      * @return - found User
      */
-    @GetMapping("/user/{userId}")
+    @GetMapping("/{userId}")
     @PreAuthorize("hasRole('USER')")
-    public Mono<ResponseEntity<User>> getUserById(@PathVariable String userId) {
+    public Mono<ResponseEntity<UserDTO>> getUserById(@PathVariable String userId) {
         return Mono.just(userDetailsService.findByUserId(userId)
-                .map(ResponseEntity::ok)
+                .map(u -> ResponseEntity.ok(u.toDto()))
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build()));
     }
 
     /**
      * Get list of users for admin user
      */
-    @GetMapping("/users")
+    @GetMapping("/")
     @PreAuthorize("hasRole('ADMIN')")
-    public Mono<ResponseEntity<List<User>>> getAllUsers() {
+    public Mono<ResponseEntity<List<UserDTO>>> getAllUsers() {
+        return Mono.just(ResponseEntity.ok(
+                userDetailsService.findAllUsers().stream()
+                        .map(User::toDto)
+                .collect(Collectors.toList())));
+    }
 
-        return Mono.just(ResponseEntity.ok(userDetailsService.findAllUsers()));
+    /**
+     * Update user by id
+     */
+    @PutMapping("/")
+    @PreAuthorize("hasRole('USER')")
+    public Mono<ResponseEntity<UserDTO>> updateUser(@RequestBody UserDTO user) {
+        return Mono.just(userDetailsService.updateUser(user)
+                .map(u -> ResponseEntity.ok(u.toDto()))
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build()));
     }
 }
