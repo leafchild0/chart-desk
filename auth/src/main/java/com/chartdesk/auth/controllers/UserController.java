@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * API to get infor about users
+ * API to get info about users
  *
  * @author vmalyshev
  * @date 22.02.2022
@@ -69,6 +70,17 @@ public class UserController {
     public Mono<ResponseEntity<UserDTO>> updateUser(@RequestBody UserDTO user) {
         return Mono.just(userDetailsService.updateUser(user)
                 .map(u -> ResponseEntity.ok(u.toDto()))
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build()));
+    }
+
+    /**
+     * Disable user
+     */
+    @PostMapping("/{userId}/disable")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Mono<ResponseEntity<Object>> disableUser(@PathVariable String userId) {
+        return Mono.just(userDetailsService.disableUser(userId)
+                .map(u -> ResponseEntity.ok().build())
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build()));
     }
 }

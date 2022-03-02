@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 /**
+ * Auth API, login and register
+ *
  * @author vmalyshev
  * @date 22.02.2022
  */

@@ -77,21 +77,27 @@ public class CustomUserDetailsService implements ReactiveUserDetailsService
 	 * @return all users
 	 */
 	public List<User> findAllUsers() {
-		List<User> allUsers = new ArrayList<>();
-		userRepository.findAll().forEach(allUsers::add);
-
-		return allUsers;
+		return userRepository.findByEnabledTrue();
 	}
 
 	/**
-	 * Updates user with passed data withid
-	 * @param user -
-	 * @return
+	 * Updates user with passed data with id
 	 */
 	public Optional<User> updateUser(UserDTO user) {
 		return findByUserId(user.getUserId()).map(found -> {
 			found.setEmail(user.getEmail());
 			found.setUsername(user.getUsername());
+
+			return userRepository.save(found);
+		});
+	}
+
+	/**
+	 * Disables user by passed id
+	 */
+	public Optional<User> disableUser(String userId) {
+		return findByUserId(userId).map(found -> {
+			found.setEnabled(false);
 
 			return userRepository.save(found);
 		});
