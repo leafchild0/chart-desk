@@ -12,6 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 /**
  * Custom user service
  *
@@ -35,6 +39,11 @@ public class CustomUserDetailsService implements ReactiveUserDetailsService
 		return userRepository.findByUsername(username).isPresent();
 	}
 
+	/**
+	 * Create new user from passed dto
+	 * @param registerDTO - dto with data
+	 * @return - newly created user
+	 */
 	public Mono<User> createNewUser(SignUpDTO registerDTO)
 	{
 		if (existsByUsername(registerDTO.getUsername())) {
@@ -45,8 +54,31 @@ public class CustomUserDetailsService implements ReactiveUserDetailsService
 		return Mono.just(userRepository.save(user));
 	}
 
+	/**
+	 * Finds user by name, used in auth
+	 * @param username - username to find
+	 * @return user details
+	 */
 	@Override
 	public Mono<UserDetails> findByUsername(String username) {
 		return Mono.justOrEmpty(UserPrincipal.create(userRepository.findByUsername(username)));
+	}
+
+	/**
+	 * Find user by passed id, should be long
+	 */
+	public Optional<User> findByUserId(String userId) {
+		return userRepository.findById(Long.valueOf(userId));
+	}
+
+	/**
+	 * Find all users for admin purposes
+	 * @return all users
+	 */
+	public List<User> findAllUsers() {
+		List<User> allUsers = new ArrayList<>();
+		userRepository.findAll().forEach(allUsers::add);
+
+		return allUsers;
 	}
 }
