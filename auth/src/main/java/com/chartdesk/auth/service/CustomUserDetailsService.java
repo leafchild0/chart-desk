@@ -1,6 +1,7 @@
 package com.chartdesk.auth.service;
 
 import com.chartdesk.auth.dto.SignUpDTO;
+import com.chartdesk.auth.dto.UserDTO;
 import com.chartdesk.auth.model.User;
 import com.chartdesk.auth.repository.UserRepository;
 import com.chartdesk.auth.security.UserPrincipal;
@@ -80,5 +81,19 @@ public class CustomUserDetailsService implements ReactiveUserDetailsService
 		userRepository.findAll().forEach(allUsers::add);
 
 		return allUsers;
+	}
+
+	/**
+	 * Updates user with passed data withid
+	 * @param user -
+	 * @return
+	 */
+	public Optional<User> updateUser(UserDTO user) {
+		return findByUserId(user.getUserId()).map(found -> {
+			found.setEmail(user.getEmail());
+			found.setUsername(user.getUsername());
+
+			return userRepository.save(found);
+		});
 	}
 }

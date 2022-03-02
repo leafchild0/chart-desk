@@ -1,5 +1,6 @@
 package com.chartdesk.auth.model;
 
+import com.chartdesk.auth.dto.UserDTO;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
@@ -98,7 +99,11 @@ public class User
 		return isAdmin;
 	}
 
-	public void setAdmin(boolean admin) {
-		isAdmin = admin;
+	public UserDTO toDto() {
+		return UserDTO.builder()
+				.email(email)
+				.username(username)
+				.isAdmin(isAdmin)
+				.build();
 	}
 }
