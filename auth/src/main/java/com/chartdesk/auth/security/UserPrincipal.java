@@ -2,6 +2,7 @@ package com.chartdesk.auth.security;
 
 import com.chartdesk.auth.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +12,7 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
 
+@EqualsAndHashCode
 public class UserPrincipal implements UserDetails
 {
 	private final Long id;
@@ -80,20 +82,5 @@ public class UserPrincipal implements UserDetails
 	public boolean isEnabled()
 	{
 		return true;
-	}
-
-	@Override
-	public boolean equals(Object o)
-	{
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		UserPrincipal that = (UserPrincipal) o;
-		return Objects.equals(id, that.id);
-	}
-
-	@Override
-	public int hashCode()
-	{
-		return Objects.hash(id);
 	}
 }
