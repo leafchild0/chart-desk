@@ -7,25 +7,24 @@ import java.util.Arrays;
 import java.util.Optional;
 
 @AllArgsConstructor
-public enum HelmProperties
-{
-  DESCRIPTION("description"),
-  ENGINE("engine"),
-  HOME("home"),
-  ICON("icon"),
-  APP_VERSION("appVersion"),
-  KEYWORDS("keywords"),
-  MAINTAINERS("maintainers"),
-  NAME("name"),
-  SOURCES("sources"),
-  VERSION("version");
+public enum HelmProperties {
+    NAME("name"),
+    VERSION("version"),
+    DESCRIPTION("description"),
+    APP_VERSION("appVersion"),
+    ICON("icon"),
+    ENGINE("engine"),
+    HOME("home"),
+    KEYWORDS("keywords"),
+    SOURCES("sources"),
+    MAINTAINERS("maintainers");
 
-  @Getter
-  private String propertyName;
+    @Getter
+    private final String propertyName;
 
-  public static Optional<HelmProperties> findByPropertyName(String propertyName) {
-    return Arrays.stream(HelmProperties.values())
-        .filter(properties -> propertyName.equals(properties.getPropertyName()))
-        .findAny();
-  }
+    public static Optional<HelmProperties> findByPropertyName(String propertyName) {
+        return Arrays.stream(HelmProperties.values())
+                .filter(properties -> propertyName.equals(properties.getPropertyName()))
+                .findAny();
+    }
 }

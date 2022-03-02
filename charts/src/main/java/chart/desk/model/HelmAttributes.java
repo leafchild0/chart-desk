@@ -52,6 +52,18 @@ public class HelmAttributes
     return getValue(HelmProperties.SOURCES, List.class);
   }
 
+  public String getEngine() {
+    return getValue(HelmProperties.ENGINE, String.class);
+  }
+
+  public String getHome() {
+    return getValue(HelmProperties.HOME, String.class);
+  }
+
+  public List<String> getKeywords() {
+    return getValue(HelmProperties.KEYWORDS, List.class);
+  }
+
   public void setName(final String name) {
     attributesEnumMap.put(HelmProperties.NAME, name);
   }
@@ -81,5 +93,3 @@ public class HelmAttributes
     return attributesEnumMap.toString();
   }
 }
-
-
