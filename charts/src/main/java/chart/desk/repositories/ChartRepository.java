@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ChartRepository extends JpaRepository<ChartModel, Long> {
+    ChartModel findChartModelByNameAndVersionAndUserId(String name, String version, String userId);
 }

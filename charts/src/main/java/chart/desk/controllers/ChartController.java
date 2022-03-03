@@ -1,12 +1,13 @@
 package chart.desk.controllers;
 
 import chart.desk.model.AssetKind;
-import chart.desk.model.ChartEntry;
 import chart.desk.model.HelmAttributes;
 import chart.desk.model.db.ChartModel;
 import chart.desk.parsers.HelmAttributeParser;
 import chart.desk.services.ChartService;
+import com.google.common.io.ByteStreams;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -16,16 +17,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.http.codec.multipart.Part;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.SequenceInputStream;
-import java.util.function.Function;
 
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @RestController
@@ -78,33 +80,62 @@ public class ChartController {
 
     @PostMapping(value = "/api/charts", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Mono<ChartModel>> uploadChart(@RequestPart("chart") Flux<FilePart> fileParts) {
-        Mono<ChartModel> attributes = getHelmAttributes(fileParts, AssetKind.HELM_PACKAGE)
-                .map(chartService::save);
+        Mono<ChartModel> attributes = toByteArray(fileParts).map(bytes -> {
+            HelmAttributes helmAttributes = getHelmAttributes(bytes, AssetKind.HELM_PACKAGE);
+            return chartService.save(helmAttributes, bytes, AssetKind.HELM_PACKAGE, getUserId());
+        });
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(attributes);
+    }
+
+    @GetMapping(value = "/{userId}/{name}-{version}.tgz")
+    public ResponseEntity<Mono<byte[]>> getChart(@PathVariable("name") String name, @PathVariable("version") String version, @PathVariable("userId") String userId) {
+        if (!getUserId().equals(userId)) {
+            // TODO: user validation
+            throw new RuntimeException();
+        }
+        byte[] chart = chartService.get(name, version, AssetKind.HELM_PACKAGE, userId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(Mono.just(chart));
     }
 
     @PostMapping("/api/prov")
-    public ResponseEntity<Mono<HelmAttributes>> uploadProvinance(@RequestPart("chart") Flux<FilePart> fileParts) {
-        Mono<HelmAttributes> attributes = getHelmAttributes(fileParts, AssetKind.HELM_PROVENANCE);
+    public ResponseEntity<Mono<ChartModel>> uploadProvinance(@RequestPart("chart") Flux<FilePart> fileParts) {
+        Mono<ChartModel> attributes = toByteArray(fileParts).map(bytes -> {
+            HelmAttributes helmAttributes = getHelmAttributes(bytes, AssetKind.HELM_PROVENANCE);
+            return chartService.save(helmAttributes, bytes, AssetKind.HELM_PROVENANCE, getUserId());
+        });
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(attributes);
     }
 
-    private Mono<HelmAttributes> getHelmAttributes(Flux<FilePart> fileParts, AssetKind helmProvenance) {
-        return fileParts.flatMap(Part::content)
-                .map(DataBuffer::asInputStream)
-                .reduce(SequenceInputStream::new)
-                .map(inputStream -> getHelmAttributes(inputStream, helmProvenance));
+    private String getUserId() {
+        // TODO: integrate with auth
+        return "testId";
     }
 
-    private HelmAttributes getHelmAttributes(InputStream inputStream, AssetKind helmPackage) {
+    private Mono<byte[]> toByteArray(Flux<FilePart> fileParts) {
+        return fileParts
+                .flatMap(Part::content)
+                .map(DataBuffer::asInputStream)
+                .reduce(SequenceInputStream::new)
+                .map(this::toByteArray);
+    }
+
+    @SneakyThrows
+    private byte[] toByteArray(InputStream inputStream) {
+        return ByteStreams.toByteArray(inputStream);
+    }
+
+    private HelmAttributes getHelmAttributes(byte[] chart, AssetKind assetKind) {
         HelmAttributes helmAttributes;
-        try (inputStream) {
-            helmAttributes = helmAttributeParser.getAttributes(helmPackage, inputStream);
+        try (InputStream inputStream = new ByteArrayInputStream(chart)) {
+            helmAttributes = helmAttributeParser.getAttributes(assetKind, inputStream);
             log.info(helmAttributes.toString());
         } catch (IOException e) {
             // TODO: error handling
