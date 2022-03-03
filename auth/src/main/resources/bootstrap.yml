@@ -16,6 +16,12 @@ spring:
     platform: postgres
     initialization-mode: always
     continue-on-error: true
+    schema: users
+  flyway:
+    schemas: users
+    url: jdbc:postgresql://localhost/chartdesk
+    user: chartdesk
+    password: Q1w2e3r4
   jpa:
     show-sql: true
     generate-ddl: false

@@ -1,5 +1,3 @@
-drop table IF EXISTS users;
-
 CREATE TABLE IF NOT EXISTS users(
     id bigint(20) NOT NULL AUTO_INCREMENT primary key,
     username varchar(50) not null,
