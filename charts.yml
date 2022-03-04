@@ -1,0 +1,19 @@
+name: charts CI
+on: 
+  push:
+    paths:
+      - charts/**
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: 8
+          distribution: 'adopt'
+      - name: Build
+        run: ./gradlew build
+      - name: Test
+        run: ./gradlew test
