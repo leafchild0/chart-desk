@@ -18,5 +18,3 @@ jobs:
           distribution: 'adopt'
       - name: Build
         run: ./gateway/gradlew build
-      - name: Test
-        run: ./gateway/gradlew test

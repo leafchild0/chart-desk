@@ -18,5 +18,3 @@ jobs:
           distribution: 'adopt'
       - name: Build
         run: ./charts/gradlew build
-      - name: Test
-        run: ../charts/gradlew test
