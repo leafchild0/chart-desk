@@ -1,6 +1,9 @@
 name: charts CI
 on:
   pull_request:
+    branches:
+      - main
+      - development
     paths:
       - charts/**
 jobs:

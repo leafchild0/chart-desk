@@ -1,6 +1,9 @@
 name: auth CI
 on:
   pull_request:
+    branches:
+      - main
+      - development
     paths:
       - auth/**
 jobs:
