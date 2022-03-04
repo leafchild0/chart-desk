@@ -1,7 +1,7 @@
 name: gateway CI
-on: 
-  push:
-    paths: 
+on:
+  pull_request:
+    paths:
       - gateway/**
 jobs:
   build:
@@ -14,6 +14,6 @@ jobs:
           java-version: 8
           distribution: 'adopt'
       - name: Build
-        run: ./gradlew build
+        run: ./gateway/gradlew build
       - name: Test
-        run: ./gradlew test
+        run: ./gateway/gradlew test
