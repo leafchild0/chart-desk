@@ -1,0 +1,44 @@
+server:
+  port: 9091
+#  servlet:
+#    context-path: /api
+
+auth-service:
+  jwtSecret: a3ZzApRSDQF5E9cH3JFV1LNBzOtQEiv6OumGJudd3Ao=
+  jwtExpirationInMs: 100000000
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: chartdesk
+    password: Q1w2e3r4
+    url: jdbc:postgresql://localhost/chartdesk
+    platform: postgres
+    initialization-mode: always
+    continue-on-error: true
+    schema: users
+  flyway:
+    schemas: users
+    url: jdbc:postgresql://localhost/chartdesk
+    user: chartdesk
+    password: Q1w2e3r4
+  jpa:
+    show-sql: true
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    database: postgresql
+  application:
+    name: auth-service
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        healthCheckPath: /actuator/health
+        healthCheckInterval: 20s
+        instanceId: ${spring.application.name}:${random.value}
+
+logging:
+  level:
+    com.chartdesk.auth: DEBUG
