@@ -1,6 +1,6 @@
 name: charts CI
-on: 
-  push:
+on:
+  pull_request:
     paths:
       - charts/**
 jobs:
@@ -14,6 +14,6 @@ jobs:
           java-version: 8
           distribution: 'adopt'
       - name: Build
-        run: ./gradlew build
+        run: ./charts/gradlew build
       - name: Test
-        run: ./gradlew test
+        run: ../charts/gradlew test

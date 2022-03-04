@@ -1,8 +1,8 @@
-name: gateway CI
+name: charts CI
 on:
   pull_request:
     paths:
-      - gateway/**
+      - auth/**
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,6 +14,6 @@ jobs:
           java-version: 8
           distribution: 'adopt'
       - name: Build
-        run: ./gateway/gradlew build
+        run: ./auth/gradlew build
       - name: Test
-        run: ./gateway/gradlew test
+        run: ./auth/gradlew test
