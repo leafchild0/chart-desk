@@ -17,4 +17,6 @@ jobs:
           java-version: 8
           distribution: 'adopt'
       - name: Build
-        run: ./charts/gradlew build
+        run: |
+          cd charts
+          ./gradlew build

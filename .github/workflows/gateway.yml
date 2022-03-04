@@ -17,4 +17,6 @@ jobs:
           java-version: 8
           distribution: 'adopt'
       - name: Build
-        run: ./gateway/gradlew build
+        run: |
+          cd gateway
+          ./gradlew build

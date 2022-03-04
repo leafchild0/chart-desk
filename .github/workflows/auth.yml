@@ -17,4 +17,6 @@ jobs:
           java-version: 8
           distribution: 'adopt'
       - name: Build
-        run: ./auth/gradlew build
+        run: |
+          cd auth
+          ./gradlew build
