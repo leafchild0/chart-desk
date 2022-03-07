@@ -1,5 +1,6 @@
 package chart.desk.model.db;
 
+import chart.desk.model.ChartEntry;
 import chart.desk.model.HelmAttributes;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
@@ -7,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.ToString;
+import org.joda.time.DateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +19,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = "charts")
@@ -106,5 +109,25 @@ public class ChartModel {
         this.created = new Date();
         this.digest = digest;
         this.userId = userId;
+    }
+
+    @SneakyThrows
+    public ChartEntry toChartEntry() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<String> urls = objectMapper.readValue(getUrls(), List.class);
+        List<String> sources = objectMapper.readValue(getSources(), List.class);
+        List<Map<String, String>> maintainers = objectMapper.readValue(getMaintainers(), List.class);
+        return ChartEntry.builder()
+                .description(getDescription())
+                .name(getName())
+                .version(getVersion())
+                .created(new DateTime(getCreated().getTime()))
+                .appVersion(getAppVersion())
+                .digest(getDigest())
+                .icon(getIcon())
+                .urls(urls)
+                .sources(sources)
+                .maintainers(maintainers)
+                .build();
     }
 }
