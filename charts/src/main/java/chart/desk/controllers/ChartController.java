@@ -40,21 +40,30 @@ public class ChartController {
     private final HelmAttributeParser helmAttributeParser;
     private final ChartService chartService;
     private final ObjectMapper yamlObjectMapper;
+    private final ObjectMapper jsonObjectMapper;
 
     @Autowired
     public ChartController(HelmAttributeParser helmAttributeParser,
             ChartService chartService,
-            @Qualifier("yaml_mapper") ObjectMapper yamlObjectMapper) {
+            @Qualifier("yaml_mapper") ObjectMapper yamlObjectMapper,
+            @Qualifier("json_mapper") ObjectMapper jsonObjectMapper) {
         this.helmAttributeParser = helmAttributeParser;
         this.chartService = chartService;
         this.yamlObjectMapper = yamlObjectMapper;
+        this.jsonObjectMapper = jsonObjectMapper;
     }
 
     // TODO: need to fetch it from database later and maybe cache here with caffeine cache etc
     @GetMapping("{userId}/index.yaml")
-    public String getIndex(@PathVariable("userId") String userId) throws JsonProcessingException {
+    public String getIndexYaml(@PathVariable("userId") String userId) throws JsonProcessingException {
         ChartIndex index = chartService.getIndex(userId);
         return yamlObjectMapper.writeValueAsString(index);
+    }
+
+    @GetMapping("{userId}/index.json")
+    public String getIndexJson(@PathVariable("userId") String userId) throws JsonProcessingException {
+        ChartIndex index = chartService.getIndex(userId);
+        return jsonObjectMapper.writeValueAsString(index);
     }
 
     @PostMapping(value = "/api/{userId}/charts", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
