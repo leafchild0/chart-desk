@@ -1,0 +1,19 @@
+name: auth CI
+on:
+  pull_request:
+    paths:
+      - auth/**
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: 8
+          distribution: 'adopt'
+      - name: Build
+        run: ./auth/gradlew build
+      - name: Test
+        run: ./auth/gradlew test
