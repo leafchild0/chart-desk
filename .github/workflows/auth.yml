@@ -1,6 +1,9 @@
 name: auth CI
 on:
   pull_request:
+    branches:
+      - main
+      - development
     paths:
       - auth/**
 jobs:
@@ -11,9 +14,9 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          java-version: 8
+          java-version: 11
           distribution: 'adopt'
       - name: Build
-        run: ./auth/gradlew build
-      - name: Test
-        run: ./auth/gradlew test
+        run: |
+          cd auth
+          ./gradlew build

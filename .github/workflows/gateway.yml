@@ -1,6 +1,9 @@
 name: gateway CI
 on:
   pull_request:
+    branches:
+      - main
+      - development
     paths:
       - gateway/**
 jobs:
@@ -11,9 +14,9 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          java-version: 8
+          java-version: 11
           distribution: 'adopt'
       - name: Build
-        run: ./gateway/gradlew build
-      - name: Test
-        run: ./gateway/gradlew test
+        run: |
+          cd gateway
+          ./gradlew build

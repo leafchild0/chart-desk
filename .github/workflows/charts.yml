@@ -1,6 +1,9 @@
 name: charts CI
 on:
   pull_request:
+    branches:
+      - main
+      - development
     paths:
       - charts/**
 jobs:
@@ -11,9 +14,9 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          java-version: 8
+          java-version: 11
           distribution: 'adopt'
       - name: Build
-        run: ./charts/gradlew build
-      - name: Test
-        run: ../charts/gradlew test
+        run: |
+          cd charts
+          ./gradlew build
