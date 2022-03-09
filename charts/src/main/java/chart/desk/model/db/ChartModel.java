@@ -81,11 +81,15 @@ public class ChartModel {
     private String maintainers;
 
     @NotNull
+    @Column(name = "user_id", nullable = false)
+    private String userId;
+
+    @NotNull
     @Column(name = "created", nullable = false)
     private Date created;
 
     @SneakyThrows
-    public ChartModel(HelmAttributes attributes, String digest, List<String> urls, List<String> provUrls) {
+    public ChartModel(HelmAttributes attributes, String digest, List<String> urls, List<String> provUrls, String userId) {
         this.name = attributes.getName();
         this.version = attributes.getVersion();
         this.description = attributes.getDescription();
@@ -101,5 +105,6 @@ public class ChartModel {
         this.provUrls = objectMapper.writeValueAsString(provUrls);
         this.created = new Date();
         this.digest = digest;
+        this.userId = userId;
     }
 }
