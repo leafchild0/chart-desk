@@ -62,9 +62,9 @@
 
 				if (this.valid) {
 					authApi.post('auth/login', {
-							username: this.username,
-							password: this.password
-						})
+						username: this.username,
+						password: this.password
+					})
 						.then(response => {
 								tokenManager.setToken(response.data.accessToken);
 								self.$router.replace('home');
@@ -72,8 +72,7 @@
 							err => {
 								if (err.response.status === 401) {
 									self.$toastr.e('Username or Password is incorrect');
-								}
-								else {
+								} else {
 									self.$toastr.e('Ups... Something went wrong');
 								}
 							}

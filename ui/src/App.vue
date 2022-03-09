@@ -1,10 +1,10 @@
 <template>
-  <div id="app">
+  <div id='app'>
     <section>
-      <b-breadcrumb align="is-centered">
-        <b-breadcrumb-item href="/">Home</b-breadcrumb-item>
-        <b-breadcrumb-item href="/charts">Charts</b-breadcrumb-item>
-        <b-breadcrumb-item href="/about">About</b-breadcrumb-item>
+      <b-breadcrumb align='is-centered'>
+        <b-breadcrumb-item href='/'>Home</b-breadcrumb-item>
+        <b-breadcrumb-item href='/charts'>Charts</b-breadcrumb-item>
+        <b-breadcrumb-item href='/about'>About</b-breadcrumb-item>
       </b-breadcrumb>
     </section>
     <router-view/>
