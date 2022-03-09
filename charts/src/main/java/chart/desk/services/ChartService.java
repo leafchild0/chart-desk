@@ -1,6 +1,7 @@
 package chart.desk.services;
 
 import chart.desk.model.AssetKind;
+import chart.desk.model.ChartIndex;
 import chart.desk.model.HelmAttributes;
 import chart.desk.model.db.ChartModel;
 import chart.desk.repositories.ChartRepository;
@@ -30,6 +31,12 @@ public class ChartService {
                 .collect(Collectors.toList());
         // TODO: calculate digest
         return chartRepository.save(new ChartModel(attributes, null, urls, Collections.emptyList(), userId));
+    }
+
+    public ChartIndex getIndex(String userId) {
+        List<ChartModel> userCharts = chartRepository.findAllByUserId(userId);
+        // TODO: handle private charts
+        return new ChartIndex(userCharts);
     }
 
     public byte[] get(String name, String version, AssetKind assetKind, String userId) {

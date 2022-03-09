@@ -1,5 +1,6 @@
 package chart.desk.model;
 
+import chart.desk.model.db.ChartModel;
 import chart.desk.util.JodaDateTimeDeserializer;
 import chart.desk.util.JodaDateTimeSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -7,9 +8,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import org.joda.time.DateTime;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Data
 public class ChartIndex {
@@ -21,5 +24,13 @@ public class ChartIndex {
 
     public ChartIndex() {
         this.entries = new HashMap<>();
+    }
+
+    public ChartIndex(List<ChartModel> chartEntries) {
+        this.apiVersion = "v1";
+        this.entries = chartEntries.isEmpty() ? null : chartEntries.stream()
+                .map(ChartModel::toChartEntry)
+                .collect(Collectors.toMap(ChartEntry::getName, Collections::singletonList));
+        this.generated = DateTime.now();
     }
 }
