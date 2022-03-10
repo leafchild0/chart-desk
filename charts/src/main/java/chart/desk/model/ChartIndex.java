@@ -30,7 +30,7 @@ public class ChartIndex {
         this.apiVersion = "v1";
         this.entries = chartEntries.isEmpty() ? null : chartEntries.stream()
                 .map(ChartModel::toChartEntry)
-                .collect(Collectors.toMap(ChartEntry::getName, Collections::singletonList));
+                .collect(Collectors.groupingBy(ChartEntry::getName));
         this.generated = DateTime.now();
     }
 }

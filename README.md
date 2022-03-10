@@ -20,7 +20,7 @@ optional params:
 --username=test
 --password=test123
 --context-path=/<account>
-1.4 Pulling helm chart
+2. Pulling helm chart
 ```
 helm fetch test/mariadb
 ```
