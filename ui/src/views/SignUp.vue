@@ -51,9 +51,10 @@
 								required>
 							</b-input>
 						</b-field>
-						<b-field label='Confirm Password'>
+						<b-field label='Confirm Password'
+									:type='{ "is-danger": !passwordsSame, "password": passwordsSame  }'
+									:message='{ "Passwords should be the same": !passwordsSame }'>
 							<b-input
-								type='password'
 								v-model='confirmPassword'
 								password-reveal
 								placeholder='Confirm password'
@@ -96,6 +97,9 @@
 					&& this.firstName !== ''
 					&& this.lastName !== ''
 					&& this.confirmPassword !== ''
+			},
+			passwordsSame() {
+				return this.password === this.confirmPassword
 			}
 		},
 		methods: {
