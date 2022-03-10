@@ -7,11 +7,11 @@
           <p class='modal-card-title'>Login</p>
         </header>
         <section class='modal-card-body'>
-          <b-field label='Email'>
+          <b-field label='Username'>
             <b-input
-                type='email'
-                v-model='email'
-                placeholder='Your email'
+                type='text'
+                v-model='username'
+                placeholder='Your username'
                 required>
             </b-input>
           </b-field>
@@ -49,13 +49,13 @@
 		name: 'Login',
 		data: function() {
 			return {
-				email: '',
+				username: '',
 				password: '',
 			};
 		},
 		computed: {
 			isValid() {
-				return this.email !== '' && this.password !== '';
+				return this.username !== '' && this.password !== '';
 			}
 		},
 		methods: {
@@ -64,7 +64,7 @@
 
 				if (this.isValid) {
 					authApi.post('auth/login', {
-						username: this.email,
+						username: this.username,
 						password: this.password
 					})
 						.then(response => {
