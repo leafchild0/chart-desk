@@ -19,5 +19,5 @@ tokenManager.checkAndPopulateToken()
 
 new Vue({
 	router,
-	render: h => h(App)
+	render: h => h(App, {props: {isLoggedIn: tokenManager.isLoggedIn()}})
 }).$mount('#app')
