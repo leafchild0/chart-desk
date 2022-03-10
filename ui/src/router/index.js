@@ -62,12 +62,12 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
 
 	// We can just check if token is there
-	const currentUser = tokenManager.getToken();
+	const isLoggedIn = tokenManager.isLoggedIn();
 	const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
 
-	if (requiresAuth && !currentUser) {
+	if (requiresAuth && !isLoggedIn) {
 		next('login')
-	} else if (!requiresAuth && currentUser) {
+	} else if (!requiresAuth && isLoggedIn) {
 		next('home')
 	} else {
 		next()

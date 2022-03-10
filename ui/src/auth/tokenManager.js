@@ -24,12 +24,12 @@ const setToken = (newToken) => {
 	}
 }
 
-const getToken = () => {
-	return token;
+const isLoggedIn = () => {
+	return token !== '';
 }
 
 export default {
 	checkAndPopulateToken,
-	getToken,
-	setToken
+	setToken,
+	isLoggedIn
 };
