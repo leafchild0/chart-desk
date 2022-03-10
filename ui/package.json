@@ -12,6 +12,7 @@
   },
   "main": "server.js",
   "dependencies": {
+    "axios": "^0.26.0",
     "buefy": "^0.9.19",
     "core-js": "^3.6.5",
     "vue": "^2.6.11",
@@ -31,6 +32,5 @@
     "vue-template-compiler": "^2.6.11"
   },
   "_id": "chart-desk-ui@0.0.1",
-  "license": "ISC",
-  "readme": "ERROR: No README data found!"
+  "license": "ISC"
 }
