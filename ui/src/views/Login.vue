@@ -2,7 +2,7 @@
 	<div class='login'>
     <section class='section'>
 		<div class='container'>
-      <div class='modal-card'>
+      <div class='modal-card login-card'>
         <header class='modal-card-head'>
           <p class='modal-card-title'>Login</p>
         </header>
@@ -94,5 +94,10 @@
 		display: block;
 		height: 100%;
 		width: 100%;
+	}
+
+	.login-card {
+		border: 1px solid lightgray;
+		border-radius: 4px;
 	}
 </style>
