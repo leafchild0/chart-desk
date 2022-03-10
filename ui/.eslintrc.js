@@ -42,7 +42,7 @@ module.exports = {
     'vue/html-quotes': ['warn', 'single'],
     'linebreak-style': ['error', 'unix'],
     'no-var': 'warn',
-    quotes: ['error', 'single'],
+    quotes: ['warn', 'single'],
     curly: ['warn', 'multi-line', 'consistent'],
     'brace-style': ['warn', '1tbs', { allowSingleLine: true }],
     'prefer-const': [
