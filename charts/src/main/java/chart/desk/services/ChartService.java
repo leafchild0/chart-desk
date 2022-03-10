@@ -49,6 +49,7 @@ public class ChartService {
         List<ChartModel> userCharts = chartRepository.findAllByUserId(userId).stream()
                 .flatMap(chart-> chartRepository.findRevisions(chart.getId()).stream())
                 .collect(Collectors.toMap(c-> c.getEntity().getVersion(), Function.identity(),
+                        // get the last revision in the same version case
                         (a, b) -> a.getRequiredRevisionNumber() > b.getRequiredRevisionNumber() ? a : b))
                 .values().stream()
                 .map(Revision::getEntity)
