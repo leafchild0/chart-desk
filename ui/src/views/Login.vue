@@ -99,5 +99,6 @@
 	.login-card {
 		border: 1px solid lightgray;
 		border-radius: 4px;
+		width: 40%;
 	}
 </style>
