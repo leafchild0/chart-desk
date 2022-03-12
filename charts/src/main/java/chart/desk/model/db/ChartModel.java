@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.ToString;
+import org.hibernate.envers.Audited;
 import org.joda.time.DateTime;
 
 import javax.persistence.Column;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 @Entity
+@Audited
 @Table(name = "charts")
 @Data
 @NoArgsConstructor
@@ -93,6 +95,27 @@ public class ChartModel {
 
     @SneakyThrows
     public ChartModel(HelmAttributes attributes, String digest, List<String> urls, List<String> provUrls, String userId) {
+        this.name = attributes.getName();
+        this.version = attributes.getVersion();
+        this.description = attributes.getDescription();
+        this.appVersion = attributes.getAppVersion();
+        this.icon = attributes.getIcon();
+        this.engine = attributes.getEngine();
+        this.home = attributes.getHome();
+        ObjectMapper objectMapper = new ObjectMapper();
+        this.keywords = objectMapper.writeValueAsString(attributes.getKeywords());
+        this.sources = objectMapper.writeValueAsString(attributes.getSources());
+        this.maintainers = objectMapper.writeValueAsString(attributes.getMaintainers());
+        this.urls = objectMapper.writeValueAsString(urls);
+        this.provUrls = objectMapper.writeValueAsString(provUrls);
+        this.created = new Date();
+        this.digest = digest;
+        this.userId = userId;
+    }
+
+    @SneakyThrows
+    public ChartModel(Long id, HelmAttributes attributes, String digest, List<String> urls, List<String> provUrls, String userId) {
+        this.id = id;
         this.name = attributes.getName();
         this.version = attributes.getVersion();
         this.description = attributes.getDescription();

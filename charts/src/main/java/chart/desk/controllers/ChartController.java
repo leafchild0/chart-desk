@@ -9,7 +9,6 @@ import chart.desk.services.ChartService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.ByteStreams;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +66,7 @@ public class ChartController {
     }
 
     @PostMapping(value = "/api/{userId}/charts", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Mono<ChartModel>>uploadChart(@RequestPart("chart") Flux<FilePart> fileParts, @PathVariable("userId")String userId) {
+    public ResponseEntity<Mono<ChartModel>> uploadChart(@RequestPart("chart") Flux<FilePart> fileParts, @PathVariable("userId") String userId) {
         Mono<ChartModel> attributes = toByteArray(fileParts).map(bytes -> {
             HelmAttributes helmAttributes = getHelmAttributes(bytes, AssetKind.HELM_PACKAGE);
             return chartService.save(helmAttributes, bytes, AssetKind.HELM_PACKAGE, userId);
