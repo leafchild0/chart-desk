@@ -1,14 +1,15 @@
 <template>
-  <div class='home'>
-    <p>This is Home</p>
-  </div>
+	<div class='home'>
+		<HeaderMenu/>
+		<p>This is Home</p>
+	</div>
 </template>
 
 <script>
 
+	import HeaderMenu from '@/components/HeaderMenu';
 	export default {
 		name: 'Home',
-		components: {
-		}
+		components: {HeaderMenu}
 	}
 </script>

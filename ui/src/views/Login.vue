@@ -69,10 +69,10 @@
 					})
 						.then(response => {
 								tokenManager.setToken(response.data.accessToken);
-								self.$router.replace('home');
+								self.$router.replace('/');
 							},
 							err => {
-								if (err.response.status === 401) {
+								if (err.response?.status === 401) {
 									self.$toastr.e('Username or Password is incorrect');
 								} else {
 									self.$toastr.e('Ups... Something went wrong');
