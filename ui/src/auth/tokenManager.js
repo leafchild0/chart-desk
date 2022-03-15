@@ -28,8 +28,13 @@ const isLoggedIn = () => {
 	return token !== '';
 }
 
+const getToken = () => {
+	return token;
+}
+
 export default {
 	checkAndPopulateToken,
 	setToken,
-	isLoggedIn
+	isLoggedIn,
+	getToken
 };

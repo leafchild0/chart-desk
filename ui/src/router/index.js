@@ -21,7 +21,7 @@ const routes = [
 	},
 	{
 		path: '/',
-		name: 'Home',
+		name: 'home',
 		component: Home,
 		meta: {
 			requiresAuth: true
@@ -29,7 +29,7 @@ const routes = [
 	},
 	{
 		path: '/charts',
-		name: 'Charts',
+		name: 'charts',
 		component: Charts,
 		meta: {
 			requiresAuth: true
@@ -37,7 +37,7 @@ const routes = [
 	},
 	{
 		path: '/about',
-		name: 'About',
+		name: 'about',
 		meta: {
 			requiresAuth: true
 		},
@@ -60,6 +60,8 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+
+	if (to.path === '/login' || to.path === '/signup') next();
 
 	// We can just check if token is there
 	const isLoggedIn = tokenManager.isLoggedIn();
