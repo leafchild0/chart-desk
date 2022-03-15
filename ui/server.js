@@ -9,15 +9,19 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const routes = require('./routes');
+const cors = require('cors');
 //const consul = require('consul')();
 //const serviceName = 'ui-service';
 
 app.use(express.static('dist'));
+// Use cors for all requests
+app.use(cors());
 app.use(bodyParser.json());
 app.use('/api', routes);
 
-app.get('*', (req, res) => {
-	res.redirect('/');
+app.get('*', (req, res, next) => {
+	console.log(req.method + '' + req.path);
+	next();
 });
 
 const PORT = process.env.PORT || 3003;
