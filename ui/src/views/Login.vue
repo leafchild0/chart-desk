@@ -63,7 +63,7 @@
 				const self = this;
 
 				if (this.isValid) {
-					authApi.post('auth/login', {
+					authApi.post('api/auth/login', {
 						username: this.username,
 						password: this.password
 					})

@@ -106,7 +106,7 @@
 			signUp: function () {
 				if (this.isValid) {
 					authApi
-						.post('auth/signup', {
+						.post('api/auth/signup', {
 							username: this.username,
 							password: this.password,
 							firstName: this.firstName,
