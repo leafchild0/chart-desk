@@ -53,7 +53,7 @@
 				isUserAccountActive: false,
 				userDetails: {
 
-                }
+				}
 			}
 		},
 		methods: {
