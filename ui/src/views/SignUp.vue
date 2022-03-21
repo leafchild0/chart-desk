@@ -65,6 +65,7 @@
 									:message='{ "Passwords should be the same": !passwordsSame }'>
 							<b-input
 								v-model='confirmPassword'
+                                type='password'
 								password-reveal
 								placeholder='Confirm password'
 								required>
@@ -115,7 +116,7 @@
 		},
 		methods: {
 			signUp: function () {
-				if (this.isValid) {
+				if (this.isValid && this.passwordsSame) {
 					authApi
 						.post('api/auth/signup', {
 							username: this.username,
