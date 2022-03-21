@@ -35,7 +35,7 @@
             :can-cancel="['outside']"
             aria-modal>
             <template>
-                <UserAccount v-bind="userDetails" @close="closeUserAccount" @save="saveUserInfo" @changePassword="changePassword"></UserAccount>
+                <UserAccount v-bind="userDetails" @close="closeUserAccount" @save="saveUserInfo" @change-password="changePassword"></UserAccount>
             </template>
         </b-modal>
     </section>
@@ -51,7 +51,9 @@
 		data() {
 			return {
 				isUserAccountActive: false,
-				userDetails: {}
+				userDetails: {
+
+                }
 			}
 		},
 		methods: {
