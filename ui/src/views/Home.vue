@@ -1,15 +1,15 @@
 <template>
 	<div class='home'>
-		<HeaderMenu/>
+		<Navbar/>
 		<p>This is Home</p>
 	</div>
 </template>
 
 <script>
 
-	import HeaderMenu from '@/components/HeaderMenu';
+	import Navbar from '@/components/HeaderMenu';
 	export default {
 		name: 'Home',
-		components: {HeaderMenu}
+		components: {Navbar}
 	}
 </script>

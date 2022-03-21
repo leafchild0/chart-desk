@@ -1,12 +1,12 @@
 <template>
 	<div class='about'>
-		<HeaderMenu/>
+		<Navbar/>
 		<h1>This is an about page</h1>
 	</div>
 </template>
 <script>
-	import HeaderMenu from '@/components/HeaderMenu';
+	import Navbar from '@/components/HeaderMenu';
 	export default {
-		components: {HeaderMenu}
+		components: {Navbar}
 	}
 </script>
