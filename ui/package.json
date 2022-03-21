@@ -1,0 +1,41 @@
+{
+  "name": "chart-desk-ui",
+  "version": "0.0.1",
+  "private": true,
+  "description": "UI service for chart-desk app, based on Vue, Node and Buefy",
+  "author": "",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "server": "node server.js",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "main": "server.js",
+  "dependencies": {
+    "axios": "^0.26.0",
+    "body-parser": "^1.19.2",
+    "buefy": "^0.9.19",
+    "consul": "^0.40.0",
+    "core-js": "^3.6.5",
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
+    "vue": "^2.6.11",
+    "vue-router": "^3.2.0",
+    "vue-toastr": "^2.1.2"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.15",
+    "@vue/cli-plugin-eslint": "~4.5.15",
+    "@vue/cli-plugin-router": "~4.5.15",
+    "@vue/cli-service": "~4.5.15",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.2.2",
+    "sass": "^1.26.5",
+    "sass-loader": "^8.0.2",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "_id": "chart-desk-ui@0.0.1",
+  "license": "ISC"
+}
