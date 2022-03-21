@@ -42,7 +42,7 @@
 </template>
 
 <script>
-	import authApi from '../auth/authApi';
+	import authApi from '../auth';
 
 	export default {
 		name: 'Login',

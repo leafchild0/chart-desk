@@ -11,7 +11,7 @@ import store from '@/store'
 const authInstance = axios.create({})
 
 authInstance.interceptors.request.use(config => {
-
+	
 	config.headers.common['Authorization'] = 'Bearer ' + store.getters['token']
 	return config
 })
