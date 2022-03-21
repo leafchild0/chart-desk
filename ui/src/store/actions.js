@@ -13,6 +13,16 @@ const setToken = ({ commit }, token) => {
 	commit('setToken', token);
 }
 
+const checkAndPopulateToken = ({ commit }) => {
+	if (window.sessionStorage) {
+		const userToken = sessionStorage.getItem('token');
+		if (userToken) {
+			commit('setToken', userToken);
+		}
+	}
+}
+
 export default {
-	setToken
+	setToken,
+	checkAndPopulateToken
 }

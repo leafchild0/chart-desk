@@ -42,7 +42,6 @@
 </template>
 
 <script>
-	import tokenManager from '@/auth/tokenManager';
 	import UserAccount from '@/components/UserAccount';
 
 	export default {
@@ -59,7 +58,7 @@
 		methods: {
 			logout() {
 				// Just remove the token
-				tokenManager.setToken('');
+				this.$store.dispatch('setToken', '')
 				window.location.assign('/');
 			},
 			showUserAccount() {

@@ -4,7 +4,7 @@ import Home from '../views/Home.vue'
 import Charts from '../views/Charts.vue'
 import SignUp from '@/views/SignUp'
 import Login from '@/views/Login'
-import tokenManager from '@/auth/tokenManager'
+import store from '@/store'
 
 Vue.use(VueRouter)
 
@@ -64,7 +64,7 @@ router.beforeEach((to, from, next) => {
 	if (to.path === '/login' || to.path === '/signup') next();
 
 	// We can just check if token is there
-	const isLoggedIn = tokenManager.isLoggedIn();
+	const isLoggedIn = store.getters['getUserToken'] !== '';
 	const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
 
 	if (requiresAuth && !isLoggedIn) {

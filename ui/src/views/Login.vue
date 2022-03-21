@@ -43,7 +43,6 @@
 
 <script>
 	import authApi from '../auth/authApi';
-	import tokenManager from '../auth/tokenManager';
 
 	export default {
 		name: 'Login',
@@ -68,7 +67,7 @@
 						password: this.password
 					})
 						.then(response => {
-								tokenManager.setToken(response.data.accessToken);
+								this.$store.dispatch('setToken', response.data.accessToken);
 								self.$router.replace('/');
 							},
 							err => {

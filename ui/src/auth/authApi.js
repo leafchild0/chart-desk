@@ -6,13 +6,13 @@
  */
 
 import axios from 'axios'
-import tokenManager from './tokenManager'
+import store from '@/store'
 
 const authInstance = axios.create({})
 
 authInstance.interceptors.request.use(config => {
 
-	config.headers.common['Authorization'] = 'Bearer ' + tokenManager.getToken()
+	config.headers.common['Authorization'] = 'Bearer ' + store.getters['token']
 	return config
 })
 
