@@ -19,6 +19,15 @@
 							</b-input>
 						</b-field>
 
+                        <b-field label='Email'>
+                            <b-input
+                                type='email'
+                                v-model='email'
+                                placeholder='Email'
+                                required>
+                            </b-input>
+                        </b-field>
+
 						<b-field label='First Name'>
 							<b-input
 								type='text'
@@ -88,6 +97,7 @@
 				firstName: '',
 				lastName: '',
 				confirmPassword: '',
+				email: ''
 			}
 		},
 		computed: {
@@ -97,6 +107,7 @@
 					&& this.firstName !== ''
 					&& this.lastName !== ''
 					&& this.confirmPassword !== ''
+					&& this.email !== ''
 			},
 			passwordsSame() {
 				return this.password === this.confirmPassword
@@ -111,6 +122,7 @@
 							password: this.password,
 							firstName: this.firstName,
 							lastName: this.lastName,
+							email: this.email
 						})
 						.then(
 							() => {
