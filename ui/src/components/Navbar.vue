@@ -71,8 +71,8 @@
 			saveUserInfo(userInfo) {
 				console.log(userInfo);
 			},
-			changePassword(newPassword) {
-				console.log(newPassword);
+			changePassword(passwordInfo) {
+				console.log(passwordInfo);
 			}
 		}
 	}
