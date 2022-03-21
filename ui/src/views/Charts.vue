@@ -7,7 +7,7 @@
 
 <script>
 
-	import Navbar from '@/components/HeaderMenu';
+	import Navbar from '@/components/Navbar';
 
 	export default {
 		name: 'Charts',
