@@ -39,7 +39,6 @@ module.exports = {
         ignores: []
       }
     ],
-    'vue/html-quotes': ['warn', 'single'],
     'linebreak-style': ['error', 'unix'],
     'no-var': 'warn',
     quotes: ['warn', 'single'],
