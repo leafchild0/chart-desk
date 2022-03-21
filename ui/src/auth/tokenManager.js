@@ -18,7 +18,7 @@ const checkAndPopulateToken = () => {
 
 const setToken = (newToken) => {
 
-	if (window.sessionStorage && newToken) {
+	if (window.sessionStorage) {
 		token = newToken;
 		sessionStorage.setItem('token', token);
 	}
