@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import Buefy from 'buefy'
-import 'buefy/dist/buefy.css'
+import './App.scss'
 import Toastr from 'vue-toastr'
 import store from './store'
 import router from './router'
