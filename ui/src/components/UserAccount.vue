@@ -89,11 +89,11 @@
                 </section>
                 <footer class="modal-card-foot">
                     <b-button
-                        label="Close"
-                        @click="$emit('close')"/>
-                    <b-button
                         label="Save"
                         type="is-primary" @click="saveData"/>
+                    <b-button
+                        label="Close"
+                        @click="$emit('close')"/>
                 </footer>
             </div>
         </div>
