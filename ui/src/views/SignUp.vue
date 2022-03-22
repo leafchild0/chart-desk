@@ -128,16 +128,15 @@
 						.then(
 							() => {
 								this.$router.replace('login');
-							},
-							(error) => {
-								if (error.response.status === 400
-									&& error.response.data.message === 'Username is already in use') {
-									this.$toastr.e('Username is already in use');
-								} else {
-									this.$toastr.e('Ups... Something went wrong');
-								}
 							}
-						);
+						).catch((error) => {
+							if (error.response.status === 400
+								&& error.response.data.message === 'Username is already in use') {
+								this.$toastr.e('Username is already in use');
+							} else {
+								this.$toastr.e('Ups... Something went wrong');
+							}
+						});
 				}
 			},
 			goToLogin() {
