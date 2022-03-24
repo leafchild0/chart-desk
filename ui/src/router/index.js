@@ -64,7 +64,7 @@ router.beforeEach((to, from, next) => {
 	if (to.path === '/login' || to.path === '/signup') next();
 
 	// We can just check if token is there
-	const isLoggedIn = store.getters['getUserToken'] !== '';
+	const isLoggedIn = store.getters['userToken'] !== '';
 	const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
 
 	if (requiresAuth && !isLoggedIn) {

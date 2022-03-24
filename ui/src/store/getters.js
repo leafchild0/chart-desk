@@ -5,15 +5,15 @@
  * @date 21.03.2022
  */
 
-const getCurrentUser = (state) => {
+const currentUser = (state) => {
 	return state.user;
 }
 
-const getUserToken = (state) => {
+const userToken = (state) => {
 	return state.token;
 }
 
 export default {
-	getCurrentUser,
-	getUserToken
+	currentUser,
+	userToken
 }
