@@ -87,7 +87,7 @@
 </template>
 
 <script>
-	import authApi from '../auth';
+	import authApi from '../api';
 
 	export default {
 		name: 'Signup',

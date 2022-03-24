@@ -15,7 +15,7 @@ Vue.use(Toastr, {
 })
 
 // Check token in session storage
-store.dispatch('checkAndPopulateToken')
+await store.dispatch('checkAndPopulateToken')
 
 new Vue({
 	router,
