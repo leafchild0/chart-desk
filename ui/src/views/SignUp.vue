@@ -87,7 +87,7 @@
 </template>
 
 <script>
-	import authApi from '../api';
+	import api from '../api';
 
 	export default {
 		name: 'Signup',
@@ -117,26 +117,21 @@
 		methods: {
 			signUp: function () {
 				if (this.isValid && this.passwordsSame) {
-					authApi
-						.post('api/auth/signup', {
-							username: this.username,
-							password: this.password,
-							firstName: this.firstName,
-							lastName: this.lastName,
-							email: this.email
-						})
-						.then(
-							() => {
-								this.$router.replace('login');
-							}
-						).catch((error) => {
-							if (error.response.status === 400
-								&& error.response.data.message === 'Username is already in use') {
-								this.$toastr.e('Username is already in use');
-							} else {
-								this.$toastr.e('Ups... Something went wrong');
-							}
-						});
+					api.signUp({
+						username: this.username,
+						password: this.password,
+						firstName: this.firstName,
+						lastName: this.lastName,
+						email: this.email
+					}).then(() => this.$router.replace('login')
+					).catch((error) => {
+						if (error.response.status === 400
+							&& error.response.data.message === 'Username is already in use') {
+							this.$toastr.e('Username is already in use');
+						} else {
+							this.$toastr.e('Ups... Something went wrong');
+						}
+					});
 				}
 			},
 			goToLogin() {

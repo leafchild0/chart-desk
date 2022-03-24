@@ -42,7 +42,7 @@
 </template>
 
 <script>
-	import authApi from '../api';
+	import api from '../api';
 
 	export default {
 		name: 'Login',
@@ -62,20 +62,20 @@
 				const self = this;
 
 				if (this.isValid) {
-					authApi.post('api/auth/login', {
+					api.login({
 						username: this.username,
 						password: this.password
+					}).then(response => {
+						this.$store.dispatch('setToken', response.data.accessToken);
+						self.$router.replace('/');
+					}).catch(err => {
+						if (err.response?.status === 401) {
+							self.$toastr.e('Username or Password is incorrect');
+						} else {
+							self.$toastr.e('Ups... Something went wrong');
+						}
 					})
-						.then(response => {
-							this.$store.dispatch('setToken', response.data.accessToken);
-							self.$router.replace('/');
-						}).catch(err => {
-							if (err.response?.status === 401) {
-								self.$toastr.e('Username or Password is incorrect');
-							} else {
-								self.$toastr.e('Ups... Something went wrong');
-							}
-						});
+
 				}
 			},
 			goToSignUp() {
