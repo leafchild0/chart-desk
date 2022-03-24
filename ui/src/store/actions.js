@@ -13,6 +13,11 @@ const setToken = ({ commit }, token) => {
 	commit('setToken', token);
 }
 
+const logout = ({ commit }) => {
+	commit('setToken', '')
+	window.location.assign('/');
+}
+
 const checkAndPopulateToken = ({ commit }) => {
 	if (window.sessionStorage) {
 		const userToken = sessionStorage.getItem('token');
@@ -22,7 +27,14 @@ const checkAndPopulateToken = ({ commit }) => {
 	}
 }
 
+const updateUser = ({ commit }, user) => {
+	// Update user in store
+	commit('updateUser', user);
+}
+
 export default {
 	setToken,
-	checkAndPopulateToken
+	checkAndPopulateToken,
+	updateUser,
+	logout
 }

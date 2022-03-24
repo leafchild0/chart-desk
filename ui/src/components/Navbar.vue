@@ -1,44 +1,45 @@
 <template>
-    <section>
-        <b-navbar type='is-light'>
-            <template #brand>
-                <b-navbar-item tag='router-link' :to='{ path: "/" }'>
-                    <b-icon icon='home'></b-icon>
-                </b-navbar-item>
-            </template>
-            <template #start>
-                <b-navbar-item href='/charts'>
-                    Charts
-                </b-navbar-item>
-                <b-navbar-dropdown label='Info'>
-                    <b-navbar-item href='/about'>
-                        About
-                    </b-navbar-item>
-                </b-navbar-dropdown>
-            </template>
-            <template #end>
-                <b-navbar-item tag='div'>
-                    <b-navbar-item @click="showUserAccount()">
-                        <b-icon icon='account'></b-icon>
-                    </b-navbar-item>
-                    <b-navbar-item @click="logout()">
-                        <b-icon icon='location-exit'></b-icon>
-                    </b-navbar-item>
-                </b-navbar-item>
-            </template>
-        </b-navbar>
-        <b-modal
-            :active="isUserAccountActive"
-            has-modal-card
-            trap-focus
-            :destroy-on-hide="false"
-            :can-cancel="['outside']"
-            aria-modal>
-            <template>
-                <UserAccount v-bind="userDetails" @close="closeUserAccount" @save="saveUserInfo" @change-password="changePassword"></UserAccount>
-            </template>
-        </b-modal>
-    </section>
+	<section>
+		<b-navbar type='is-light'>
+			<template #brand>
+				<b-navbar-item tag='router-link' :to='{ path: "/" }'>
+					<b-icon icon='home'></b-icon>
+				</b-navbar-item>
+			</template>
+			<template #start>
+				<b-navbar-item href='/charts'>
+					Charts
+				</b-navbar-item>
+				<b-navbar-dropdown label='Info'>
+					<b-navbar-item href='/about'>
+						About
+					</b-navbar-item>
+				</b-navbar-dropdown>
+			</template>
+			<template #end>
+				<b-navbar-item tag='div'>
+					<b-navbar-item @click="showUserAccount()">
+						<b-icon icon='account'></b-icon>
+					</b-navbar-item>
+					<b-navbar-item @click="logout()">
+						<b-icon icon='location-exit'></b-icon>
+					</b-navbar-item>
+				</b-navbar-item>
+			</template>
+		</b-navbar>
+		<b-modal
+			:active="isUserAccountActive"
+			has-modal-card
+			trap-focus
+			:destroy-on-hide="false"
+			:can-cancel="['outside']"
+			aria-modal>
+			<template>
+				<UserAccount v-bind="userDetails" @close="closeUserAccount" @save="saveUserInfo" @change-password="changePassword">
+				</UserAccount>
+			</template>
+		</b-modal>
+	</section>
 </template>
 
 <script>
@@ -50,16 +51,13 @@
 		data() {
 			return {
 				isUserAccountActive: false,
-				userDetails: {
-
-				}
+				userDetails: {}
 			}
 		},
 		methods: {
 			logout() {
 				// Just remove the token
-				this.$store.dispatch('setToken', '')
-				window.location.assign('/');
+				this.$store.dispatch('logout')
 			},
 			showUserAccount() {
 				this.isUserAccountActive = true;

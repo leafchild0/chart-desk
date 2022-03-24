@@ -13,7 +13,6 @@ const getUserToken = (state) => {
 	return state.token;
 }
 
-
 export default {
 	getCurrentUser,
 	getUserToken
