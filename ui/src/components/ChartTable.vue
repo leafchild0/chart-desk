@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-table paginated per-page="1" :data="data">
+    <b-table paginated per-page="30" :data="data">
 
       <b-table-column field="name" label="Chart name" centered sortable searchable v-slot="props">
         {{ props.row.name }}
