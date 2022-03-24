@@ -5,9 +5,10 @@
  * @date 09.03.2022
  */
 
-import {login, signUp} from './auth';
+import {login, signUp, getCurrentUser} from './auth';
 
 export default {
 	login,
-	signUp
+	signUp,
+	getCurrentUser
 };

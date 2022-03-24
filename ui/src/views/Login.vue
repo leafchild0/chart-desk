@@ -59,7 +59,6 @@
 		},
 		methods: {
 			login: function() {
-				const self = this;
 
 				if (this.isValid) {
 					api.login({
@@ -67,12 +66,12 @@
 						password: this.password
 					}).then(response => {
 						this.$store.dispatch('setToken', response.data.accessToken);
-						self.$router.replace('/');
+						this.$router.replace('/');
 					}).catch(err => {
 						if (err.response?.status === 401) {
-							self.$toastr.e('Username or Password is incorrect');
+							this.$toastr.e('Username or Password is incorrect');
 						} else {
-							self.$toastr.e('Ups... Something went wrong');
+							this.$toastr.e('Ups... Something went wrong');
 						}
 					})
 

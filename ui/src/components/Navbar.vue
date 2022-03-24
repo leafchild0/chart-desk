@@ -35,7 +35,7 @@
 			:can-cancel="['outside']"
 			aria-modal>
 			<template>
-				<UserAccount v-bind="userDetails" @close="closeUserAccount" @save="saveUserInfo" @change-password="changePassword">
+				<UserAccount v-bind="currentUser" @close="closeUserAccount" @save="saveUserInfo" @change-password="changePassword">
 				</UserAccount>
 			</template>
 		</b-modal>
@@ -44,15 +44,20 @@
 
 <script>
 	import UserAccount from '@/components/UserAccount';
+	import {mapGetters} from 'vuex';
 
 	export default {
 		name: 'Navbar',
 		components: {UserAccount},
 		data() {
 			return {
-				isUserAccountActive: false,
-				userDetails: {}
+				isUserAccountActive: false
 			}
+		},
+		computed: {
+			...mapGetters([
+				'currentUser',
+			])
 		},
 		methods: {
 			logout() {
