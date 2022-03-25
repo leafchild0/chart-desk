@@ -66,8 +66,9 @@
 				if (this.isValid) {
 					this.login({
 						username: this.username,
-						password: this.password
-					}, this.$toastr)
+						password: this.password,
+						notif: this.$toastr
+					})
 				}
 			},
 			goToSignUp() {

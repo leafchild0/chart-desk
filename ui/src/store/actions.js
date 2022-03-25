@@ -14,13 +14,14 @@ const setToken = ({ commit }, token) => {
 	commit('setToken', token);
 }
 
-const logout = ({ commit }) => {
-	commit('setToken', '')
+const logout = ({ dispatch }) => {
+	dispatch('setToken', '')
 	window.location.assign('/');
 }
 
-const login = ({ dispatch }, payload, notif) => {
-	api.login(payload).then(response => {
+const login = ({ dispatch }, payload) => {
+	const {username, password, notif} = payload
+	api.login({username, password}).then(response => {
 		dispatch('setToken', response.data.accessToken);
 		window.location.replace('/');
 	}).catch(err => {
