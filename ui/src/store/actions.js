@@ -1,5 +1,3 @@
-import api from '@/api';
-
 /**
  * Actions of the app
  *

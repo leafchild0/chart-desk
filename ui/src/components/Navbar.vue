@@ -44,7 +44,8 @@
 
 <script>
 	import UserAccount from '@/components/UserAccount';
-	import {mapGetters} from 'vuex';
+	import {mapActions, mapGetters} from 'vuex';
+	import api from '@/api';
 
 	export default {
 		name: 'Navbar',
@@ -60,6 +61,9 @@
 			])
 		},
 		methods: {
+			...mapActions([
+				'updateUser',
+			]),
 			logout() {
 				// Just remove the token
 				this.$store.dispatch('logout')
@@ -71,10 +75,27 @@
 				this.isUserAccountActive = false;
 			},
 			saveUserInfo(userInfo) {
-				console.log(userInfo);
+				api.updateUserDetails(userInfo)
+					.then(response => {
+						this.updateUser(response);
+						this.$toastr.s('User Info has been updated');
+						this.isUserAccountActive = false;
+					})
+					.catch(() => {
+						this.$toastr.e('Error during user details update');
+					})
 			},
 			changePassword(passwordInfo) {
-				console.log(passwordInfo);
+				api.updatePassword(passwordInfo)
+					.then(response => {
+						if (response.status === 200) {
+							this.$toastr.s('Password has been changed successfully');
+							this.isUserAccountActive = false;
+						}
+					})
+					.catch(() => {
+						this.$toastr.e('Error during user details update');
+					})
 			}
 		}
 	}

@@ -11,7 +11,7 @@
                             <b-field label='Username'>
                                 <b-input
                                     type='text'
-                                    v-model='username'
+                                    v-model='usernameM'
                                     placeholder='Username'
                                     maxlength='15'
                                     validation-message='Only lowercase letter and numbers are allowed'
@@ -23,7 +23,7 @@
                             <b-field label='Email'>
                                 <b-input
                                     type='email'
-                                    v-model='email'
+                                    v-model='emailM'
                                     placeholder='Email'
                                     required>
                                 </b-input>
@@ -32,7 +32,7 @@
                             <b-field label='First Name'>
                                 <b-input
                                     type='text'
-                                    v-model='firstName'
+                                    v-model='firstNameM'
                                     placeholder='First Name'
                                     maxlength='30'
                                     required>
@@ -42,7 +42,7 @@
                             <b-field label='Last Name'>
                                 <b-input
                                     type='text'
-                                    v-model='lastName'
+                                    v-model='lastNameM'
                                     placeholder='Last Name'
                                     maxlength='30'
                                     required>
@@ -103,17 +103,18 @@
 <script>
 	export default {
 		name: 'UserAccount',
+		props: ['email', 'firstName', 'lastName', 'username'],
 		data() {
 			return {
 				isComponentModalActive: false,
 				activeTab: 0,
 				newPassword: '',
 				oldPassword: '',
-				username: '',
-				firstName: '',
-				lastName: '',
+				usernameM: this.username,
+				firstNameM: this.firstName,
+				lastNameM: this.lastName,
+				emailM: this.email,
 				confirmPassword: '',
-				email: ''
 			}
 		},
 		computed: {
@@ -133,10 +134,10 @@
 					if (this.isUserInfoValid) {
 						// Save user info
 						this.$emit('save', {
-							username: this.username,
-							firstName: this.firstName,
-							lastName: this.lastName,
-							email: this.email
+							username: this.usernameM,
+							firstName: this.firstNameM,
+							lastName: this.lastNameM,
+							email: this.emailM
 						})
 					}
 				} else if (this.activeTab === 1) {
