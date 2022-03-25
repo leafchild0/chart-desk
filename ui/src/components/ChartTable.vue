@@ -43,7 +43,9 @@
 						Object.keys(response.data.entries)
 							.forEach(k => this.data.push(...response.data.entries[k]));
 					})
-					.catch((err) => console.error(err));
+					.catch(() => {
+						this.$toastr.e('Something went wrong while getting charts')
+					});
 			}
 		},
 		mounted() {
