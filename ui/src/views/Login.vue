@@ -30,7 +30,7 @@
         <footer class='modal-card-foot'>
           <b-button
               label='Login'
-              type='is-primary' @click='login' :disabled='!isValid'/>
+              type='is-primary' @click='tryLogin' :disabled='!isValid'/>
           <b-button type='is-text' @click='goToSignUp'>
             New? Sign up
           </b-button>
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-	import api from '../api';
+	import {mapActions} from 'vuex';
 
 	export default {
 		name: 'Login',
@@ -58,23 +58,16 @@
 			}
 		},
 		methods: {
-			login: function() {
+			...mapActions([
+				'login'
+			]),
+			tryLogin: function() {
 
 				if (this.isValid) {
-					api.login({
+					this.login({
 						username: this.username,
 						password: this.password
-					}).then(response => {
-						this.$store.dispatch('setToken', response.data.accessToken);
-						this.$router.replace('/');
-					}).catch(err => {
-						if (err.response?.status === 401) {
-							this.$toastr.e('Username or Password is incorrect');
-						} else {
-							this.$toastr.e('Ups... Something went wrong');
-						}
-					})
-
+					}, this.$toastr)
 				}
 			},
 			goToSignUp() {
