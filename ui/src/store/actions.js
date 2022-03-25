@@ -19,20 +19,6 @@ const logout = ({ dispatch }) => {
 	window.location.assign('/');
 }
 
-const login = ({ dispatch }, payload) => {
-	const {username, password, notif} = payload
-	api.login({username, password}).then(response => {
-		dispatch('setToken', response.data.accessToken);
-		window.location.replace('/');
-	}).catch(err => {
-		if (err.response?.status === 401) {
-			notif.e('Username or Password is incorrect');
-		} else {
-			notif.e('Ups... Something went wrong');
-		}
-	})
-}
-
 const checkAndPopulateToken = ({ commit }) => {
 	if (window.sessionStorage) {
 		const userToken = sessionStorage.getItem('token');
@@ -51,6 +37,5 @@ export default {
 	setToken,
 	checkAndPopulateToken,
 	updateUser,
-	logout,
-	login
+	logout
 }
