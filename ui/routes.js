@@ -34,7 +34,7 @@ router
 	})
 	.put('/auth/user', (req, res, next) => {
 		console.log('Update current user', req.body);
-		res.sendStatus(200);
+		res.json(req.body);
 		next();
 	})
 	.post('/auth/password', (req, res, next) => {
