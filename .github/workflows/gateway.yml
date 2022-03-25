@@ -1,6 +1,7 @@
 name: gateway CI
 on:
   pull_request:
+    types: [opened, synchronize, reopened]
     branches:
       - main
       - development
