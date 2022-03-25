@@ -1,6 +1,11 @@
 # chart-desk
 Helm charts registry and MS suite
 
+[![auth CI](https://github.com/leafchild0/chart-desk/actions/workflows/auth.yml/badge.svg)](https://github.com/leafchild0/chart-desk/actions/workflows/auth.yml)
+[![charts CI](https://github.com/leafchild0/chart-desk/actions/workflows/charts.yml/badge.svg)](https://github.com/leafchild0/chart-desk/actions/workflows/charts.yml)
+[![gateway CI](https://github.com/leafchild0/chart-desk/actions/workflows/gateway.yml/badge.svg)](https://github.com/leafchild0/chart-desk/actions/workflows/gateway.yml)
+[![ui CI](https://github.com/leafchild0/chart-desk/actions/workflows/ui.yml/badge.svg)](https://github.com/leafchild0/chart-desk/actions/workflows/ui.yml)
+
 ## Testing info
 1. Upload package
 1.1 Add repo in helm:
