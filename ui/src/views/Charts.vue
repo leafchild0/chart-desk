@@ -1,18 +1,20 @@
 <template>
 	<div class='charts'>
 		<Navbar/>
-		<p>This is Charts</p>
+		<ChartTable/>
 	</div>
 </template>
 
 <script>
 
 	import Navbar from '@/components/Navbar';
+	import ChartTable from '@/components/ChartTable';
 
-	export default {
+  export default {
 		name: 'Charts',
 		components: {
-			Navbar
+			Navbar,
+			ChartTable
 		}
 	}
 </script>
