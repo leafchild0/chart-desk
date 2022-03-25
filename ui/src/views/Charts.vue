@@ -7,14 +7,14 @@
 
 <script>
 
-import HeaderMenu from '@/components/HeaderMenu';
-import ChartTable from '@/components/ChartTable';
+	import HeaderMenu from '@/components/HeaderMenu';
+	import ChartTable from '@/components/ChartTable';
 
-  export default {
+	export default {
 		name: 'Charts',
 		components: {
 			HeaderMenu,
-      ChartTable
+			ChartTable
 		}
 	}
 </script>
