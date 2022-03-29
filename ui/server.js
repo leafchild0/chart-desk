@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 app.use('/api', routes);
 
 app.get('*', (req, res, next) => {
-	console.log(req.method + '' + req.path);
+	console.log(req.method + ' ' + req.path);
 	next();
 });
 

@@ -19,6 +19,15 @@
 							</b-input>
 						</b-field>
 
+                        <b-field label='Email'>
+                            <b-input
+                                type='email'
+                                v-model='email'
+                                placeholder='Email'
+                                required>
+                            </b-input>
+                        </b-field>
+
 						<b-field label='First Name'>
 							<b-input
 								type='text'
@@ -44,7 +53,6 @@
 								type='password'
 								v-model='password'
 								password-reveal
-								min='8'
 								validation-message='Min 6 characters, at least one lower case and one upper case'
 								pattern='(?=.*[0-9])(?=.*[a-zA-Z])(?=\S+$).{6,20}'
 								placeholder='Your password'
@@ -56,6 +64,7 @@
 									:message='{ "Passwords should be the same": !passwordsSame }'>
 							<b-input
 								v-model='confirmPassword'
+                                type='password'
 								password-reveal
 								placeholder='Confirm password'
 								required>
@@ -77,7 +86,7 @@
 </template>
 
 <script>
-	import authApi from '../auth/authApi';
+	import api from '../api';
 
 	export default {
 		name: 'Signup',
@@ -88,6 +97,7 @@
 				firstName: '',
 				lastName: '',
 				confirmPassword: '',
+				email: ''
 			}
 		},
 		computed: {
@@ -97,6 +107,7 @@
 					&& this.firstName !== ''
 					&& this.lastName !== ''
 					&& this.confirmPassword !== ''
+					&& this.email !== ''
 			},
 			passwordsSame() {
 				return this.password === this.confirmPassword
@@ -104,27 +115,22 @@
 		},
 		methods: {
 			signUp: function () {
-				if (this.isValid) {
-					authApi
-						.post('api/auth/signup', {
-							username: this.username,
-							password: this.password,
-							firstName: this.firstName,
-							lastName: this.lastName,
-						})
-						.then(
-							() => {
-								this.$router.replace('login');
-							},
-							(error) => {
-								if (error.response.status === 400
-									&& error.response.data.message === 'Username is already in use') {
-									this.$toastr.e('Username is already in use');
-								} else {
-									this.$toastr.e('Ups... Something went wrong');
-								}
-							}
-						);
+				if (this.isValid && this.passwordsSame) {
+					api.signUp({
+						username: this.username,
+						password: this.password,
+						firstName: this.firstName,
+						lastName: this.lastName,
+						email: this.email
+					}).then(() => this.$router.replace('login')
+					).catch((error) => {
+						if (error.response.status === 400
+							&& error.response.data.message === 'Username is already in use') {
+							this.$toastr.e('Username is already in use');
+						} else {
+							this.$toastr.e('Ups... Something went wrong');
+						}
+					});
 				}
 			},
 			goToLogin() {

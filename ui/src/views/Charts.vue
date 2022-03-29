@@ -1,7 +1,7 @@
 <template>
 	<div class='charts'>
 		<HeaderMenu/>
-    <ChartTable/>
+        <ChartTable/>
   </div>
 </template>
 
