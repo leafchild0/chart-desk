@@ -18,24 +18,24 @@
 			</template>
 			<template #end>
 				<b-navbar-item tag='div'>
-					<b-navbar-item @click="showUserAccount()">
+					<b-navbar-item @click='showUserAccount()'>
 						<b-icon icon='account'></b-icon>
 					</b-navbar-item>
-					<b-navbar-item @click="logout()">
+					<b-navbar-item @click='logout()'>
 						<b-icon icon='location-exit'></b-icon>
 					</b-navbar-item>
 				</b-navbar-item>
 			</template>
 		</b-navbar>
 		<b-modal
-			:active="isUserAccountActive"
+			:active='isUserAccountActive'
 			has-modal-card
 			trap-focus
-			:destroy-on-hide="false"
-			:can-cancel="['outside']"
+			:destroy-on-hide='false'
+			:can-cancel='["outside"]'
 			aria-modal>
 			<template>
-				<UserAccount v-bind="currentUser" @close="closeUserAccount" @save="saveUserInfo" @change-password="changePassword">
+				<UserAccount v-bind='currentUser' @close='closeUserAccount' @save='saveUserInfo' @change-password='changePassword'>
 				</UserAccount>
 			</template>
 		</b-modal>
