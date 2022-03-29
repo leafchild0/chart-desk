@@ -53,7 +53,6 @@
 								type='password'
 								v-model='password'
 								password-reveal
-								min='8'
 								validation-message='Min 6 characters, at least one lower case and one upper case'
 								pattern='(?=.*[0-9])(?=.*[a-zA-Z])(?=\S+$).{6,20}'
 								placeholder='Your password'
