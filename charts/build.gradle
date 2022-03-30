@@ -40,3 +40,11 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "leafchild0_chart-desk"
+        property "sonar.organization", "chart-desk"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
+}
