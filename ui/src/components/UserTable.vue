@@ -1,27 +1,9 @@
 <template>
 	<div id='user-table'>
-		<b-table striped paginated narrowed hoverable :loading='data.length === 0' per-page='30' :data='data'>
-
-			<b-table-column field='name' label='User name' centered sortable searchable v-slot='props'>
-				{{ props.row.username }}
-			</b-table-column>
-
-			<b-table-column field='firstName' label='First Name' centered searchable v-slot='props'>
-				{{ props.row.firstName }}
-			</b-table-column>
-
-			<b-table-column field='lastName' label='Last Name' centered searchable v-slot='props'>
-				{{ props.row.lastName }}
-			</b-table-column>
-
-			<b-table-column field='email' label='Email' centered searchable v-slot='props'>
-				{{ props.row.email }}
-			</b-table-column>
-
-			<b-table-column field='isAdmin' label='Admin' centered searchable v-slot='props'>
-				{{ props.row.email }}
-			</b-table-column>
-
+		<b-field label='Filter by' label-position='on-border' class='filter'>
+			<b-input v-model='filterBy' placeholder='Filter by any field'></b-input>
+		</b-field>
+		<b-table striped paginated narrowed hoverable :loading='data.length === 0' per-page='30' :data='filteredData' :columns='headers'>
 			<b-table-column class='has-text-success' field='actions' label='Actions' centered v-slot='props'>
 				<b-tooltip label='Deactivate user' position='is-left' type='is-warning'>
 					<b-button size='is-small' type='is-danger' outlined rounded icon-left='account-off' @click='deactivateUser(props.row.id)'></b-button>
@@ -35,7 +17,24 @@
 
 	export default {
 		name: 'UserTable',
-		props: ['data'],
+		props: ['data', 'filterColumns', 'headers'],
+		data() {
+			return {
+				filterBy: '',
+			}
+		},
+		computed: {
+			filteredData() {
+				if (!this.filterBy) return this.data
+
+				return this.data.filter(entry => {
+					for (const f of this.filterColumns) {
+						if (entry[f].includes(this.filterBy)) return true
+					}
+					return false
+				})
+			}
+		},
 		methods: {
 			deactivateUser(id) {
 				this.$emit('deactivate', id)
@@ -47,7 +46,12 @@
 <style lang='scss'>
 
 	#user-table {
+
 		padding: 15px;
+
+		.filter {
+			width: 200px;
+		}
 
 		.b-table div.top.level {
 			justify-content: center;

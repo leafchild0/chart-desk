@@ -3,7 +3,7 @@
 		<Navbar/>
 		<div class='is-admin' v-if='!currentUser.isAdmin'>You don't have permission to access this page</div>
 		<div v-else>
-			<UserTable :data='users' @deactivate='deactivateUser'/>
+			<UserTable :data='users' @deactivate='deactivateUser' :filter-columns='filterColumns' :headers='headers'/>
 		</div>
 	</div>
 </template>
@@ -20,13 +20,23 @@
 		components: {Navbar, UserTable},
 		data() {
 			return {
-				users: []
+				users: [],
+				headers: [
+					{field: 'username', label: 'User name'},
+					{field: 'firstName', label: 'First Name'},
+					{field: 'lastName', label: 'Last Name'},
+					{field: 'email', label: 'Email'},
+					{field: 'admin', label: 'Admin'}
+				]
 			}
 		},
 		computed: {
 			...mapGetters([
 				'currentUser',
-			])
+			]),
+			filterColumns() {
+				return this.headers.filter(h => h.field !== 'admin').map(h => h.field)
+			}
 		},
 		methods: {
 			deactivateUser(id) {
