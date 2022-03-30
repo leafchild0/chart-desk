@@ -3,7 +3,7 @@
 		<Navbar/>
 		<div class='is-admin' v-if='!currentUser.isAdmin'>You don't have permission to access this page</div>
 		<div v-else>
-
+			<UserTable :data='users' @deactivate='deactivateUser'/>
 		</div>
 	</div>
 </template>
@@ -12,11 +12,12 @@
 
 	import Navbar from '@/components/Navbar';
 	import api from '@/api';
-	import {mapActions, mapGetters} from 'vuex';
+	import {mapGetters} from 'vuex';
+	import UserTable from '@/components/UserTable';
 
 	export default {
 		name: 'Admin',
-		components: {Navbar},
+		components: {Navbar, UserTable},
 		data() {
 			return {
 				users: []
@@ -26,6 +27,17 @@
 			...mapGetters([
 				'currentUser',
 			])
+		},
+		methods: {
+			deactivateUser(id) {
+				api.deactivateUser(id)
+					.then(() => {
+						this.$toastr.s('User Info has been deactivated');
+					})
+					.catch(() => {
+						this.$toastr.e('Error during user details update');
+					})
+			}
 		},
 		mounted() {
 			// There should be a better place for this
