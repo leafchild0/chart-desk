@@ -31,7 +31,7 @@
 			// There should be a better place for this
 			api.getAllUsers()
 				.then(response => {
-					this.users = response.data;
+					this.users = response.data.filter(u => u.id !== this.currentUser.id);
 				})
 				.catch(() => {
 					this.$toastr.e('Ups... Something went wrong during users fetch');
