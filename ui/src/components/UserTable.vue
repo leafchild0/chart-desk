@@ -12,9 +12,7 @@
 				</b-table-column>
 			</template>
 			<b-table-column field='actions' label='Actions' centered v-slot='props'>
-				<b-tooltip label='Deactivate user' position='is-left' type='is-warning'>
-					<b-button size='is-small' type='is-danger' outlined rounded icon-left='account-off' @click='deactivateUser(props.row.id)'></b-button>
-				</b-tooltip>
+				<slot name='actions' v-bind='props.row'></slot>
 			</b-table-column>
 		</b-table>
 	</div>
@@ -40,11 +38,6 @@
 					}
 					return false
 				})
-			}
-		},
-		methods: {
-			deactivateUser(id) {
-				this.$emit('deactivate', id)
 			}
 		}
 	}

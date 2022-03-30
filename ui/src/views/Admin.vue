@@ -3,7 +3,13 @@
 		<Navbar/>
 		<div class='is-admin' v-if='!currentUser.isAdmin'>You don't have permission to access this page</div>
 		<div v-else>
-			<UserTable :data='users' @deactivate='deactivateUser' :filter-columns='filterColumns' :headers='headers'/>
+			<UserTable :data='users' @deactivate='deactivateUser' :filter-columns='filterColumns' :headers='headers'>
+				<template v-slot:actions='props'>
+					<b-tooltip label='Deactivate user' position='is-left' type='is-warning'>
+						<b-button size='is-small' type='is-danger' outlined rounded icon-left='account-off' @click='() => deactivateUser(props.id)'></b-button>
+					</b-tooltip>
+				</template>
+			</UserTable>
 		</div>
 	</div>
 </template>
