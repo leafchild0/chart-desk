@@ -20,33 +20,33 @@ import java.util.Optional;
 /**
  * Custom user service
  *
- * @date 22.02.2022
  * @author vmalyshev
+ * @date 22.02.2022
  */
 @Service
-public class CustomUserDetailsService implements ReactiveUserDetailsService
-{
+public class CustomUserDetailsService implements ReactiveUserDetailsService {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 
-	public CustomUserDetailsService(UserRepository userRepository, PasswordEncoder passwordEncoder)
-	{
+	public CustomUserDetailsService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
 	}
 
-	private boolean existsByUsername(String username)
-	{
+	private boolean existsByUsername(String username) {
+
 		return userRepository.findByUsername(username).isPresent();
 	}
 
 	/**
 	 * Create new user from passed dto
+	 *
 	 * @param registerDTO - dto with data
 	 * @return - newly created user
 	 */
-	public Mono<User> createNewUser(SignUpDTO registerDTO)
-	{
+	public Mono<User> createNewUser(SignUpDTO registerDTO) {
+
 		if (existsByUsername(registerDTO.getUsername())) {
 			throw new HttpClientErrorException(HttpStatus.UNPROCESSABLE_ENTITY, "User with this username already exists");
 		}
@@ -57,11 +57,13 @@ public class CustomUserDetailsService implements ReactiveUserDetailsService
 
 	/**
 	 * Finds user by name, used in auth
+	 *
 	 * @param username - username to find
 	 * @return user details
 	 */
 	@Override
 	public Mono<UserDetails> findByUsername(String username) {
+
 		return Mono.justOrEmpty(UserPrincipal.create(userRepository.findByUsername(username)));
 	}
 
@@ -69,14 +71,17 @@ public class CustomUserDetailsService implements ReactiveUserDetailsService
 	 * Find user by passed id, should be long
 	 */
 	public Optional<User> findByUserId(Long userId) {
+
 		return userRepository.findById(userId);
 	}
 
 	/**
 	 * Find all users for admin purposes
+	 *
 	 * @return all users
 	 */
 	public List<User> findAllUsers() {
+
 		return userRepository.findByEnabledTrue();
 	}
 
@@ -84,6 +89,7 @@ public class CustomUserDetailsService implements ReactiveUserDetailsService
 	 * Updates user with passed data with id
 	 */
 	public Optional<User> updateUser(UserDTO user) {
+
 		return findByUserId(user.getId()).map(found -> {
 			found.setEmail(user.getEmail());
 			found.setUsername(user.getUsername());
@@ -96,6 +102,7 @@ public class CustomUserDetailsService implements ReactiveUserDetailsService
 	 * Disables user by passed id
 	 */
 	public Optional<User> disableUser(Long userId) {
+
 		return findByUserId(userId).map(found -> {
 			found.setEnabled(false);
 

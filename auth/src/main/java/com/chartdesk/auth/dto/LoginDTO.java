@@ -8,11 +8,9 @@ import javax.validation.constraints.NotBlank;
  * DTO for login
  *
  * @author vmalyshev
- *
  */
 @Data
-public class LoginDTO
-{
+public class LoginDTO {
 	@NotBlank
 	private String username;
 

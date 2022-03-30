@@ -25,16 +25,15 @@ import java.util.stream.Collectors;
  */
 @Component
 @Slf4j
-public class JwtTokenUtil
-{
+public class JwtTokenUtil {
 	@Value("${auth-service.jwtSecret}")
 	private String jwtSecret;
 
 	@Value("${auth-service.jwtExpirationInMs}")
 	private int jwtExpirationInMs;
 
-	public String generateToken(UserDetails user)
-	{
+	public String generateToken(UserDetails user) {
+
 		Instant now = Instant.now();
 		return Jwts.builder()
 			.setSubject(user.getUsername())
@@ -46,8 +45,8 @@ public class JwtTokenUtil
 			.compact();
 	}
 
-	public String getUserIdFromJWT(String token)
-	{
+	public String getUserIdFromJWT(String token) {
+
 		Claims claims = Jwts.parserBuilder()
 			.setSigningKey(getKey())
 			.build()
@@ -57,46 +56,37 @@ public class JwtTokenUtil
 		return claims.getSubject();
 	}
 
-	public Claims getAllClaims(String token)
-	{
+	public Claims getAllClaims(String token) {
+
 		return Jwts.parserBuilder()
-				.setSigningKey(getKey())
-				.build()
-				.parseClaimsJws(token)
-				.getBody();
+			.setSigningKey(getKey())
+			.build()
+			.parseClaimsJws(token)
+			.getBody();
 
 	}
 
-	private SecretKey getKey()
-	{
+	private SecretKey getKey() {
+
 		return Keys.hmacShaKeyFor(jwtSecret.getBytes());
 	}
 
-	public boolean validateToken(String authToken)
-	{
-		try
-		{
+	public boolean validateToken(String authToken) {
+
+		try {
 			Jwts.parserBuilder()
 				.setSigningKey(getKey())
 				.build()
 				.parseClaimsJws(authToken);
 
 			return true;
-		}
-		catch (MalformedJwtException ex)
-		{
+		} catch (MalformedJwtException ex) {
 			log.error("Invalid JWT token");
-		}
-		catch (ExpiredJwtException ex)
-		{
+		} catch (ExpiredJwtException ex) {
 			log.error("Expired JWT token");
-		}
-		catch (UnsupportedJwtException ex)
-		{
+		} catch (UnsupportedJwtException ex) {
 			log.error("Unsupported JWT token");
-		}
-		catch (IllegalArgumentException ex)
-		{
+		} catch (IllegalArgumentException ex) {
 			log.error("JWT claims string is empty.");
 		}
 		return false;

@@ -13,8 +13,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @EqualsAndHashCode
-public class UserPrincipal implements UserDetails
-{
+public class UserPrincipal implements UserDetails {
 	private final Long id;
 
 	private final String username;
@@ -24,63 +23,63 @@ public class UserPrincipal implements UserDetails
 
 	private final Collection<? extends GrantedAuthority> authorities;
 
-	public UserPrincipal(Long id, String username, String password, Collection<? extends GrantedAuthority> authorities)
-	{
+	public UserPrincipal(Long id, String username, String password, Collection<? extends GrantedAuthority> authorities) {
+
 		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.authorities = authorities;
 	}
 
-	public static Optional<UserDetails> create(Optional<User> data)
-	{
+	public static Optional<UserDetails> create(Optional<User> data) {
+
 		return data.map(user -> new UserPrincipal(
-				user.getId(),
-				user.getUsername(),
-				user.getPassword(),
-				Collections.singleton(new SimpleGrantedAuthority( user.isAdmin() ? "ADMIN": "USER"))
+			user.getId(),
+			user.getUsername(),
+			user.getPassword(),
+			Collections.singleton(new SimpleGrantedAuthority(user.isAdmin() ? "ADMIN" : "USER"))
 		));
 	}
 
 	@Override
-	public String getUsername()
-	{
+	public String getUsername() {
+
 		return username;
 	}
 
 	@Override
-	public String getPassword()
-	{
+	public String getPassword() {
+
 		return password;
 	}
 
 	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities()
-	{
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+
 		return authorities;
 	}
 
 	@Override
-	public boolean isAccountNonExpired()
-	{
+	public boolean isAccountNonExpired() {
+
 		return true;
 	}
 
 	@Override
-	public boolean isAccountNonLocked()
-	{
+	public boolean isAccountNonLocked() {
+
 		return true;
 	}
 
 	@Override
-	public boolean isCredentialsNonExpired()
-	{
+	public boolean isCredentialsNonExpired() {
+
 		return true;
 	}
 
 	@Override
-	public boolean isEnabled()
-	{
+	public boolean isEnabled() {
+
 		return true;
 	}
 }

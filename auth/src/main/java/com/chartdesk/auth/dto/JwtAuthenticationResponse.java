@@ -3,36 +3,35 @@ package com.chartdesk.auth.dto;
 /**
  * Response with token
  *
- * @date 18.02.2022
  * @author vmalyshev
+ * @date 18.02.2022
  */
-public class JwtAuthenticationResponse
-{
+public class JwtAuthenticationResponse {
 	private String accessToken;
 	private String tokenType = "Bearer";
 
-	public JwtAuthenticationResponse(String accessToken)
-	{
+	public JwtAuthenticationResponse(String accessToken) {
+
 		this.accessToken = accessToken;
 	}
 
-	public String getAccessToken()
-	{
+	public String getAccessToken() {
+
 		return accessToken;
 	}
 
-	public void setAccessToken(String accessToken)
-	{
+	public void setAccessToken(String accessToken) {
+
 		this.accessToken = accessToken;
 	}
 
-	public String getTokenType()
-	{
+	public String getTokenType() {
+
 		return tokenType;
 	}
 
-	public void setTokenType(String tokenType)
-	{
+	public void setTokenType(String tokenType) {
+
 		this.tokenType = tokenType;
 	}
 }

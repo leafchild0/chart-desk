@@ -6,8 +6,7 @@ import java.util.Optional;
 import com.chartdesk.auth.model.User;
 import org.springframework.data.repository.CrudRepository;
 
-public interface UserRepository extends CrudRepository<User, Long>
-{
+public interface UserRepository extends CrudRepository<User, Long> {
 	/**
 	 * Find user by userName
 	 */
@@ -15,7 +14,6 @@ public interface UserRepository extends CrudRepository<User, Long>
 
 	/**
 	 * Find all Active users
-	 *
 	 */
 	List<User> findByEnabledTrue();
 }

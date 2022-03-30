@@ -8,12 +8,11 @@ import javax.validation.constraints.NotBlank;
 /**
  * DTO for sign up
  *
- * @date 18.02.2022
  * @author vmalyshev
+ * @date 18.02.2022
  */
 @Data
-public class SignUpDTO
-{
+public class SignUpDTO {
 	@NotBlank
 	private String username;
 
