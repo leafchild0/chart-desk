@@ -3,13 +3,13 @@
 		<Navbar/>
 		<div class='is-admin' v-if='!currentUser.isAdmin'>You don't have permission to access this page</div>
 		<div v-else>
-			<UserTable :data='users' @deactivate='deactivateUser' :filter-columns='filterColumns' :headers='headers'>
+			<FilterableTable :data='users' :filter-columns='filterColumns' :headers='headers'>
 				<template v-slot:actions='props'>
 					<b-tooltip label='Deactivate user' position='is-left' type='is-warning'>
 						<b-button size='is-small' type='is-danger' outlined rounded icon-left='account-off' @click='() => deactivateUser(props.id)'></b-button>
 					</b-tooltip>
 				</template>
-			</UserTable>
+			</FilterableTable>
 		</div>
 	</div>
 </template>
@@ -19,11 +19,11 @@
 	import Navbar from '@/components/Navbar';
 	import api from '@/api';
 	import {mapGetters} from 'vuex';
-	import UserTable from '@/components/UserTable';
+	import FilterableTable from '@/components/FilterableTable';
 
 	export default {
 		name: 'Admin',
-		components: {Navbar, UserTable},
+		components: {Navbar, FilterableTable},
 		data() {
 			return {
 				users: [],
@@ -41,7 +41,7 @@
 				'currentUser',
 			]),
 			filterColumns() {
-				return this.headers.filter(h => h.field !== 'admin').map(h => h.field)
+				return this.headers.filter(h => h.field !== 'isAdmin').map(h => h.field)
 			}
 		},
 		methods: {

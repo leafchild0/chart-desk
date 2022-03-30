@@ -5,7 +5,14 @@
 		</b-field>
 		<b-table striped paginated narrowed hoverable :loading='data.length === 0' per-page='30' :data='filteredData'>
 			<template v-for='header in headers'>
-				<b-table-column :key='header.field' v-bind='header'>
+				<b-table-column :key='header.field' v-if='header.field === "username"' v-bind='header'>
+					<template v-slot='props'>
+						<span class='tag is-info'>
+							{{ props.row[header.field] }}
+						</span>
+					</template>
+				</b-table-column>
+				<b-table-column :key='header.field' v-else v-bind='header'>
 					<template v-slot='props'>
 						{{ props.row[header.field] }}
 					</template>
@@ -21,7 +28,7 @@
 <script>
 
 	export default {
-		name: 'UserTable',
+		name: 'FilterableTable',
 		props: ['data', 'filterColumns', 'headers'],
 		data() {
 			return {
