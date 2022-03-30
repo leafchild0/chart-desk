@@ -50,7 +50,7 @@ public class CustomUserDetailsService implements ReactiveUserDetailsService
 		if (existsByUsername(registerDTO.getUsername())) {
 			throw new HttpClientErrorException(HttpStatus.UNPROCESSABLE_ENTITY, "User with this username already exists");
 		}
-		User user = new User(registerDTO.getUsername(),
+		User user = new User(registerDTO.getUsername(), registerDTO.getFirstName(), registerDTO.getLastName(),
 			registerDTO.getEmail(), passwordEncoder.encode(registerDTO.getPassword()));
 		return Mono.just(userRepository.save(user));
 	}
@@ -68,8 +68,8 @@ public class CustomUserDetailsService implements ReactiveUserDetailsService
 	/**
 	 * Find user by passed id, should be long
 	 */
-	public Optional<User> findByUserId(String userId) {
-		return userRepository.findById(Long.valueOf(userId));
+	public Optional<User> findByUserId(Long userId) {
+		return userRepository.findById(userId);
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class CustomUserDetailsService implements ReactiveUserDetailsService
 	 * Updates user with passed data with id
 	 */
 	public Optional<User> updateUser(UserDTO user) {
-		return findByUserId(user.getUserId()).map(found -> {
+		return findByUserId(user.getId()).map(found -> {
 			found.setEmail(user.getEmail());
 			found.setUsername(user.getUsername());
 
@@ -95,7 +95,7 @@ public class CustomUserDetailsService implements ReactiveUserDetailsService
 	/**
 	 * Disables user by passed id
 	 */
-	public Optional<User> disableUser(String userId) {
+	public Optional<User> disableUser(Long userId) {
 		return findByUserId(userId).map(found -> {
 			found.setEnabled(false);
 

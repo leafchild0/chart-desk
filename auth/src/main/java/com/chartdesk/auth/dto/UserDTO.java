@@ -20,7 +20,13 @@ public class UserDTO
 	private String username;
 
 	@NotBlank
-	private String userId;
+	private Long id;
+
+	@NotBlank
+	private String firstName;
+
+	@NotBlank
+	private String lastName;
 
 	@NotBlank
 	@Email

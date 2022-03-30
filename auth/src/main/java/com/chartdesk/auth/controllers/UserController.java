@@ -45,7 +45,7 @@ public class UserController {
     @GetMapping("/{userId}")
     @PreAuthorize("hasRole('USER')")
     public Mono<ResponseEntity<UserDTO>> getUserById(@PathVariable String userId) {
-        return Mono.just(userDetailsService.findByUserId(userId)
+        return Mono.just(userDetailsService.findByUserId(Long.valueOf(userId))
                 .map(u -> ResponseEntity.ok(u.toDto()))
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build()));
     }
@@ -79,7 +79,7 @@ public class UserController {
     @PostMapping("/{userId}/disable")
     @PreAuthorize("hasRole('ADMIN')")
     public Mono<ResponseEntity<Object>> disableUser(@PathVariable String userId) {
-        return Mono.just(userDetailsService.disableUser(userId)
+        return Mono.just(userDetailsService.disableUser(Long.valueOf(userId))
                 .map(u -> ResponseEntity.ok().build())
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build()));
     }
