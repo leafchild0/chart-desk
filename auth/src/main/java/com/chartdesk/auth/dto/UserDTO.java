@@ -32,5 +32,5 @@ public class UserDTO
 	@Email
 	private String email;
 
-	private boolean isAdmin;
+	private Boolean isAdmin;
 }
