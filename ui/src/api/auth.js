@@ -27,6 +27,10 @@ export const updateUserDetails = (payload) => {
 	return api.put('auth/user', payload)
 }
 
+export const deactivateUser = (id) => {
+	return api.post(`auth/user/ + ${id}/deactivate`)
+}
+
 export const updatePassword = (payload) => {
 	return api.post('auth/password', payload)
 }

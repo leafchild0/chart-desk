@@ -33,6 +33,8 @@
 				api.deactivateUser(id)
 					.then(() => {
 						this.$toastr.s('User Info has been deactivated');
+						// Remove user for consistency
+						this.users = this.users.filter(u => u.id !== id);
 					})
 					.catch(() => {
 						this.$toastr.e('Error during user details update');
