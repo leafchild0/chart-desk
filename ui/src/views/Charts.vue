@@ -1,19 +1,19 @@
 <template>
 	<div class='charts'>
-		<HeaderMenu/>
+		<Navbar/>
         <ChartTable/>
   </div>
 </template>
 
 <script>
 
-	import HeaderMenu from '@/components/HeaderMenu';
 	import ChartTable from '@/components/ChartTable';
+	import Navbar from '@/components/Navbar';
 
 	export default {
 		name: 'Charts',
 		components: {
-			HeaderMenu,
+			Navbar,
 			ChartTable
 		}
 	}
