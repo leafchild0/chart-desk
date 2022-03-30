@@ -26,7 +26,7 @@
 
 <script>
 
-	import chartsApi from '@/auth/chartsApi';
+	import chartsApi from '@/api/chartsApi';
 
 	export default {
 		name: 'ChartTable',
@@ -36,16 +36,14 @@
 		methods: {
 			getData() {
 				// TODO: user id/name here & gateway
-				return chartsApi.get('http://192.168.50.149:8080/2/index.json', {
+				return chartsApi.get('2/index.json', {
 					dataType: 'json',
-				})
-					.then((response) => {
-						Object.keys(response.data.entries)
-							.forEach(k => this.data.push(...response.data.entries[k]));
-					})
-					.catch(() => {
-						this.$toastr.e('Something went wrong while getting charts')
-					});
+				}).then((response) => {
+					Object.keys(response.data.entries)
+						.forEach(k => this.data.push(...response.data.entries[k]));
+				}).catch(() => {
+					this.$toastr.e('Something went wrong while getting charts')
+				});
 			}
 		},
 		mounted() {

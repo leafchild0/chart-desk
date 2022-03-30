@@ -1,19 +1,19 @@
 <template>
 	<div class='charts'>
-		<HeaderMenu/>
+		<UploadChartButton/>
         <ChartTable/>
   </div>
 </template>
 
 <script>
 
-	import HeaderMenu from '@/components/HeaderMenu';
 	import ChartTable from '@/components/ChartTable';
+	import UploadChartButton from '@/components/UploadChartButton';
 
 	export default {
 		name: 'Charts',
 		components: {
-			HeaderMenu,
+			UploadChartButton,
 			ChartTable
 		}
 	}
