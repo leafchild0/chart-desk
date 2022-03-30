@@ -3,8 +3,15 @@
 		<b-field label='Filter by' label-position='on-border' class='filter'>
 			<b-input v-model='filterBy' placeholder='Filter by any field'></b-input>
 		</b-field>
-		<b-table striped paginated narrowed hoverable :loading='data.length === 0' per-page='30' :data='filteredData' :columns='headers'>
-			<b-table-column class='has-text-success' field='actions' label='Actions' centered v-slot='props'>
+		<b-table striped paginated narrowed hoverable :loading='data.length === 0' per-page='30' :data='filteredData'>
+			<template v-for='header in headers'>
+				<b-table-column :key='header.field' v-bind='header'>
+					<template v-slot='props'>
+						{{ props.row[header.field] }}
+					</template>
+				</b-table-column>
+			</template>
+			<b-table-column field='actions' label='Actions' centered v-slot='props'>
 				<b-tooltip label='Deactivate user' position='is-left' type='is-warning'>
 					<b-button size='is-small' type='is-danger' outlined rounded icon-left='account-off' @click='deactivateUser(props.row.id)'></b-button>
 				</b-tooltip>
