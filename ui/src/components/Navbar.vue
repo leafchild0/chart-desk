@@ -10,6 +10,9 @@
 				<b-navbar-item href='/charts'>
 					Charts
 				</b-navbar-item>
+				<b-navbar-item v-if='currentUser.isAdmin' href='/admin'>
+					Admin
+				</b-navbar-item>
 				<b-navbar-dropdown label='Info'>
 					<b-navbar-item href='/about'>
 						About
