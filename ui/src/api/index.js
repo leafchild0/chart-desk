@@ -5,12 +5,22 @@
  * @date 09.03.2022
  */
 
-import {login, signUp, getCurrentUser, updatePassword, updateUserDetails} from './auth';
+import {
+	login,
+	signUp,
+	getCurrentUser,
+	updatePassword,
+	updateUserDetails,
+	getAllUsers,
+	deactivateUser
+} from './auth';
 
 export default {
 	login,
 	signUp,
 	getCurrentUser,
 	updatePassword,
-	updateUserDetails
+	updateUserDetails,
+	getAllUsers,
+	deactivateUser
 };
