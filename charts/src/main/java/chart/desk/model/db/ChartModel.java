@@ -3,6 +3,7 @@ package chart.desk.model.db;
 import chart.desk.model.ChartEntry;
 import chart.desk.model.HelmAttributes;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -51,10 +51,10 @@ public class ChartModel {
     @Column(name = "app_version", nullable = false)
     private String appVersion;
 
-    @Column(name = "digest", nullable = false)
+    @Column(name = "digest")
     private String digest;
 
-    @Column(name = "engine", nullable = false)
+    @Column(name = "engine")
     private String engine;
 
     @NotNull
