@@ -26,8 +26,7 @@ export default {
 	updatePassword,
 	updateUserDetails,
 	getAllUsers,
-	deactivateUser
-	updateUserDetails,
+	deactivateUser,
 	chartsList,
 	uploadChart
 };

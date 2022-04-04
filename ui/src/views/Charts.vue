@@ -2,13 +2,13 @@
 	<div class='charts'>
 		<Navbar/>
 		<UploadChartButton :format='".tgz"'/>
-		<ChartTable :charts='data'/>
+		<FilterableTable :data='charts' :filter-columns='filterColumns' :headers='headers'/>
 	</div>
 </template>
 
 <script>
 
-	import ChartTable from '@/components/ChartTable';
+	import FilterableTable from '@/components/FilterableTable';
 	import Navbar from '@/components/Navbar';
 	import UploadChartButton from '@/components/UploadChartButton';
 	import api from '@/api';
@@ -18,20 +18,31 @@
 		components: {
 			Navbar,
 			UploadChartButton,
-			ChartTable
+			FilterableTable
 		},
 		methods: {},
 		data() {
 			return {
-				data: [],
+				charts: [],
+				headers: [
+					{field: 'name', label: 'Chart name'},
+					{field: 'version', label: 'Chart version'},
+					{field: 'description', label: 'Description'},
+					{field: 'created', label: 'Date'},
+				]
 			}
 		},
 		mounted() {
 			api.chartsList().then((response) => {
-				this.data = [].concat(...Object.values(response.data.entries));
+				this.charts = [].concat(...Object.values(response.data.entries));
 			}).catch(() => {
 				this.$toastr.e('Something went wrong while getting charts');
 			});
+		},
+		computed: {
+			filterColumns() {
+				return this.headers.map(h => h.field)
+			}
 		}
 	}
 </script>

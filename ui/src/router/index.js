@@ -33,7 +33,7 @@ const routes = [
 		name: 'charts',
 		component: Charts,
 		meta: {
-			requiresAuth: false
+			requiresAuth: true
 		}
 	},
 	{
