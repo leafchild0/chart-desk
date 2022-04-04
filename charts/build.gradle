@@ -1,3 +1,8 @@
+plugins {
+    id 'application'
+    id "org.sonarqube" version "3.3"
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -39,4 +44,12 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "leafchild0_chart-desk"
+        property "sonar.organization", "chart-desk"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
 }
