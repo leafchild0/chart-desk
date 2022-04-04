@@ -4,4 +4,13 @@ const chartsApi = axios.create({
 	baseURL: '/charts_api/'
 });
 
-export default chartsApi;
+export const chartsList = () => {
+	// TODO: user id/name here & gateway
+	return chartsApi.get('2/index.json', {
+		dataType: 'json',
+	})
+}
+
+export const uploadChart = (payload) => {
+	return chartsApi.post('auth/password', payload)
+}

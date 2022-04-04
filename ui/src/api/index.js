@@ -6,11 +6,14 @@
  */
 
 import {login, signUp, getCurrentUser, updatePassword, updateUserDetails} from './auth';
+import {chartsList, uploadChart} from './chartsApi';
 
 export default {
 	login,
 	signUp,
 	getCurrentUser,
 	updatePassword,
-	updateUserDetails
+	updateUserDetails,
+	chartsList,
+	uploadChart
 };

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<b-table paginated per-page='30' :data='data'>
+		<b-table paginated per-page='30' :data='charts'>
 
 			<b-table-column field='name' label='Chart name' centered sortable searchable v-slot='props'>
 				{{ props.row.name }}
@@ -26,28 +26,13 @@
 
 <script>
 
-	import chartsApi from '@/api/chartsApi';
-
 	export default {
 		name: 'ChartTable',
-		data: () => ({
-			data: [],
-		}),
-		methods: {
-			getData() {
-				// TODO: user id/name here & gateway
-				return chartsApi.get('2/index.json', {
-					dataType: 'json',
-				}).then((response) => {
-					Object.keys(response.data.entries)
-						.forEach(k => this.data.push(...response.data.entries[k]));
-				}).catch(() => {
-					this.$toastr.e('Something went wrong while getting charts')
-				});
-			}
+		props: {
+			charts: Array
 		},
-		mounted() {
-			this.getData();
+		methods: {
+
 		}
 	}
 </script>
