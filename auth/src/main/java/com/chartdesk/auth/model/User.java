@@ -1,13 +1,11 @@
 package com.chartdesk.auth.model;
 
 import com.chartdesk.auth.dto.UserDTO;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Email;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,9 +16,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

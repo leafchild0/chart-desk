@@ -72,7 +72,11 @@ public class CustomUserDetailsService implements ReactiveUserDetailsService {
 	 */
 	public Optional<User> findByUserId(Long userId) {
 
-		return userRepository.findById(userId);
+		return userRepository.findById(userId).map(u -> {
+				u.setPassword(null);
+				return u;
+			}
+		);
 	}
 
 	/**
