@@ -13,10 +13,6 @@ spring:
     username: chartdesk
     password: Q1w2e3r4
     url: jdbc:postgresql://localhost/chartdesk
-    platform: postgres
-    initialization-mode: always
-    continue-on-error: true
-    schema: users
   flyway:
     schemas: users
     url: jdbc:postgresql://localhost/chartdesk
@@ -30,6 +26,8 @@ spring:
     database: postgresql
   application:
     name: auth-service
+  config:
+    import: optional:consul:localhost:8500
   cloud:
     consul:
       host: localhost
@@ -38,6 +36,12 @@ spring:
         healthCheckPath: /actuator/health
         healthCheckInterval: 20s
         instanceId: ${spring.application.name}:${random.value}
+  sql:
+    init:
+      platform: postgres
+      enabled:
+      schema-locations: users
+      continue-on-error: true
 
 logging:
   level:

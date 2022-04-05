@@ -10,7 +10,7 @@ Helm charts registry and MS suite
 1. Upload package
 1.1 Add repo in helm:
 ```
-helm repo add test http://localhost:8080/
+helm repo add test http://localhost:8080/<user_id>
 "test" has been added to your repositories
 ```
 1.2 Install helm publish plugin
