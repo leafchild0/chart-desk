@@ -1,5 +1,5 @@
 <template>
-	<div id='user-table'>
+	<div id='filterable-table'>
 		<b-field label='Filter by' label-position='on-border' class='filter'>
 			<b-input v-model='filterBy' placeholder='Filter by any field'></b-input>
 		</b-field>
@@ -18,7 +18,7 @@
 					</template>
 				</b-table-column>
 			</template>
-			<b-table-column field='actions' label='Actions' centered v-slot='props'>
+			<b-table-column v-if='props' field='actions' label='Actions' centered v-slot='props'>
 				<slot name='actions' v-bind='props.row'></slot>
 			</b-table-column>
 		</b-table>
@@ -52,7 +52,7 @@
 
 <style lang='scss'>
 
-	#user-table {
+	#filterable-table {
 
 		padding: 15px;
 

@@ -14,6 +14,10 @@ import {
 	getAllUsers,
 	deactivateUser
 } from './auth';
+import {
+	chartsList,
+	uploadChart
+} from './chartsApi';
 
 export default {
 	login,
@@ -22,5 +26,7 @@ export default {
 	updatePassword,
 	updateUserDetails,
 	getAllUsers,
-	deactivateUser
+	deactivateUser,
+	chartsList,
+	uploadChart
 };
