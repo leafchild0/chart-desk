@@ -5,6 +5,7 @@ import Charts from '../views/Charts.vue'
 import SignUp from '@/views/SignUp'
 import Login from '@/views/Login'
 import store from '@/store'
+import Admin from '@/views/Admin';
 
 Vue.use(VueRouter)
 
@@ -33,6 +34,15 @@ const routes = [
 		component: Charts,
 		meta: {
 			requiresAuth: true
+		}
+	},
+	{
+		path: '/admin',
+		name: 'admin',
+		component: Admin,
+		meta: {
+			requiresAuth: true,
+			isAdmin: true
 		}
 	},
 	{

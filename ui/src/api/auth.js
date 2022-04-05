@@ -19,8 +19,16 @@ export const getCurrentUser = () => {
 	return api.get('auth/user')
 }
 
+export const getAllUsers = () => {
+	return api.get('auth/users')
+}
+
 export const updateUserDetails = (payload) => {
 	return api.put('auth/user', payload)
+}
+
+export const deactivateUser = (id) => {
+	return api.post(`auth/user/ + ${id}/deactivate`)
 }
 
 export const updatePassword = (payload) => {

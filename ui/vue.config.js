@@ -6,6 +6,12 @@ module.exports = {
 				ws: true,
 				changeOrigin: true
 			},
+			'^/charts_api': {
+				target: 'http://localhost:8081',
+				pathRewrite: { '^/charts_api': '' },
+				ws: true,
+				changeOrigin: true
+			}
 		}
 	}
 }

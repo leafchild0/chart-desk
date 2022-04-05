@@ -1,8 +1,7 @@
 package com.chartdesk.auth.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-
-import javax.validation.constraints.NotBlank;
 
 /**
  * DTO for login

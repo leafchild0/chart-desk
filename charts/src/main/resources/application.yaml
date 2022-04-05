@@ -1,0 +1,29 @@
+server:
+  port: 8081
+spring:
+  jpa:
+    generate-ddl: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: chart_desk
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  flyway:
+    schemas: chart_desk
+    user: postgres
+    password: changeme
+    url: jdbc:postgresql://localhost:5432/charts
+  datasource:
+    password: changeme
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/charts
+storage:
+  type: LOCAL
+  aws:
+    bucket: testBucket
+  local:
+    path: ./charts/storage/
