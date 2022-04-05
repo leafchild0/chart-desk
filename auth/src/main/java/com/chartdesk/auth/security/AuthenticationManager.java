@@ -33,7 +33,7 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
                 .switchIfEmpty(Mono.empty())
                 .map(valid -> {
                     Claims claims = jwtTokenUtil.getTokenClaims(authToken);
-                    List<String> rolesMap = claims.get("role", List.class);
+                    List<String> rolesMap = claims.get("authorities", List.class);
                     return new UsernamePasswordAuthenticationToken(
                             username,
                             null,
