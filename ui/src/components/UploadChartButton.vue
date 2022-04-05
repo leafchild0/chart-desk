@@ -8,7 +8,7 @@
 							<span class='file-label'>Click to upload chart (Only .tar.gz)</span>
 						</span>
 					<span class='file-name'>
-							{{ chartFile || '' }}
+							{{ chartFile ? chartFile.name : '' }}
 						</span>
 				</b-upload>
 			</b-field>
@@ -21,7 +21,6 @@
 </template>
 
 <script>
-	import chartsApi from '@/api/chartsApi';
 
 	export default {
 		name: 'UploadChartButton',
@@ -38,15 +37,9 @@
 				this.chartFile = event.target.files[0]
 			},
 			onUpload() {
-				const formData = new FormData()
-				formData.append('chart', this.chartFile, this.chartFile.name)
-				chartsApi.post('api/2/charts', formData, {}).then((response) => {
-					if (response.status === 201) {
-						this.$toastr.s('Helm chart ' + response.data.name + ', version: ' + response.data.version + ' was uploaded.');
-					}
-				}).catch(() => {
-					this.$toastr.e('Something went wrong while uploading chart.')
-				});
+				const formData = new FormData();
+				formData.append('chart', this.chartFile, this.chartFile.name);
+				this.$emit('upload-chart', formData);
 			}
 		}
 	}

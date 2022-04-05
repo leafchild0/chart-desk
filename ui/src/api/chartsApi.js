@@ -12,5 +12,5 @@ export const chartsList = () => {
 }
 
 export const uploadChart = (payload) => {
-	return chartsApi.post('auth/password', payload)
+	return chartsApi.post('api/2/charts', payload, {});
 }

@@ -1,7 +1,7 @@
 <template>
 	<div class='charts'>
 		<Navbar/>
-		<UploadChartButton :format='".tgz"'/>
+		<UploadChartButton v-on:upload-chart='uploadChart' :format='".tgz"'/>
 		<FilterableTable :data='charts' :filter-columns='filterColumns' :headers='headers'/>
 	</div>
 </template>
@@ -20,7 +20,17 @@
 			UploadChartButton,
 			FilterableTable
 		},
-		methods: {},
+		methods: {
+			uploadChart(formData) {
+				api.uploadChart(formData).then((response) => {
+					if (response.status === 201) {
+						this.$toastr.s('Helm chart ' + response.data.name + ', version: ' + response.data.version + ' was uploaded.');
+					}
+				}).catch(() => {
+					this.$toastr.e('Something went wrong while uploading chart.')
+				});
+			}
+		},
 		data() {
 			return {
 				charts: [],
