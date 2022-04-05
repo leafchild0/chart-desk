@@ -37,7 +37,7 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
                     return new UsernamePasswordAuthenticationToken(
                             username,
                             null,
-                            rolesMap.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList())
+                            rolesMap.stream().map(SimpleGrantedAuthority::new).toList()
                     );
                 });
     }

@@ -39,7 +39,7 @@ public class JwtTokenUtil {
 		return Jwts.builder()
 			.setSubject(user.getUsername())
 			.claim("authorities", user.getAuthorities().stream()
-				.map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+				.map(GrantedAuthority::getAuthority).toList())
 			.setIssuedAt(Date.from(now))
 			.setExpiration(Date.from(now.plusSeconds(jwtExpirationInMs)))
 			.signWith(getKey())
