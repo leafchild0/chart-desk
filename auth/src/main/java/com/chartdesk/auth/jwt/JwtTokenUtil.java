@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 public class JwtTokenUtil {
+
 	@Value("${auth-service.jwtSecret}")
 	private String jwtSecret;
 
@@ -45,7 +46,7 @@ public class JwtTokenUtil {
 			.compact();
 	}
 
-	public String getUserIdFromJWT(String token) {
+	public String getSubject(String token) {
 
 		Claims claims = Jwts.parserBuilder()
 			.setSigningKey(getKey())
@@ -56,7 +57,7 @@ public class JwtTokenUtil {
 		return claims.getSubject();
 	}
 
-	public Claims getAllClaims(String token) {
+	public Claims getTokenClaims(String token) {
 
 		return Jwts.parserBuilder()
 			.setSigningKey(getKey())
@@ -71,7 +72,7 @@ public class JwtTokenUtil {
 		return Keys.hmacShaKeyFor(jwtSecret.getBytes());
 	}
 
-	public boolean validateToken(String authToken) {
+	public boolean validateUserToken(String authToken) {
 
 		try {
 			Jwts.parserBuilder()
