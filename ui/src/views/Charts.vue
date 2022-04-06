@@ -2,7 +2,13 @@
 	<div class='charts'>
 		<Navbar/>
 		<UploadChartButton v-on:upload-chart='uploadChart' :format='".tgz"'/>
-		<FilterableTable :data='charts' :filter-columns='filterColumns' :headers='headers'/>
+		<FilterableTable :data='charts' :filter-columns='filterColumns' :headers='headers'>
+			<template v-slot:actions='props'>
+				<b-tooltip label='Edit chart' position='is-left' type='is-info'>
+					<b-button size='is-small' type='is-success' outlined rounded icon-left='account' @click='() => editUser(props.id)'></b-button>
+				</b-tooltip>
+			</template>
+		</FilterableTable>
 	</div>
 </template>
 
@@ -20,17 +26,6 @@
 			UploadChartButton,
 			FilterableTable
 		},
-		methods: {
-			uploadChart(formData) {
-				api.uploadChart(formData).then((response) => {
-					if (response.status === 201) {
-						this.$toastr.s('Helm chart ' + response.data.name + ', version: ' + response.data.version + ' was uploaded.');
-					}
-				}).catch(() => {
-					this.$toastr.e('Something went wrong while uploading chart.')
-				});
-			}
-		},
 		data() {
 			return {
 				charts: [],
@@ -42,17 +37,31 @@
 				]
 			}
 		},
+		computed: {
+			filterColumns() {
+				return this.headers.map(h => h.field)
+			}
+		},
+		methods: {
+			uploadChart(formData) {
+				api.uploadChart(formData).then((response) => {
+					if (response.status === 201) {
+						this.$toastr.s('Helm chart ' + response.data.name + ', version: ' + response.data.version + ' was uploaded.');
+					}
+				}).catch(() => {
+					this.$toastr.e('Something went wrong while uploading chart.')
+				});
+			},
+			editUser(id) {
+				this.$router.push({name: 'chart', params: {id: id}})
+			}
+		},
 		mounted() {
 			api.chartsList().then((response) => {
 				this.charts = [].concat(...Object.values(response.data.entries));
 			}).catch(() => {
 				this.$toastr.e('Something went wrong while getting charts');
 			});
-		},
-		computed: {
-			filterColumns() {
-				return this.headers.map(h => h.field)
-			}
 		}
 	}
 </script>
