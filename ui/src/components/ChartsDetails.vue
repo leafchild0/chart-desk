@@ -29,7 +29,7 @@
 						<div class='field-body'>
 							<div class='field'>
 								<div class='control'>
-									<span> {{ chart.created }}</span>
+									<span> {{ new Date(chart.created).toLocaleDateString() }}</span>
 								</div>
 							</div>
 						</div>
