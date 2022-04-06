@@ -18,7 +18,7 @@
 					</template>
 				</b-table-column>
 			</template>
-			<b-table-column v-if='props' field='actions' label='Actions' centered v-slot='props'>
+			<b-table-column field='actions' label='Actions' centered v-slot='props'>
 				<slot name='actions' v-bind='props.row'></slot>
 			</b-table-column>
 		</b-table>
