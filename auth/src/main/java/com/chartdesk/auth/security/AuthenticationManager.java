@@ -34,11 +34,7 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
                 .map(valid -> {
                     Claims claims = jwtTokenUtil.getTokenClaims(authToken);
                     List<String> rolesMap = claims.get("authorities", List.class);
-                    return new UsernamePasswordAuthenticationToken(
-                            username,
-                            null,
-                            rolesMap.stream().map(SimpleGrantedAuthority::new).toList()
-                    );
+                    return new UsernamePasswordAuthenticationToken(username, null, rolesMap.stream().map(SimpleGrantedAuthority::new).toList());
                 });
     }
 }
