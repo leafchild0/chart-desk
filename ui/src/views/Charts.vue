@@ -1,7 +1,7 @@
 <template>
 	<div class='charts'>
 		<Navbar/>
-		<UploadChartButton v-on:upload-chart='uploadChart' :format='".tgz"'/>
+		<UploadChartButton v-on:upload-chart='uploadChart' :title='"Upload chart (.tar.gz)"' :format='".tgz"'/>
 		<FilterableTable :data='charts' :filter-columns='filterColumns' :headers='headers' :details='true'>
 			<template v-slot:details='props'>
 				<ChartsDetails :chart='props.row'/>
