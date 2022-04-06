@@ -64,7 +64,6 @@ public class JwtTokenUtil {
 			.build()
 			.parseClaimsJws(token)
 			.getBody();
-
 	}
 
 	private SecretKey getKey() {
