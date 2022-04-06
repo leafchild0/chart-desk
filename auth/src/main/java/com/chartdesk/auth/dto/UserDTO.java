@@ -9,22 +9,27 @@ import lombok.Data;
 /**
  * DTO for user
  *
- * @date 02.03.2022
  * @author vmalyshev
+ * @date 02.03.2022
  */
 @Data
 @Builder
-public class UserDTO
-{
+public class UserDTO {
 	@NotBlank
 	private String username;
 
 	@NotBlank
-	private String userId;
+	private Long id;
+
+	@NotBlank
+	private String firstName;
+
+	@NotBlank
+	private String lastName;
 
 	@NotBlank
 	@Email
 	private String email;
 
-	private boolean isAdmin;
+	private Boolean isAdmin;
 }

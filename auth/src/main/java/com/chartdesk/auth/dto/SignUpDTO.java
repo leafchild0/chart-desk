@@ -7,12 +7,11 @@ import lombok.Data;
 /**
  * DTO for sign up
  *
- * @date 18.02.2022
  * @author vmalyshev
+ * @date 18.02.2022
  */
 @Data
-public class SignUpDTO
-{
+public class SignUpDTO {
 	@NotBlank
 	private String username;
 
@@ -22,4 +21,11 @@ public class SignUpDTO
 
 	@NotBlank
 	private String password;
+
+	@NotBlank
+	private String firstName;
+
+	@NotBlank
+	private String lastName;
+
 }

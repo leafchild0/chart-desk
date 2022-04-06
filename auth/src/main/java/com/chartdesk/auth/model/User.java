@@ -4,6 +4,7 @@ import com.chartdesk.auth.dto.UserDTO;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
@@ -15,8 +16,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
-public class User
-{
+@Data
+public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -31,79 +32,37 @@ public class User
 	@NotBlank
 	private String password;
 
+	@NotBlank
+	private String firstName;
+
+	@NotBlank
+	private String lastName;
+
 	@NotNull
 	private boolean enabled;
 
 	private boolean isAdmin;
 
-	public User(String username, String email, String password)
-	{
+	public User(String username, String firstName, String lastName, String email, String password) {
+
 		this.username = username;
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
 		this.enabled = true;
 		this.isAdmin = false;
 	}
 
-	public Long getId()
-	{
-		return id;
-	}
-
-	public void setId(Long id)
-	{
-		this.id = id;
-	}
-
-	public String getUsername()
-	{
-		return username;
-	}
-
-	public void setUsername(String username)
-	{
-		this.username = username;
-	}
-
-	public String getEmail()
-	{
-		return email;
-	}
-
-	public void setEmail(String email)
-	{
-		this.email = email;
-	}
-
-	public String getPassword()
-	{
-		return password;
-	}
-
-	public void setPassword(String password)
-	{
-		this.password = password;
-	}
-
-	public boolean isEnabled()
-	{
-		return enabled;
-	}
-
-	public void setEnabled(boolean enabled)
-	{
-		this.enabled = enabled;
-	}
-
-	public boolean isAdmin() {
-		return isAdmin;
-	}
-
 	public UserDTO toDto() {
+
 		return UserDTO.builder()
-				.email(email)
-				.username(username)
-				.isAdmin(isAdmin)
-				.build();
+			.email(email)
+			.username(username)
+			.isAdmin(isAdmin)
+			.firstName(firstName)
+			.lastName(lastName)
+			.id(id)
+			.build();
 	}
 }
