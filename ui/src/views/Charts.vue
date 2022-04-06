@@ -2,12 +2,7 @@
 	<div class='charts'>
 		<Navbar/>
 		<UploadChartButton v-on:upload-chart='uploadChart' :format='".tgz"'/>
-		<FilterableTable :data='charts' :filter-columns='filterColumns' :headers='headers'>
-			<template v-slot:actions='props'>
-				<b-tooltip label='Edit chart' position='is-left' type='is-info'>
-					<b-button size='is-small' type='is-success' outlined rounded icon-left='account' @click='() => editUser(props.id)'></b-button>
-				</b-tooltip>
-			</template>
+		<FilterableTable :data='charts' :filter-columns='filterColumns' :headers='headers' :details='true'>
 		</FilterableTable>
 	</div>
 </template>
@@ -52,7 +47,7 @@
 					this.$toastr.e('Something went wrong while uploading chart.')
 				});
 			},
-			editUser(id) {
+			showDetails(id) {
 				this.$router.push({name: 'chart', params: {id: id}})
 			}
 		},
