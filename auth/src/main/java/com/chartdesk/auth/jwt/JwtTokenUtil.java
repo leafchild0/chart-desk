@@ -68,12 +68,10 @@ public class JwtTokenUtil {
 	}
 
 	private SecretKey getKey() {
-
 		return Keys.hmacShaKeyFor(jwtSecret.getBytes());
 	}
 
 	public boolean validateUserToken(String authToken) {
-
 		try {
 			Jwts.parserBuilder()
 				.setSigningKey(getKey())
