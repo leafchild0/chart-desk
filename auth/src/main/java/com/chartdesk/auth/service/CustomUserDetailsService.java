@@ -36,7 +36,6 @@ public class CustomUserDetailsService implements ReactiveUserDetailsService {
 	}
 
 	private boolean existsByUsername(String username) {
-
 		return userRepository.findByUsername(username).isPresent();
 	}
 
@@ -64,7 +63,6 @@ public class CustomUserDetailsService implements ReactiveUserDetailsService {
 	 */
 	@Override
 	public Mono<UserDetails> findByUsername(String username) {
-
 		return Mono.justOrEmpty(UserPrincipal.create(userRepository.findByUsername(username)));
 	}
 
@@ -86,7 +84,6 @@ public class CustomUserDetailsService implements ReactiveUserDetailsService {
 	 * @return all users
 	 */
 	public List<User> findAllUsers() {
-
 		return userRepository.findByEnabledTrue();
 	}
 
