@@ -4,13 +4,7 @@
 		<UploadChartButton v-on:upload-chart='uploadChart' :format='".tgz"'/>
 		<FilterableTable :data='charts' :filter-columns='filterColumns' :headers='headers' :details='true'>
 			<template v-slot:details='props'>
-				<article class='media'>
-					<div class='media-content'>
-						<div class='content'>
-							{{props.row}}
-						</div>
-					</div>
-				</article>
+				<ChartsDetails :chart='props.row'/>
 			</template>
 		</FilterableTable>
 	</div>
@@ -22,10 +16,12 @@
 	import Navbar from '@/components/Navbar';
 	import UploadChartButton from '@/components/UploadChartButton';
 	import api from '@/api';
+	import ChartsDetails from '@/components/ChartsDetails';
 
 	export default {
 		name: 'Charts',
 		components: {
+			ChartsDetails,
 			Navbar,
 			UploadChartButton,
 			FilterableTable
@@ -69,3 +65,10 @@
 		}
 	}
 </script>
+
+<style scoped lang='scss'>
+
+	.charts {
+	}
+
+</style>
