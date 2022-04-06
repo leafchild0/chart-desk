@@ -5,7 +5,7 @@
 				<b-upload @change='onChange' v-model='chartFile' class='file-label' :accept='format' required validationMessage='Please select a file'>
 						<span class='file-cta'>
 							<b-icon class='file-icon' icon='upload'></b-icon>
-							<span class='file-label'>Click to upload chart (Only .tar.gz)</span>
+							<span class='file-label'>{{title}}</span>
 						</span>
 					<span class='file-name'>
 							{{ chartFile ? chartFile.name : '' }}
@@ -25,7 +25,8 @@
 	export default {
 		name: 'UploadChartButton',
 		props: {
-			format: String
+			format: String,
+			title: String
 		},
 		data() {
 			return {

@@ -3,7 +3,17 @@
 		<b-field label='Filter by' label-position='on-border' class='filter'>
 			<b-input v-model='filterBy' placeholder='Filter by any field'></b-input>
 		</b-field>
-		<b-table striped paginated narrowed hoverable :loading='data.length === 0' per-page='30' :data='filteredData'>
+		<b-table
+			striped
+			paginated
+			narrowed
+			hoverable
+			:loading='data.length === 0'
+			per-page='30'
+			:data='filteredData'
+			:detailed='details'
+			detail-key='name'
+		>
 			<template v-for='header in headers'>
 				<b-table-column :key='header.field' v-if='header.field === "username"' v-bind='header'>
 					<template v-slot='props'>
@@ -18,9 +28,13 @@
 					</template>
 				</b-table-column>
 			</template>
-			<b-table-column v-if='props' field='actions' label='Actions' centered v-slot='props'>
+			<b-table-column v-if='isActions' field='actions' label='Actions' centered v-slot='props'>
 				<slot name='actions' v-bind='props.row'></slot>
 			</b-table-column>
+
+			<template #detail='props'>
+				<slot name='details' v-bind='props'></slot>
+			</template>
 		</b-table>
 	</div>
 </template>
@@ -29,7 +43,7 @@
 
 	export default {
 		name: 'FilterableTable',
-		props: ['data', 'filterColumns', 'headers'],
+		props: ['data', 'filterColumns', 'headers', 'details'],
 		data() {
 			return {
 				filterBy: '',
@@ -45,6 +59,9 @@
 					}
 					return false
 				})
+			},
+			isActions() {
+				return this.$slots.actions || this.$scopedSlots.actions
 			}
 		}
 	}
