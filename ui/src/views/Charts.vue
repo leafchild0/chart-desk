@@ -3,6 +3,15 @@
 		<Navbar/>
 		<UploadChartButton v-on:upload-chart='uploadChart' :format='".tgz"'/>
 		<FilterableTable :data='charts' :filter-columns='filterColumns' :headers='headers' :details='true'>
+			<template v-slot:details='props'>
+				<article class='media'>
+					<div class='media-content'>
+						<div class='content'>
+							{{props.row}}
+						</div>
+					</div>
+				</article>
+			</template>
 		</FilterableTable>
 	</div>
 </template>

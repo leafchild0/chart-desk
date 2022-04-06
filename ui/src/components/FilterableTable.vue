@@ -28,18 +28,12 @@
 					</template>
 				</b-table-column>
 			</template>
-			<b-table-column field='actions' label='Actions' centered v-slot='props'>
+			<b-table-column v-if='isActions' field='actions' label='Actions' centered v-slot='props'>
 				<slot name='actions' v-bind='props.row'></slot>
 			</b-table-column>
 
 			<template #detail='props'>
-				<article class='media'>
-					<div class='media-content'>
-						<div class='content'>
-							{{props.row}}
-						</div>
-					</div>
-				</article>
+				<slot name='details' v-bind='props'></slot>
 			</template>
 		</b-table>
 	</div>
@@ -65,6 +59,9 @@
 					}
 					return false
 				})
+			},
+			isActions() {
+				return this.$slots.actions || this.$scopedSlots.actions
 			}
 		}
 	}
