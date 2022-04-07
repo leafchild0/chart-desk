@@ -74,7 +74,7 @@ public class ChartProxyController {
                     }).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
         } catch (Exception e) {
             log.error("Proxy helm repository {} failed.", thirdPartyUrl, e);
-            return Collections.emptyMap();
+            throw new RuntimeException("Proxy helm repository " + thirdPartyUrl + " failed.");
         }
     }
 
