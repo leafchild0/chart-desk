@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface ChartRepository extends JpaRepository<ChartModel, Long> {
-    Optional<ChartModel> findChartModelByNameAndUserId(String name, String userId);
+    Optional<ChartModel> findChartModelByUserIdAndNameAndVersion(String userId, String name, String version);
 
     List<ChartModel> findAllByUserId(String userId);
 }

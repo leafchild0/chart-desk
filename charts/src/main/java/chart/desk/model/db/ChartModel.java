@@ -41,11 +41,11 @@ public class ChartModel {
     private String version;
 
     @NotNull
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
     private String description;
 
     @NotNull
-    @Column(name = "app_version", nullable = false)
+    @Column(name = "app_version")
     private String appVersion;
 
     @Column(name = "digest")
@@ -55,15 +55,15 @@ public class ChartModel {
     private String engine;
 
     @NotNull
-    @Column(name = "icon", nullable = false)
+    @Column(name = "icon")
     private String icon;
 
     @NotNull
-    @Column(name = "home", nullable = false)
+    @Column(name = "home")
     private String home;
 
     @NotNull
-    @Column(name = "keywords", nullable = false)
+    @Column(name = "keywords")
     private String keywords;
 
     @NotNull
@@ -71,15 +71,15 @@ public class ChartModel {
     private String urls;
 
     @NotNull
-    @Column(name = "prov_urls", nullable = false)
+    @Column(name = "prov_urls")
     private String provUrls;
 
     @NotNull
-    @Column(name = "sources", nullable = false)
+    @Column(name = "sources")
     private String sources;
 
     @NotNull
-    @Column(name = "maintainers", nullable = false)
+    @Column(name = "maintainers")
     private String maintainers;
 
     @NotNull

@@ -1,12 +1,18 @@
 package chart.desk.controllers;
 
 import chart.desk.model.AssetKind;
+import chart.desk.model.ChartEntry;
 import chart.desk.model.ChartIndex;
 import chart.desk.parsers.YamlParser;
 import chart.desk.services.ChartService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.vdurmont.semver4j.Semver;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,8 +20,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Comparator;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
@@ -33,35 +46,51 @@ public class ChartProxyController {
     }
 
     @PostMapping("/proxy/{userId}")
-    public void proxyIndex(@PathVariable("userId") String userId,
+    public Map<Boolean, Long> proxyIndex(@PathVariable("userId") String userId,
             @RequestParam("thirdPartyUrl") String thirdPartyUrl) throws JsonProcessingException {
         String chartIndex = restTemplate.getForObject(thirdPartyUrl, String.class);
         ChartIndex index = yamlParser.download(chartIndex);
-        index.getEntries().values().forEach(charts -> charts.stream()
-                .forEach(chartEntry -> {
-                    log.info("Saving chart {} {}", chartEntry.getName(), chartEntry.getVersion());
-                    byte[] chart = downloadFirstChart(chartEntry.getUrls());
-                    if (chart.length == 0) {
-                        log.error("Downloading chart failed: {} {}", chartEntry.getName(), chartEntry.getVersion());
-                        return;
-                    }
-                    try {
-                        chartService.save(chartEntry, chart, AssetKind.HELM_PACKAGE, userId);
-                    } catch (Exception e) {
-                        log.error("Saving chart failed: {} {}", chartEntry.getName(), chartEntry.getVersion());
-                    }
-                }));
+        Map<String, List<ChartEntry>> existedCharts = chartService.getIndex(userId).getEntries();
+        try (PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
+            CloseableHttpClient client = HttpClients.custom().setConnectionManager(connectionManager).build()) {
+            return index.getEntries().values().stream()
+                    .flatMap(Collection::stream)
+                    .parallel()
+                    .filter(a -> existedCharts.getOrDefault(a.getName(), Collections.emptyList()).stream().noneMatch(b -> Objects.equals(a.getVersion(), b.getVersion())))
+                    .map(chartEntry -> {
+                        log.info("Saving chart {} {}", chartEntry.getName(), chartEntry.getVersion());
+                        byte[] chart = downloadFirstChart(chartEntry.getUrls(), client);
+                        if (chart.length == 0) {
+                            log.error("Downloading chart failed: {} {}", chartEntry.getName(), chartEntry.getVersion());
+                            return false;
+                        }
+                        try {
+                            chartService.save(chartEntry, chart, AssetKind.HELM_PACKAGE, userId, false);
+                            return true;
+                        } catch (Exception e) {
+                            log.error("Saving chart failed: {} {}", chartEntry.getName(), chartEntry.getVersion(), e);
+                            return false;
+                        }
+                    }).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        } catch (Exception e) {
+            log.error("Proxy helm repository {} failed.", thirdPartyUrl, e);
+            return Collections.emptyMap();
+        }
     }
 
-    private byte[] downloadFirstChart(List<String> urls) {
+    private byte[] downloadFirstChart(List<String> urls, CloseableHttpClient client) {
         for (String url : urls) {
-            try {
-                return restTemplate.getForObject(url, byte[].class);
-            } catch (Exception e) {
+            HttpGet request = new HttpGet(url);
+            try (CloseableHttpResponse execute = client.execute(request)) {
+                if (execute.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                    try (InputStream is = execute.getEntity().getContent()) {
+                        return is.readAllBytes();
+                    }
+                }
+            } catch (IOException e) {
                 log.warn("Download chart from {} failed.", url, e);
             }
         }
         return new byte[] {};
     }
 }
-

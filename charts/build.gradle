@@ -32,6 +32,9 @@ dependencies {
     // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-s3
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.169'
 
+    // https://mvnrepository.com/artifact/commons-httpclient/commons-httpclient
+    implementation 'commons-httpclient:commons-httpclient:3.1'
+
     implementation 'com.vdurmont:semver4j:3.1.0'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
