@@ -14,11 +14,11 @@ import java.nio.file.Path;
  */
 @Service
 @ConditionalOnProperty(
-        value="storage.type",
+        value = "storage.type",
         havingValue = "LOCAL")
 public class LocalStorageService implements StorageService {
 
-    @Value("${storage.local.path}" )
+    @Value("${storage.local.path}")
     private String storagePath;
 
     @Override

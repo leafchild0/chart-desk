@@ -15,12 +15,12 @@ import java.io.InputStream;
 import java.net.URL;
 
 @ConditionalOnProperty(
-        value="storage.type",
+        value = "storage.type",
         havingValue = "AWS_S3")
 @Service
 public class S3StorageService implements StorageService {
 
-    @Value("${storage.aws.bucket}" )
+    @Value("${storage.aws.bucket}")
     private String bucketName;
 
     @Override

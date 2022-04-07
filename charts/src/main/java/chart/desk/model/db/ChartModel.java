@@ -134,10 +134,10 @@ public class ChartModel {
     @SneakyThrows
     public ChartEntry toChartEntry() {
         ObjectMapper objectMapper = new ObjectMapper();
-        List<String> urls = objectMapper.readValue(getUrls(), List.class);
-        List<String> sources = objectMapper.readValue(getSources(), List.class);
-        List<String> keywords = objectMapper.readValue(getKeywords(), List.class);
-        List<Map<String, String>> maintainers = objectMapper.readValue(getMaintainers(), List.class);
+        List<String> urlsList = objectMapper.readValue(getUrls(), List.class);
+        List<String> sourcesList = objectMapper.readValue(getSources(), List.class);
+        List<String> keywordsList = objectMapper.readValue(getKeywords(), List.class);
+        List<Map<String, String>> maintainersList = objectMapper.readValue(getMaintainers(), List.class);
         return ChartEntry.builder()
                 .description(getDescription())
                 .name(getName())
@@ -146,12 +146,12 @@ public class ChartModel {
                 .appVersion(getAppVersion())
                 .digest(getDigest())
                 .icon(getIcon())
-                .urls(urls)
-                .sources(sources)
-                .maintainers(maintainers)
+                .urls(urlsList)
+                .sources(sourcesList)
+                .maintainers(maintainersList)
                 .engine(getEngine())
                 .home(getHome())
-                .keywords(keywords)
+                .keywords(keywordsList)
                 .build();
     }
 }

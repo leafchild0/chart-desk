@@ -117,8 +117,8 @@ public class ChartController {
             log.info(chartEntry.toString());
         } catch (IOException e) {
             // TODO: error handling
+            log.error("Helm attribute parsing failed", e);
             chartEntry = new ChartEntry();
-            e.printStackTrace();
         }
         return chartEntry;
     }

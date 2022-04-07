@@ -2,7 +2,6 @@ package chart.desk.model;
 
 import chart.desk.util.JodaDateTimeDeserializer;
 import chart.desk.util.JodaDateTimeSerializer;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;

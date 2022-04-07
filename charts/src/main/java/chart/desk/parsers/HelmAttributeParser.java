@@ -25,11 +25,11 @@ public class HelmAttributeParser {
     }
 
     public ChartEntry getAttributes(final AssetKind assetKind, final InputStream inputStream) throws IOException {
-      return switch (assetKind) {
-        case HELM_PACKAGE -> getAttributesFromInputStream(inputStream);
-        case HELM_PROVENANCE -> getAttributesProvenanceFromInputStream(inputStream);
-        default -> new ChartEntry();
-      };
+        return switch (assetKind) {
+            case HELM_PACKAGE -> getAttributesFromInputStream(inputStream);
+            case HELM_PROVENANCE -> getAttributesProvenanceFromInputStream(inputStream);
+            default -> new ChartEntry();
+        };
     }
 
     private ChartEntry getAttributesProvenanceFromInputStream(final InputStream inputStream) throws IOException {
