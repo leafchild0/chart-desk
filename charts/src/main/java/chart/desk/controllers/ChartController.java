@@ -1,8 +1,8 @@
 package chart.desk.controllers;
 
 import chart.desk.model.AssetKind;
+import chart.desk.model.ChartEntry;
 import chart.desk.model.ChartIndex;
-import chart.desk.model.HelmAttributes;
 import chart.desk.model.db.ChartModel;
 import chart.desk.parsers.HelmAttributeParser;
 import chart.desk.services.ChartService;
@@ -68,7 +68,7 @@ public class ChartController {
     @PostMapping(value = "/api/{userId}/charts", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Mono<ChartModel>> uploadChart(@RequestPart("chart") Flux<FilePart> fileParts, @PathVariable("userId") String userId) {
         Mono<ChartModel> attributes = toByteArray(fileParts).map(bytes -> {
-            HelmAttributes helmAttributes = getHelmAttributes(bytes, AssetKind.HELM_PACKAGE);
+            ChartEntry helmAttributes = getHelmAttributes(bytes, AssetKind.HELM_PACKAGE);
             return chartService.save(helmAttributes, bytes, AssetKind.HELM_PACKAGE, userId);
         });
 
@@ -88,7 +88,7 @@ public class ChartController {
     @PostMapping("{userId}/api/prov")
     public ResponseEntity<Mono<ChartModel>> uploadProvinance(@RequestPart("chart") Flux<FilePart> fileParts, @PathVariable("userId") String userId) {
         Mono<ChartModel> attributes = toByteArray(fileParts).map(bytes -> {
-            HelmAttributes helmAttributes = getHelmAttributes(bytes, AssetKind.HELM_PROVENANCE);
+            ChartEntry helmAttributes = getHelmAttributes(bytes, AssetKind.HELM_PROVENANCE);
             return chartService.save(helmAttributes, bytes, AssetKind.HELM_PROVENANCE, userId);
         });
 
@@ -110,16 +110,16 @@ public class ChartController {
         return ByteStreams.toByteArray(inputStream);
     }
 
-    private HelmAttributes getHelmAttributes(byte[] chart, AssetKind assetKind) {
-        HelmAttributes helmAttributes;
+    private ChartEntry getHelmAttributes(byte[] chart, AssetKind assetKind) {
+        ChartEntry chartEntry;
         try (InputStream inputStream = new ByteArrayInputStream(chart)) {
-            helmAttributes = helmAttributeParser.getAttributes(assetKind, inputStream);
-            log.info(helmAttributes.toString());
+            chartEntry = helmAttributeParser.getAttributes(assetKind, inputStream);
+            log.info(chartEntry.toString());
         } catch (IOException e) {
             // TODO: error handling
-            helmAttributes = new HelmAttributes();
+            chartEntry = new ChartEntry();
             e.printStackTrace();
         }
-        return helmAttributes;
+        return chartEntry;
     }
 }

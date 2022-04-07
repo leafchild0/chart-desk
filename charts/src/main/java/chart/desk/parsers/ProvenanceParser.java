@@ -1,6 +1,6 @@
 package chart.desk.parsers;
 
-import chart.desk.model.HelmAttributes;
+import chart.desk.model.ChartEntry;
 import chart.desk.model.HelmProperties;
 import org.springframework.stereotype.Service;
 
@@ -11,29 +11,29 @@ import java.io.InputStreamReader;
 
 @Service
 public class ProvenanceParser {
-    public HelmAttributes parse(final InputStream inputStream) throws IOException {
-        HelmAttributes attributes = new HelmAttributes();
+    public ChartEntry parse(final InputStream inputStream) throws IOException {
+        ChartEntry chartEntry = new ChartEntry();
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 if (line.startsWith(HelmProperties.NAME.getPropertyName())) {
-                    attributes.setName(getValue(line));
+                    chartEntry.setName(getValue(line));
                 }
                 if (line.startsWith(HelmProperties.DESCRIPTION.getPropertyName())) {
-                    attributes.setDescription(getValue(line));
+                    chartEntry.setDescription(getValue(line));
                 }
                 if (line.startsWith(HelmProperties.VERSION.getPropertyName())) {
-                    attributes.setVersion(getValue(line));
+                    chartEntry.setVersion(getValue(line));
                 }
                 if (line.startsWith(HelmProperties.ICON.getPropertyName())) {
-                    attributes.setIcon(getValue(line));
+                    chartEntry.setIcon(getValue(line));
                 }
                 if (line.startsWith(HelmProperties.APP_VERSION.getPropertyName())) {
-                    attributes.setAppVersion(getValue(line));
+                    chartEntry.setAppVersion(getValue(line));
                 }
             }
         }
-        return attributes;
+        return chartEntry;
     }
 
     private String getValue(String string) {

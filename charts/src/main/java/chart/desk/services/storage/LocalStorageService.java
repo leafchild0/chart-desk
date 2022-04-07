@@ -26,14 +26,20 @@ public class LocalStorageService implements StorageService {
         String fileName = getFileName(name, version, assetKind);
         try {
             Path path = Path.of(storagePath, userId, fileName);
-            Files.createDirectories(path.getParent());
-            Files.createFile(path);
-            Files.write(path, file);
+            if (!Files.exists(path)) {
+                saveChart(file, path);
+            }
             return getGatewayUrl() + userId + "/" + fileName;
         } catch (IOException e) {
             // TODO: error handling
             throw new RuntimeException(e);
         }
+    }
+
+    private void saveChart(byte[] file, Path path) throws IOException {
+        Files.createDirectories(path.getParent());
+        Files.createFile(path);
+        Files.write(path, file);
     }
 
     private String getFileName(String name, String version, AssetKind assetKind) {

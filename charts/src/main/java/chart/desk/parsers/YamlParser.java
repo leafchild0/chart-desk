@@ -1,7 +1,8 @@
 package chart.desk.parsers;
 
+import chart.desk.model.ChartEntry;
 import chart.desk.model.ChartIndex;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -12,7 +13,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UncheckedIOException;
-import java.util.Map;
 
 /**
  * Service for getting attributes from yaml files, writing to yaml files
@@ -27,12 +27,8 @@ public class YamlParser
     this.mapper = mapper;
   }
 
-  private static final TypeReference<Map<String, Object>> MAP_TYPE_REFERENCE
-          = new TypeReference<>() {
-  };
-
-  public Map<String, Object> load(InputStream is) throws IOException {
-    return mapper.readValue(is, MAP_TYPE_REFERENCE);
+  public ChartEntry load(InputStream is) throws IOException {
+    return mapper.readValue(is, ChartEntry.class);
   }
 
   public String getYamlContent(final ChartIndex index) {
@@ -52,5 +48,9 @@ public class YamlParser
     catch (IOException ex) {
       throw new UncheckedIOException(ex);
     }
+  }
+
+  public ChartIndex download(String chartIndex) throws JsonProcessingException {
+    return mapper.readValue(chartIndex, ChartIndex.class);
   }
 }
