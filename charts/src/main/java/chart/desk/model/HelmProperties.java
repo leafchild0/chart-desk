@@ -9,7 +9,7 @@ import java.util.Optional;
 /**
  * @deprecated replace with ChartEntity
  */
-@Deprecated
+@Deprecated(forRemoval = true)
 @AllArgsConstructor
 public enum HelmProperties {
     NAME("name"),

@@ -12,12 +12,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 @SpringBootTest
-public class TgzParserTest {
+class TgzParserTest {
     @Autowired
     private HelmAttributeParser helmAttributeParser;
 
     @Test
-    public void getChartFromInputStream() throws IOException {
+    void getChartFromInputStream() throws IOException {
         try (InputStream is = Resources.getResource("mariadb-4.2.6.tgz").openStream()) {
             ChartEntry chartEntry = helmAttributeParser.getAttributes(AssetKind.HELM_PACKAGE, is);
             Assertions.assertEquals("mariadb", chartEntry.getName());

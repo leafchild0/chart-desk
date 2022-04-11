@@ -16,12 +16,14 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -29,6 +31,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @RestController
 @Slf4j
@@ -47,8 +51,9 @@ public class ChartProxyController {
 
     @PostMapping("/proxy/{userId}")
     public Map<Boolean, Long> proxyIndex(@PathVariable("userId") String userId,
-            @RequestParam("thirdPartyUrl") String thirdPartyUrl) throws JsonProcessingException {
-        String chartIndex = restTemplate.getForObject(thirdPartyUrl, String.class);
+            @RequestBody Map<String, String> body) throws JsonProcessingException {
+        String thirdPartyUrl = body.get("thirdPartyUrl");
+        String chartIndex = restTemplate.getForObject(URI.create(thirdPartyUrl), String.class);
         ChartIndex index = yamlParser.download(chartIndex);
         Map<String, List<ChartEntry>> existedCharts = chartService.getIndex(userId).getEntries();
         try (PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
@@ -74,7 +79,7 @@ public class ChartProxyController {
                     }).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
         } catch (Exception e) {
             log.error("Proxy helm repository {} failed.", thirdPartyUrl, e);
-            throw new RuntimeException("Proxy helm repository " + thirdPartyUrl + " failed.");
+            throw new ResponseStatusException(BAD_REQUEST, "Proxy helm repository " + thirdPartyUrl + " failed.", e);
         }
     }
 

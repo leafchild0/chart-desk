@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -116,9 +117,8 @@ public class ChartController {
             chartEntry = helmAttributeParser.getAttributes(assetKind, inputStream);
             log.info(chartEntry.toString());
         } catch (IOException e) {
-            // TODO: error handling
             log.error("Helm attribute parsing failed", e);
-            chartEntry = new ChartEntry();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Helm attribute parsing failed", e);
         }
         return chartEntry;
     }

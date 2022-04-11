@@ -3,7 +3,9 @@ package chart.desk.services.storage;
 import chart.desk.model.AssetKind;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -31,8 +33,7 @@ public class LocalStorageService implements StorageService {
             }
             return getGatewayUrl() + userId + "/" + fileName;
         } catch (IOException e) {
-            // TODO: error handling
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Chart " + name + "-" + version + " fetching error", e);
         }
     }
 
@@ -57,8 +58,7 @@ public class LocalStorageService implements StorageService {
         try {
             return Files.readAllBytes(path);
         } catch (IOException e) {
-            // TODO: error handling
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Chart " + name + "-" + version + " fetching error", e);
         }
     }
 
