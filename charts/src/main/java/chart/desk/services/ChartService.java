@@ -85,11 +85,13 @@ public class ChartService {
     private Semver normalizeVersion(String version) {
         try {
             return new Semver(version);
-        } catch(SemverException e) {
+        } catch (SemverException e) {
+            // v0.0.1 -> 0.0.1
             if (version.startsWith("v")) {
                 return normalizeVersion(version.substring(1));
             }
 
+            // put chart in the end of charts list if version could not be parsed.
             return new Semver("0.0.0");
         }
     }
