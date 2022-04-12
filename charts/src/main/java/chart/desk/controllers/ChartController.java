@@ -3,6 +3,7 @@ package chart.desk.controllers;
 import chart.desk.model.AssetKind;
 import chart.desk.model.ChartEntry;
 import chart.desk.model.ChartIndex;
+import chart.desk.model.ChartTo;
 import chart.desk.model.db.ChartModel;
 import chart.desk.parsers.HelmAttributeParser;
 import chart.desk.services.ChartService;
@@ -32,6 +33,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.SequenceInputStream;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @Slf4j
@@ -62,8 +65,8 @@ public class ChartController {
 
     @GetMapping("{userId}/index.json")
     public String getIndexJson(@PathVariable("userId") String userId) throws JsonProcessingException {
-        ChartIndex index = chartService.getIndex(userId);
-        return jsonObjectMapper.writeValueAsString(index);
+        List<ChartTo> chartList = chartService.getChartList(userId);
+        return jsonObjectMapper.writeValueAsString(chartList);
     }
 
     @PostMapping(value = "/api/{userId}/charts", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -78,8 +81,15 @@ public class ChartController {
                 .body(attributes);
     }
 
+    @GetMapping(value = "/{userId}/{name}/{version}")
+    public ResponseEntity<Mono<ChartEntry>> getChart(@PathVariable("name") String name, @PathVariable("version") String version, @PathVariable("userId") String userId) {
+        Optional<ChartEntry> chart = chartService.get(name, version, userId);
+        return chart.map(entry -> ResponseEntity.status(HttpStatus.OK).body(Mono.just(entry)))
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(Mono.empty()));
+    }
+
     @GetMapping(value = "/{userId}/{name}-{version}.tgz")
-    public ResponseEntity<Mono<byte[]>> getChart(@PathVariable("name") String name, @PathVariable("version") String version, @PathVariable("userId") String userId) {
+    public ResponseEntity<Mono<byte[]>> getChartArchive(@PathVariable("name") String name, @PathVariable("version") String version, @PathVariable("userId") String userId) {
         byte[] chart = chartService.get(name, version, AssetKind.HELM_PACKAGE, userId);
         return ResponseEntity
                 .status(HttpStatus.OK)

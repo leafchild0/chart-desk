@@ -3,10 +3,13 @@ package chart.desk.services;
 import chart.desk.model.AssetKind;
 import chart.desk.model.ChartEntry;
 import chart.desk.model.ChartIndex;
+import chart.desk.model.ChartTo;
 import chart.desk.model.db.ChartModel;
 import chart.desk.repositories.ChartRepository;
 import chart.desk.services.storage.StorageService;
 import chart.desk.services.storage.StorageType;
+import com.vdurmont.semver4j.Semver;
+import com.vdurmont.semver4j.SemverException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -47,6 +51,52 @@ public class ChartService {
         List<ChartModel> userCharts = chartRepository.findAllByUserId(userId);
         // TODO: handle private charts
         return new ChartIndex(userCharts);
+    }
+
+    public List<ChartTo> getChartList(String userId) {
+        return getIndex(userId).getEntries()
+                .values().stream()
+                .map(this::toChartTo)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+    }
+
+    private Optional<ChartTo> toChartTo(List<ChartEntry> charts) {
+        List<ChartEntry> chartEntries = charts.stream()
+                .sorted(Comparator.comparing(a -> normalizeVersion(a.getVersion())))
+                .toList();
+
+        if (chartEntries.isEmpty()) {
+            return Optional.empty();
+        }
+
+        ChartEntry lastVersionChart = chartEntries.get(chartEntries.size() - 1);
+        return Optional.of(ChartTo.builder()
+                .name(lastVersionChart.getName())
+                .versions(chartEntries.stream()
+                        .map(ChartEntry::getVersion)
+                        .toList())
+                .created(lastVersionChart.getCreated())
+                .tags(lastVersionChart.getKeywords())
+                .build());
+    }
+
+    private Semver normalizeVersion(String version) {
+        try {
+            return new Semver(version);
+        } catch(SemverException e) {
+            if (version.startsWith("v")) {
+                return normalizeVersion(version.substring(1));
+            }
+
+            return new Semver("0.0.0");
+        }
+    }
+
+    public Optional<ChartEntry> get(String name, String version, String userId) {
+        return chartRepository.findChartModelByUserIdAndNameAndVersion(userId, name, version)
+                .map(ChartModel::toChartEntry);
     }
 
     public byte[] get(String name, String version, AssetKind assetKind, String userId) {
