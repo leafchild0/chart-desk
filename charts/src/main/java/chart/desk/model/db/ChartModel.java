@@ -1,7 +1,6 @@
 package chart.desk.model.db;
 
 import chart.desk.model.ChartEntry;
-import chart.desk.model.HelmAttributes;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -9,7 +8,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.ToString;
-import org.hibernate.envers.Audited;
 import org.joda.time.DateTime;
 
 import javax.persistence.Column;
@@ -23,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 @Entity
-@Audited
 @Table(name = "charts")
 @Data
 @NoArgsConstructor
@@ -44,11 +41,11 @@ public class ChartModel {
     private String version;
 
     @NotNull
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
     private String description;
 
     @NotNull
-    @Column(name = "app_version", nullable = false)
+    @Column(name = "app_version")
     private String appVersion;
 
     @Column(name = "digest")
@@ -58,15 +55,15 @@ public class ChartModel {
     private String engine;
 
     @NotNull
-    @Column(name = "icon", nullable = false)
+    @Column(name = "icon")
     private String icon;
 
     @NotNull
-    @Column(name = "home", nullable = false)
+    @Column(name = "home")
     private String home;
 
     @NotNull
-    @Column(name = "keywords", nullable = false)
+    @Column(name = "keywords")
     private String keywords;
 
     @NotNull
@@ -74,15 +71,15 @@ public class ChartModel {
     private String urls;
 
     @NotNull
-    @Column(name = "prov_urls", nullable = false)
+    @Column(name = "prov_urls")
     private String provUrls;
 
     @NotNull
-    @Column(name = "sources", nullable = false)
+    @Column(name = "sources")
     private String sources;
 
     @NotNull
-    @Column(name = "maintainers", nullable = false)
+    @Column(name = "maintainers")
     private String maintainers;
 
     @NotNull
@@ -94,18 +91,18 @@ public class ChartModel {
     private Date created;
 
     @SneakyThrows
-    public ChartModel(HelmAttributes attributes, String digest, List<String> urls, List<String> provUrls, String userId) {
-        this.name = attributes.getName();
-        this.version = attributes.getVersion();
-        this.description = attributes.getDescription();
-        this.appVersion = attributes.getAppVersion();
-        this.icon = attributes.getIcon();
-        this.engine = attributes.getEngine();
-        this.home = attributes.getHome();
+    public ChartModel(ChartEntry chartEntry, String digest, List<String> urls, List<String> provUrls, String userId) {
+        this.name = chartEntry.getName();
+        this.version = chartEntry.getVersion();
+        this.description = chartEntry.getDescription();
+        this.appVersion = chartEntry.getAppVersion();
+        this.icon = chartEntry.getIcon();
+        this.engine = chartEntry.getEngine();
+        this.home = chartEntry.getHome();
         ObjectMapper objectMapper = new ObjectMapper();
-        this.keywords = objectMapper.writeValueAsString(attributes.getKeywords());
-        this.sources = objectMapper.writeValueAsString(attributes.getSources());
-        this.maintainers = objectMapper.writeValueAsString(attributes.getMaintainers());
+        this.keywords = objectMapper.writeValueAsString(chartEntry.getKeywords());
+        this.sources = objectMapper.writeValueAsString(chartEntry.getSources());
+        this.maintainers = objectMapper.writeValueAsString(chartEntry.getMaintainers());
         this.urls = objectMapper.writeValueAsString(urls);
         this.provUrls = objectMapper.writeValueAsString(provUrls);
         this.created = new Date();
@@ -114,19 +111,19 @@ public class ChartModel {
     }
 
     @SneakyThrows
-    public ChartModel(Long id, HelmAttributes attributes, String digest, List<String> urls, List<String> provUrls, String userId) {
+    public ChartModel(Long id, ChartEntry chartEntry, String digest, List<String> urls, List<String> provUrls, String userId) {
         this.id = id;
-        this.name = attributes.getName();
-        this.version = attributes.getVersion();
-        this.description = attributes.getDescription();
-        this.appVersion = attributes.getAppVersion();
-        this.icon = attributes.getIcon();
-        this.engine = attributes.getEngine();
-        this.home = attributes.getHome();
+        this.name = chartEntry.getName();
+        this.version = chartEntry.getVersion();
+        this.description = chartEntry.getDescription();
+        this.appVersion = chartEntry.getAppVersion();
+        this.icon = chartEntry.getIcon();
+        this.engine = chartEntry.getEngine();
+        this.home = chartEntry.getHome();
         ObjectMapper objectMapper = new ObjectMapper();
-        this.keywords = objectMapper.writeValueAsString(attributes.getKeywords());
-        this.sources = objectMapper.writeValueAsString(attributes.getSources());
-        this.maintainers = objectMapper.writeValueAsString(attributes.getMaintainers());
+        this.keywords = objectMapper.writeValueAsString(chartEntry.getKeywords());
+        this.sources = objectMapper.writeValueAsString(chartEntry.getSources());
+        this.maintainers = objectMapper.writeValueAsString(chartEntry.getMaintainers());
         this.urls = objectMapper.writeValueAsString(urls);
         this.provUrls = objectMapper.writeValueAsString(provUrls);
         this.created = new Date();
@@ -137,9 +134,10 @@ public class ChartModel {
     @SneakyThrows
     public ChartEntry toChartEntry() {
         ObjectMapper objectMapper = new ObjectMapper();
-        List<String> urls = objectMapper.readValue(getUrls(), List.class);
-        List<String> sources = objectMapper.readValue(getSources(), List.class);
-        List<Map<String, String>> maintainers = objectMapper.readValue(getMaintainers(), List.class);
+        List<String> urlsList = objectMapper.readValue(getUrls(), List.class);
+        List<String> sourcesList = objectMapper.readValue(getSources(), List.class);
+        List<String> keywordsList = objectMapper.readValue(getKeywords(), List.class);
+        List<Map<String, String>> maintainersList = objectMapper.readValue(getMaintainers(), List.class);
         return ChartEntry.builder()
                 .description(getDescription())
                 .name(getName())
@@ -148,9 +146,12 @@ public class ChartModel {
                 .appVersion(getAppVersion())
                 .digest(getDigest())
                 .icon(getIcon())
-                .urls(urls)
-                .sources(sources)
-                .maintainers(maintainers)
+                .urls(urlsList)
+                .sources(sourcesList)
+                .maintainers(maintainersList)
+                .engine(getEngine())
+                .home(getHome())
+                .keywords(keywordsList)
                 .build();
     }
 }

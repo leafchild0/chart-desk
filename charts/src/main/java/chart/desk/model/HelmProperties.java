@@ -6,6 +6,10 @@ import lombok.Getter;
 import java.util.Arrays;
 import java.util.Optional;
 
+/**
+ * @deprecated replace with ChartEntity
+ */
+@Deprecated(forRemoval = true)
 @AllArgsConstructor
 public enum HelmProperties {
     NAME("name"),

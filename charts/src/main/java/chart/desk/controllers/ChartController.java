@@ -1,8 +1,8 @@
 package chart.desk.controllers;
 
 import chart.desk.model.AssetKind;
+import chart.desk.model.ChartEntry;
 import chart.desk.model.ChartIndex;
-import chart.desk.model.HelmAttributes;
 import chart.desk.model.db.ChartModel;
 import chart.desk.parsers.HelmAttributeParser;
 import chart.desk.services.ChartService;
@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -68,8 +69,8 @@ public class ChartController {
     @PostMapping(value = "/api/{userId}/charts", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Mono<ChartModel>> uploadChart(@RequestPart("chart") Flux<FilePart> fileParts, @PathVariable("userId") String userId) {
         Mono<ChartModel> attributes = toByteArray(fileParts).map(bytes -> {
-            HelmAttributes helmAttributes = getHelmAttributes(bytes, AssetKind.HELM_PACKAGE);
-            return chartService.save(helmAttributes, bytes, AssetKind.HELM_PACKAGE, userId);
+            ChartEntry helmAttributes = getHelmAttributes(bytes, AssetKind.HELM_PACKAGE);
+            return chartService.save(helmAttributes, bytes, AssetKind.HELM_PACKAGE, userId, true);
         });
 
         return ResponseEntity
@@ -88,8 +89,8 @@ public class ChartController {
     @PostMapping("{userId}/api/prov")
     public ResponseEntity<Mono<ChartModel>> uploadProvinance(@RequestPart("chart") Flux<FilePart> fileParts, @PathVariable("userId") String userId) {
         Mono<ChartModel> attributes = toByteArray(fileParts).map(bytes -> {
-            HelmAttributes helmAttributes = getHelmAttributes(bytes, AssetKind.HELM_PROVENANCE);
-            return chartService.save(helmAttributes, bytes, AssetKind.HELM_PROVENANCE, userId);
+            ChartEntry helmAttributes = getHelmAttributes(bytes, AssetKind.HELM_PROVENANCE);
+            return chartService.save(helmAttributes, bytes, AssetKind.HELM_PROVENANCE, userId, true);
         });
 
         return ResponseEntity
@@ -110,16 +111,15 @@ public class ChartController {
         return ByteStreams.toByteArray(inputStream);
     }
 
-    private HelmAttributes getHelmAttributes(byte[] chart, AssetKind assetKind) {
-        HelmAttributes helmAttributes;
+    private ChartEntry getHelmAttributes(byte[] chart, AssetKind assetKind) {
+        ChartEntry chartEntry;
         try (InputStream inputStream = new ByteArrayInputStream(chart)) {
-            helmAttributes = helmAttributeParser.getAttributes(assetKind, inputStream);
-            log.info(helmAttributes.toString());
+            chartEntry = helmAttributeParser.getAttributes(assetKind, inputStream);
+            log.info(chartEntry.toString());
         } catch (IOException e) {
-            // TODO: error handling
-            helmAttributes = new HelmAttributes();
-            e.printStackTrace();
+            log.error("Helm attribute parsing failed", e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Helm attribute parsing failed", e);
         }
-        return helmAttributes;
+        return chartEntry;
     }
 }

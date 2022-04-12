@@ -7,7 +7,9 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -15,12 +17,12 @@ import java.io.InputStream;
 import java.net.URL;
 
 @ConditionalOnProperty(
-        value="storage.type",
+        value = "storage.type",
         havingValue = "AWS_S3")
 @Service
 public class S3StorageService implements StorageService {
 
-    @Value("${storage.aws.bucket}" )
+    @Value("${storage.aws.bucket}")
     private String bucketName;
 
     @Override
@@ -32,8 +34,7 @@ public class S3StorageService implements StorageService {
             getS3Client().putObject(bucketName, key, is, new ObjectMetadata());
             return getUrl(key).toString();
         } catch (IOException e) {
-            // TODO: exception handling
-            throw new RuntimeException(e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Chart " + name + "-" + version + " fetching error", e);
         }
     }
 

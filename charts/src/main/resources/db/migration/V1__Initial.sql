@@ -17,3 +17,5 @@ CREATE TABLE CHARTS
     user_id     VARCHAR(255),
     created     timestamp without time zone NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'UTC')
 );
+
+CREATE INDEX IDX_CHARTS ON CHARTS(user_id, name, version);
