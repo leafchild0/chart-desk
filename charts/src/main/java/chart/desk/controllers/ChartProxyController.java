@@ -23,7 +23,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -51,9 +54,10 @@ public class ChartProxyController {
 
     @PostMapping("/proxy/{userId}")
     public Map<Boolean, Long> proxyIndex(@PathVariable("userId") String userId,
-            @RequestBody Map<String, String> body) throws JsonProcessingException {
+            @RequestBody Map<String, String> body) throws JsonProcessingException, MalformedURLException, URISyntaxException {
         String thirdPartyUrl = body.get("thirdPartyUrl");
-        String chartIndex = restTemplate.getForObject(URI.create(thirdPartyUrl), String.class);
+        // Creating new URL and perform validation checks
+        String chartIndex = restTemplate.getForObject(new URL(thirdPartyUrl).toURI(), String.class);
         ChartIndex index = yamlParser.download(chartIndex);
         Map<String, List<ChartEntry>> existedCharts = chartService.getIndex(userId).getEntries();
         try (PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
