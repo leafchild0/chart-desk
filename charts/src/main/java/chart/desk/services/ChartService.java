@@ -31,6 +31,17 @@ public class ChartService {
     private final ChartRepository chartRepository;
     private final List<StorageService> storageServices;
 
+    /**
+     * Store chart in DB and storage.
+     *
+     * @param chartEntry {@link ChartEntry}
+     * @param chart byte array of chart archive
+     * @param assetKind {@link AssetKind}
+     * @param userId user id
+     * @param checkExist boolean flag should we check that this chart already exist
+     *
+     * @return {@link ChartModel}
+     */
     public ChartModel save(ChartEntry chartEntry, byte[] chart, AssetKind assetKind, String userId, boolean checkExist) {
         if (checkExist) {
             Optional<ChartModel> existChart = chartRepository.findChartModelByUserIdAndNameAndVersion(userId, chartEntry.getName(), chartEntry.getVersion());
@@ -46,12 +57,24 @@ public class ChartService {
         return chartRepository.save(new ChartModel(chartEntry, null, urls, Collections.emptyList(), userId));
     }
 
+    /**
+     * Return {@link ChartIndex} with all available charts with all available versions.
+     *
+     * @param userId user id
+     * @return {@link ChartIndex}
+     */
     public ChartIndex getIndex(String userId) {
         List<ChartModel> userCharts = chartRepository.findAllByUserId(userId);
         // TODO: handle private charts
         return new ChartIndex(userCharts);
     }
 
+    /**
+     * Return list with all available charts with all available versions
+     *
+     * @param userId user id
+     * @return list o ChartTo
+     */
     public List<ChartTo> getChartList(String userId) {
         return getIndex(userId).getEntries()
                 .values().stream()
@@ -95,12 +118,31 @@ public class ChartService {
         }
     }
 
-    public Optional<ChartEntry> get(String name, String version, String userId) {
+    /**
+     * Fetch {@link ChartEntry} from DB if present
+     *
+     * @param name chart name
+     * @param version chart version
+     * @param userId user id
+     *
+     * @return Optional of {@link ChartEntry}
+     */
+    public Optional<ChartEntry> getChart(String name, String version, String userId) {
         return chartRepository.findChartModelByUserIdAndNameAndVersion(userId, name, version)
                 .map(ChartModel::toChartEntry);
     }
 
-    public byte[] get(String name, String version, AssetKind assetKind, String userId) {
+    /**
+     * Fetch chart archive from local storage
+     *
+     * @param name chart name
+     * @param version chart version
+     * @param userId user id
+     * @param assetKind {@link AssetKind}
+     *
+     * @return byte array of chart archive
+     */
+    public byte[] getChartArchive(String name, String version, AssetKind assetKind, String userId) {
         return storageServices.stream()
                 .filter(s -> s.type() == StorageType.LOCAL)
                 .map(s -> s.get(name, version, assetKind, userId))

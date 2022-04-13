@@ -43,7 +43,6 @@ public class ChartController {
     private final HelmAttributeParser helmAttributeParser;
     private final ChartService chartService;
     private final ObjectMapper yamlObjectMapper;
-    private final ObjectMapper jsonObjectMapper;
 
     @Autowired
     public ChartController(HelmAttributeParser helmAttributeParser,
@@ -53,7 +52,6 @@ public class ChartController {
         this.helmAttributeParser = helmAttributeParser;
         this.chartService = chartService;
         this.yamlObjectMapper = yamlObjectMapper;
-        this.jsonObjectMapper = jsonObjectMapper;
     }
 
     // TODO: need to fetch it from database later and maybe cache here with caffeine cache etc
@@ -64,9 +62,8 @@ public class ChartController {
     }
 
     @GetMapping("{userId}/index.json")
-    public String getIndexJson(@PathVariable("userId") String userId) throws JsonProcessingException {
-        List<ChartTo> chartList = chartService.getChartList(userId);
-        return jsonObjectMapper.writeValueAsString(chartList);
+    public List<ChartTo> getIndexJson(@PathVariable("userId") String userId) {
+        return chartService.getChartList(userId);
     }
 
     @PostMapping(value = "/api/{userId}/charts", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -83,14 +80,14 @@ public class ChartController {
 
     @GetMapping(value = "/{userId}/{name}/{version}")
     public ResponseEntity<Mono<ChartEntry>> getChart(@PathVariable("name") String name, @PathVariable("version") String version, @PathVariable("userId") String userId) {
-        Optional<ChartEntry> chart = chartService.get(name, version, userId);
+        Optional<ChartEntry> chart = chartService.getChart(name, version, userId);
         return chart.map(entry -> ResponseEntity.status(HttpStatus.OK).body(Mono.just(entry)))
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(Mono.empty()));
     }
 
     @GetMapping(value = "/{userId}/{name}-{version}.tgz")
     public ResponseEntity<Mono<byte[]>> getChartArchive(@PathVariable("name") String name, @PathVariable("version") String version, @PathVariable("userId") String userId) {
-        byte[] chart = chartService.get(name, version, AssetKind.HELM_PACKAGE, userId);
+        byte[] chart = chartService.getChartArchive(name, version, AssetKind.HELM_PACKAGE, userId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(Mono.just(chart));
