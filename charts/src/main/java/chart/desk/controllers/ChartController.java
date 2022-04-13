@@ -47,8 +47,7 @@ public class ChartController {
     @Autowired
     public ChartController(HelmAttributeParser helmAttributeParser,
             ChartService chartService,
-            @Qualifier("yaml_mapper") ObjectMapper yamlObjectMapper,
-            @Qualifier("json_mapper") ObjectMapper jsonObjectMapper) {
+            @Qualifier("yaml_mapper") ObjectMapper yamlObjectMapper) {
         this.helmAttributeParser = helmAttributeParser;
         this.chartService = chartService;
         this.yamlObjectMapper = yamlObjectMapper;
@@ -61,7 +60,7 @@ public class ChartController {
         return yamlObjectMapper.writeValueAsString(index);
     }
 
-    @GetMapping("{userId}/index.json")
+    @GetMapping("{userId}")
     public List<ChartTo> getIndexJson(@PathVariable("userId") String userId) {
         return chartService.getChartList(userId);
     }
