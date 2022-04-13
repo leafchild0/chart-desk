@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -16,9 +17,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-@ConditionalOnProperty(
-        value = "storage.type",
-        havingValue = "AWS_S3")
+/**
+ * Storage implementation for AWS S3
+ */
+
+@ConditionalOnExpression("'${storage.type}'.contains('AWS_S3')")
 @Service
 public class S3StorageService implements StorageService {
 

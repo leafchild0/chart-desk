@@ -2,6 +2,7 @@ package chart.desk.services.storage;
 
 import chart.desk.model.AssetKind;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -12,12 +13,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
- *
+ * Local Storage provider impl
  */
 @Service
-@ConditionalOnProperty(
-        value = "storage.type",
-        havingValue = "LOCAL")
+@ConditionalOnExpression("'${storage.type}'.contains('LOCAL')")
 public class LocalStorageService implements StorageService {
 
     @Value("${storage.local.path}")
