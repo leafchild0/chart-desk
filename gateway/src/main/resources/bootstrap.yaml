@@ -1,8 +1,6 @@
 spring:
   application:
     name: gateway-service
-  config:
-    import: optional:consul:localhost:8500
   cloud:
     consul:
       host: localhost
