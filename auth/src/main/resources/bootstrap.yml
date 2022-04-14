@@ -8,24 +8,28 @@ auth-service:
   jwtExpirationInMs: 100000000
 
 spring:
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    username: postgres
-    password: changeme
-    url: jdbc:postgresql://localhost/charts
-  flyway:
-    schemas: auth
-    url: jdbc:postgresql://localhost/charts
-    user: postgres
-    password: changeme
-  jpa:
-    show-sql: true
-    generate-ddl: false
-    hibernate:
-      ddl-auto: none
-    database: postgresql
   application:
     name: auth-service
+  jpa:
+    generate-ddl: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: auth
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  flyway:
+    schemas: auth
+    user: postgres
+    password: changeme
+    url: jdbc:postgresql://localhost:5432/charts
+  datasource:
+    password: changeme
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/charts
   cloud:
     consul:
       host: localhost
