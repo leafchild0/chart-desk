@@ -1,0 +1,29 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+description: Git server and application builder for Hephy Workflow.
+home: https://github.com/teamhephy/builder
+maintainers:
+- - email: team@teamhephy.com
+name: builder
+version: v2.13.7
+
+...
+files:
+  builder-v2.13.7.tgz: sha256:668cab877a86400132333c67751ea5cd6e56200084ac2ab9ab13f221914960cb
+-----BEGIN PGP SIGNATURE-----
+
+wsFcBAEBCgAQBQJfgzNsCRBOPt40+beXrAAAsfIQAM4ylH7v3Uhrig0lpHgWPcF8
+vToNkjUt6bPE2ZzYYAqD/c6nEd/vP2vKtTqv9gsrBf9W2H7nkc3BDj5yEW60ROUi
+1IaldDrP1RgA8Zm5Xgr9F7HwmdyYHL6IjLqDaHor9wq5OLBpr3dlbB5ajB3qqRxU
+FW0kS8Eu7ykklIBAa+ew3sMpTLN6M8ehHtW3M4oYLQ1901hkRq8AavNJL+UeUp9E
+v/1IlwJbVqOkvMcak60wvm3eePBnrxE9HEni8VerVqLzt1wZ+yh52oGkOJih0J/N
+SQBBIxF4EHpXlbFvMKgsThlq1TJ2oGob3sioGrVlFYI5yZOW5Og79qcGUMQ+p8TX
+1X0pu6mI+8LsAUUunAhtUHdiUQ5vZGKk1TCT90kLW5f9DeYJiLdno5my/otOF3dt
+cH1sAg35AFruUO/dCnd8cFpmQIArRpnw+y8WhKTHkHz9WnNK3j+IsTUwTmcz/gER
+uLMwnWFNVfYgyMMVTHAXdHkqNWaMwHzTO4R1RejzhJKV8OE1gLccFu+Qny3SiMDo
+SaSbchc8mGPicHtGfBjOLgvKR7cKvmkzGtY3OWj4GkBo8Tqi9e/8RpcZI/heKm11
+9PFMlq01LY0tOVR38M9yIrwE+7E/fpsIaUkJBQYNsdXJKUBKthLCr+Egj/RUKKxL
+jc7O2+02x9wXoDUHWrMG
+=hmFX
+-----END PGP SIGNATURE-----

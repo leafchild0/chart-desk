@@ -40,4 +40,12 @@ public class ChartCmdController {
                 .status(HttpStatus.OK)
                 .body(Mono.just(chart));
     }
+
+    @GetMapping(value = "/{userId}/{name}-{version}.tgz.prov")
+    public ResponseEntity<Mono<byte[]>> getChartProv(@PathVariable("name") String name, @PathVariable("version") String version, @PathVariable("userId") String userId) {
+        byte[] chart = chartService.getChartArchive(name, version, AssetKind.HELM_PROVENANCE, userId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(Mono.just(chart));
+    }
 }
