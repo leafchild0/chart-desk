@@ -13,11 +13,20 @@ spring:
         enabled: true
         format: yaml
     gateway:
+      discovery:
+        locator:
+          enabled: true
       routes:
         # =====================================
         # routes to be listed here
         # Java routing can be used as well, but to change it - recompilation and restart would be needed
         # Properties can be changed on the fly
+      - id: auth-service
+        uri: lb://auth-service
+        predicates:
+          - Path=/auth/**
+        filters:
+          - RewritePath=/auth/(?<path>.*), /$\{path}
 
 server:
   port: 8765
