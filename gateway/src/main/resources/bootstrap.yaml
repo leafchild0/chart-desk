@@ -27,6 +27,12 @@ spring:
           - Path=/auth/**
         filters:
           - RewritePath=/auth/(?<path>.*), /$\{path}
+      - id: charts-service
+        uri: lb://charts-service
+        predicates:
+          - Path=/charts/**
+        filters:
+          - RewritePath=/charts/(?<path>.*), /$\{path}
 
 server:
   port: 8765
