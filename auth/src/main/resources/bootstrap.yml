@@ -10,14 +10,14 @@ auth-service:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    username: chartdesk
-    password: Q1w2e3r4
-    url: jdbc:postgresql://localhost/chartdesk
+    username: postgres
+    password: changeme
+    url: jdbc:postgresql://localhost/charts
   flyway:
-    schemas: users
-    url: jdbc:postgresql://localhost/chartdesk
-    user: chartdesk
-    password: Q1w2e3r4
+    schemas: auth
+    url: jdbc:postgresql://localhost/charts
+    user: postgres
+    password: changeme
   jpa:
     show-sql: true
     generate-ddl: false
@@ -26,8 +26,6 @@ spring:
     database: postgresql
   application:
     name: auth-service
-  config:
-    import: optional:consul:localhost:8500
   cloud:
     consul:
       host: localhost
@@ -36,12 +34,6 @@ spring:
         healthCheckPath: /actuator/health
         healthCheckInterval: 20s
         instanceId: ${spring.application.name}:${random.value}
-  sql:
-    init:
-      platform: postgres
-      enabled:
-      schema-locations: users
-      continue-on-error: true
 
 logging:
   level:
