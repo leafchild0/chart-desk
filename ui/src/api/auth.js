@@ -28,7 +28,7 @@ export const updateUserDetails = (payload) => {
 }
 
 export const deactivateUser = (id) => {
-	return api.post(`auth/user/ + ${id}/deactivate`)
+	return api.post(`auth/user/${id}/deactivate`)
 }
 
 export const updatePassword = (payload) => {
