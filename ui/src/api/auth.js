@@ -1,37 +1,37 @@
-import api from './api';
+import {auth} from './api';
 
 /**
- * API related to Auth and user, i.e. login/signup
+ * auth related to auth and user, i.e. login/signup
  *
  * @author vmalyshev
  * @date 24.03.2022
  */
 
 export const login = (payload) => {
-	return api.post('auth/login', payload)
+	return auth.post('login', payload)
 }
 
 export const signUp = (payload) => {
-	return api.post('auth/signup', payload)
+	return auth.post('signup', payload)
 }
 
 export const getCurrentUser = () => {
-	return api.get('auth/user')
+	return auth.get('user')
 }
 
 export const getAllUsers = () => {
-	return api.get('auth/users')
+	return auth.get('users')
 }
 
 export const updateUserDetails = (payload) => {
-	return api.put('auth/user', payload)
+	return auth.put('user', payload)
 }
 
 export const deactivateUser = (id) => {
-	return api.post(`auth/user/${id}/deactivate`)
+	return auth.post(`user/${id}/deactivate`)
 }
 
 export const updatePassword = (payload) => {
-	return api.post('auth/password', payload)
+	return auth.post('password', payload)
 }
 
