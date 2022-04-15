@@ -33,6 +33,7 @@ spring:
           - Path=/charts/**
         filters:
           - RewritePath=/charts/(?<path>.*), /$\{path}
+          - AuthFilter
 
 server:
   port: 8765
@@ -42,7 +43,11 @@ server:
 
 logging:
   level:
-    org.springframework.web: INFO
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+management:
+  endpoint.gateway.enabled: true
+  endpoints.web.exposure.include: gateway
 
 # Secret to generate tokens, used in both auth service and in gateway
 auth-service:
