@@ -1,8 +1,6 @@
 spring:
   application:
     name: gateway-service
-  config:
-    import: optional:consul:localhost:8500
   cloud:
     consul:
       host: localhost
@@ -15,11 +13,27 @@ spring:
         enabled: true
         format: yaml
     gateway:
+      discovery:
+        locator:
+          enabled: true
       routes:
         # =====================================
         # routes to be listed here
         # Java routing can be used as well, but to change it - recompilation and restart would be needed
         # Properties can be changed on the fly
+      - id: auth-service
+        uri: lb://auth-service
+        predicates:
+          - Path=/auth/**
+        filters:
+          - RewritePath=/auth/(?<path>.*), /$\{path}
+      - id: charts-service
+        uri: lb://charts-service
+        predicates:
+          - Path=/charts/**
+        filters:
+          - RewritePath=/charts/(?<path>.*), /$\{path}
+          - AuthFilter
 
 server:
   port: 8765
@@ -30,6 +44,9 @@ server:
 logging:
   level:
     org.springframework.web: INFO
+management:
+  endpoint.gateway.enabled: true
+  endpoints.web.exposure.include: gateway
 
 # Secret to generate tokens, used in both auth service and in gateway
 auth-service:

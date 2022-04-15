@@ -7,27 +7,35 @@ auth-service:
   jwtSecret: a3ZzApRSDQF5E9cH3JFV1LNBzOtQEiv6OumGJudd3Ao=
   jwtExpirationInMs: 100000000
 
+management:
+  health:
+    livenessState.enabled: true
+    readinessState.enabled: true
+  endpoint.health.probes.enabled: true
+
 spring:
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    username: chartdesk
-    password: Q1w2e3r4
-    url: jdbc:postgresql://localhost/chartdesk
-  flyway:
-    schemas: users
-    url: jdbc:postgresql://localhost/chartdesk
-    user: chartdesk
-    password: Q1w2e3r4
-  jpa:
-    show-sql: true
-    generate-ddl: false
-    hibernate:
-      ddl-auto: none
-    database: postgresql
   application:
     name: auth-service
-  config:
-    import: optional:consul:localhost:8500
+  jpa:
+    generate-ddl: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: auth
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  flyway:
+    schemas: auth
+    user: postgres
+    password: changeme
+    url: jdbc:postgresql://localhost:5432/charts
+  datasource:
+    password: changeme
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/charts
   cloud:
     consul:
       host: localhost
@@ -36,12 +44,6 @@ spring:
         healthCheckPath: /actuator/health
         healthCheckInterval: 20s
         instanceId: ${spring.application.name}:${random.value}
-  sql:
-    init:
-      platform: postgres
-      enabled:
-      schema-locations: users
-      continue-on-error: true
 
 logging:
   level:

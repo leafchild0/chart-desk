@@ -1,19 +1,17 @@
 package com.chartdesk.gateway.security;
 
-import javax.crypto.SecretKey;
-
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
+
+import javax.crypto.SecretKey;
 
 /**
  * Provider for JWT tokens
@@ -27,21 +25,6 @@ public class JwtTokenProvider {
 
 	@Value("${auth-service.jwtSecret}")
 	private String jwtSecret;
-
-	public Long getUserIdFromJWT(Claims claims) {
-
-		return Long.parseLong(claims.getSubject());
-	}
-
-	public Claims getClaims(String token) {
-
-		return Jwts.parserBuilder()
-			.setSigningKey(getKey())
-			.build()
-			.parseClaimsJws(token)
-			.getBody();
-
-	}
 
 	private SecretKey getKey() {
 
@@ -60,16 +43,19 @@ public class JwtTokenProvider {
 		}
 		catch (MalformedJwtException ex) {
 			log.error("Invalid JWT token");
+			throw new HttpClientErrorException(HttpStatus.UNPROCESSABLE_ENTITY, "Invalid JWT token");
 		}
 		catch (ExpiredJwtException ex) {
 			log.error("Expired JWT token");
+			throw new HttpClientErrorException(HttpStatus.UNPROCESSABLE_ENTITY, "Expired JWT token");
 		}
 		catch (UnsupportedJwtException ex) {
 			log.error("Unsupported JWT token");
+			throw new HttpClientErrorException(HttpStatus.UNPROCESSABLE_ENTITY, "Unsupported JWT token");
 		}
 		catch (IllegalArgumentException ex) {
-			log.error("JWT claims string is empty.");
+			log.error("JWT claims string is empty");
+			throw new HttpClientErrorException(HttpStatus.UNPROCESSABLE_ENTITY, "JWT claims string is empty");
 		}
-		return false;
 	}
 }
