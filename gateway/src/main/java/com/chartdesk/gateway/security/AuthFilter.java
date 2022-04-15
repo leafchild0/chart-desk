@@ -26,7 +26,7 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
 
 	private String getJwtFromRequest(ServerHttpRequest request) {
 
-		String bearerToken = request.getHeaders().getFirst("Authorization");
+		String bearerToken = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
 		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(PREFIX)) {
 			return bearerToken.substring(7);
 		}
@@ -41,12 +41,7 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
 			}
 
 			String token = getJwtFromRequest(exchange.getRequest());
-			if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
-				return chain.filter(exchange);
-			}
-			else {
-				return Mono.empty();
-			}
+			return StringUtils.hasText(token) && tokenProvider.validateToken(token) ? chain.filter(exchange) : Mono.empty();
 		};
 	}
 
