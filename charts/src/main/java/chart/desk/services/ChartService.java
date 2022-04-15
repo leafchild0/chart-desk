@@ -12,6 +12,7 @@ import com.vdurmont.semver4j.Semver;
 import com.vdurmont.semver4j.SemverException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -54,7 +55,8 @@ public class ChartService {
         List<String> urls = storageServices.stream()
                 .map(s -> s.save(chart, chartEntry.getName(), chartEntry.getVersion(), assetKind, userId))
                 .toList();
-        return chartRepository.save(new ChartModel(chartEntry, null, urls, Collections.emptyList(), userId));
+        String digestHex = DigestUtils.sha256Hex(chart);
+        return chartRepository.save(new ChartModel(chartEntry, digestHex, urls, Collections.emptyList(), userId));
     }
 
     /**
