@@ -58,7 +58,7 @@ public class ChartProxyController {
         this.restTemplate = restTemplate;
     }
 
-    @PostMapping("/proxy/convert")
+    @PostMapping("/proxy/index")
     public List<ChartTo> convertIndex(@RequestBody ProxyTo body) throws JsonProcessingException, MalformedURLException, URISyntaxException {
         String thirdPartyUrl = body.getThirdPartyUrl();
         String chartIndex = restTemplate.getForObject(new URL(thirdPartyUrl).toURI(), String.class);

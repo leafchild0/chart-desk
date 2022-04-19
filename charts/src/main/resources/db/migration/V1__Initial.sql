@@ -1,3 +1,10 @@
+CREATE TABLE SOURCES
+(
+    id           SERIAL PRIMARY KEY,
+    url          VARCHAR(2048) NOT NULL,
+    refresh_time INT
+);
+
 CREATE TABLE CHARTS
 (
     id          SERIAL,
@@ -16,16 +23,9 @@ CREATE TABLE CHARTS
     user_name   VARCHAR(255),
     source_id   INT,
     created     timestamp without time zone NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'UTC'),
-    CONSTRAINT fk_customer
+    CONSTRAINT fk_source
         FOREIGN KEY(source_id)
             REFERENCES SOURCES(id)
 );
 
 CREATE INDEX IDX_CHARTS ON CHARTS(user_name, name, version);
-
-CREATE TABLE SOURCES
-(
-    id           SERIAL,
-    url          VARCHAR(2048) NOT NULL,
-    refresh_time INT
-);
