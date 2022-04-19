@@ -65,14 +65,14 @@ public class ChartProxyController {
         return yamlParser.download(chartIndex).toChartsTo();
     }
 
-    @PostMapping("/proxy/{userId}")
-    public Map<Boolean, Long> proxyIndex(@PathVariable("userId") String userId,
+    @PostMapping("/proxy/{userName}")
+    public Map<Boolean, Long> proxyIndex(@PathVariable("userName") String userName,
             @RequestBody ProxyTo body) throws JsonProcessingException, MalformedURLException, URISyntaxException {
         String thirdPartyUrl = body.getThirdPartyUrl();
         SourceModel source = sourceService.saveIfNotExist(thirdPartyUrl);
 
         Map<String, ChartTo> selectedChartEntries = body.getEntityMap();
-        Map<String, List<ChartEntry>> existedCharts = chartService.getIndex(userId).getEntries();
+        Map<String, List<ChartEntry>> existedCharts = chartService.getIndex(userName).getEntries();
 
         String chartIndex = restTemplate.getForObject(new URL(source.getUrl()).toURI(), String.class);
         ChartIndex index = yamlParser.download(chartIndex);
@@ -92,7 +92,7 @@ public class ChartProxyController {
                             return false;
                         }
                         try {
-                            chartService.save(chartEntry, chart, AssetKind.HELM_PACKAGE, userId, source,false);
+                            chartService.save(chartEntry, chart, AssetKind.HELM_PACKAGE, userName, source,false);
                             return true;
                         } catch (Exception e) {
                             log.error("Saving chart failed: {} {}", chartEntry.getName(), chartEntry.getVersion(), e);
