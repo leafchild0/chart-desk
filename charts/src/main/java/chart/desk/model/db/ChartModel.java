@@ -15,6 +15,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Date;
 import java.util.List;
@@ -86,8 +88,12 @@ public class ChartModel {
     @Column(name = "created", nullable = false)
     private Date created;
 
+    @ManyToOne
+    @JoinColumn(name="source_id")
+    private SourceModel source;
+
     @SneakyThrows
-    public ChartModel(ChartEntry chartEntry, String digest, List<String> urls, String userName) {
+    public ChartModel(ChartEntry chartEntry, String digest, List<String> urls, String userName, SourceModel source) {
         this.name = chartEntry.getName();
         this.version = chartEntry.getVersion();
         this.description = chartEntry.getDescription();
@@ -103,6 +109,7 @@ public class ChartModel {
         this.created = new Date();
         this.digest = digest;
         this.userName = userName;
+        this.source = source;
     }
 
     @SneakyThrows

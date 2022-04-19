@@ -2,7 +2,7 @@ package chart.desk.controllers;
 
 import chart.desk.model.AssetKind;
 import chart.desk.model.ChartEntry;
-import chart.desk.model.ChartTo;
+import chart.desk.model.to.ChartTo;
 import chart.desk.model.db.ChartModel;
 import chart.desk.parsers.HelmAttributeParser;
 import chart.desk.services.ChartService;
@@ -56,7 +56,7 @@ public class ChartController {
     public ResponseEntity<Mono<ChartModel>> uploadChart(@RequestPart("chart") Flux<FilePart> fileParts, @PathVariable("userId") String userId) {
         Mono<ChartModel> attributes = toByteArray(fileParts).map(bytes -> {
             ChartEntry helmAttributes = getHelmAttributes(bytes, AssetKind.HELM_PACKAGE);
-            return chartService.save(helmAttributes, bytes, AssetKind.HELM_PACKAGE, userId, true);
+            return chartService.save(helmAttributes, bytes, AssetKind.HELM_PACKAGE, userId, null,true);
         });
 
         return ResponseEntity

@@ -14,7 +14,18 @@ CREATE TABLE CHARTS
     maintainers TEXT,
     urls        TEXT,
     user_name   VARCHAR(255),
-    created     timestamp without time zone NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'UTC')
+    source_id   INT,
+    created     timestamp without time zone NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'UTC'),
+    CONSTRAINT fk_customer
+        FOREIGN KEY(source_id)
+            REFERENCES SOURCES(id)
 );
 
-CREATE INDEX IDX_CHARTS ON CHARTS(user_id, name, version);
+CREATE INDEX IDX_CHARTS ON CHARTS(user_name, name, version);
+
+CREATE TABLE SOURCES
+(
+    id           SERIAL,
+    url          VARCHAR(2048) NOT NULL,
+    refresh_time INT
+);

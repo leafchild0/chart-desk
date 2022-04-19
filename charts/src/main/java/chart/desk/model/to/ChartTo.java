@@ -1,4 +1,4 @@
-package chart.desk.model;
+package chart.desk.model.to;
 
 import chart.desk.util.JodaDateTimeDeserializer;
 import chart.desk.util.JodaDateTimeSerializer;
