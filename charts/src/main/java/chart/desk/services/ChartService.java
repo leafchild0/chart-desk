@@ -18,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -56,7 +55,7 @@ public class ChartService {
                 .map(s -> s.save(chart, chartEntry.getName(), chartEntry.getVersion(), assetKind, userId))
                 .toList();
         String digestHex = DigestUtils.sha256Hex(chart);
-        return chartRepository.save(new ChartModel(chartEntry, digestHex, urls, Collections.emptyList(), userId));
+        return chartRepository.save(new ChartModel(chartEntry, null, urls, userId));
     }
 
     /**
