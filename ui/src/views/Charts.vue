@@ -59,7 +59,7 @@
 		},
 		mounted() {
 			api.chartsList().then((response) => {
-				this.charts = [].concat(...Object.values(response.data.entries));
+				this.charts = response.data;
 			}).catch(() => {
 				this.$toastr.e('Something went wrong while getting charts');
 			}).finally(() => this.loading = false);

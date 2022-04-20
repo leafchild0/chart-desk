@@ -6,11 +6,9 @@ const chartsApi = axios.create({
 
 export const chartsList = () => {
 	// TODO: user id/name here & gateway
-	return chartsApi.get('2/index.json', {
-		dataType: 'json',
-	})
+	return chartsApi.get('api/2/charts')
 }
 
 export const uploadChart = (payload) => {
-	return chartsApi.post('api/2/charts', payload, {});
+	return chartsApi.post('api/2/charts', payload);
 }
