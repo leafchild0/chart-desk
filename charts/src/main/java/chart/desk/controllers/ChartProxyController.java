@@ -3,8 +3,12 @@ package chart.desk.controllers;
 import chart.desk.model.AssetKind;
 import chart.desk.model.ChartEntry;
 import chart.desk.model.ChartIndex;
+import chart.desk.model.db.SourceModel;
+import chart.desk.model.to.ChartTo;
+import chart.desk.model.to.ProxyTo;
 import chart.desk.parsers.YamlParser;
 import chart.desk.services.ChartService;
+import chart.desk.services.SourceService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
@@ -24,7 +28,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collection;
@@ -42,29 +45,44 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 public class ChartProxyController {
 
     private final ChartService chartService;
+    private final SourceService sourceService;
     private final YamlParser yamlParser;
     private final RestTemplate restTemplate;
 
     @Autowired
-    public ChartProxyController(ChartService chartService, YamlParser yamlParser, RestTemplate restTemplate) {
+    public ChartProxyController(ChartService chartService, SourceService sourceService,
+            YamlParser yamlParser, RestTemplate restTemplate) {
         this.chartService = chartService;
+        this.sourceService = sourceService;
         this.yamlParser = yamlParser;
         this.restTemplate = restTemplate;
     }
 
-    @PostMapping("/proxy/{userId}")
-    public Map<Boolean, Long> proxyIndex(@PathVariable("userId") String userId,
-            @RequestBody Map<String, String> body) throws JsonProcessingException, MalformedURLException, URISyntaxException {
-        String thirdPartyUrl = body.get("thirdPartyUrl");
-        // Creating new URL and perform validation checks
+    @PostMapping("/proxy/index")
+    public List<ChartTo> convertIndex(@RequestBody ProxyTo body) throws JsonProcessingException, MalformedURLException, URISyntaxException {
+        String thirdPartyUrl = body.getThirdPartyUrl();
         String chartIndex = restTemplate.getForObject(new URL(thirdPartyUrl).toURI(), String.class);
+        return yamlParser.download(chartIndex).toChartsTo();
+    }
+
+    @PostMapping("/proxy/{userName}")
+    public Map<Boolean, Long> proxyIndex(@PathVariable("userName") String userName,
+            @RequestBody ProxyTo body) throws JsonProcessingException, MalformedURLException, URISyntaxException {
+        String thirdPartyUrl = body.getThirdPartyUrl();
+        SourceModel source = sourceService.saveIfNotExist(thirdPartyUrl);
+
+        Map<String, ChartTo> selectedChartEntries = body.getEntityMap();
+        Map<String, List<ChartEntry>> existedCharts = chartService.getIndex(userName).getEntries();
+
+        String chartIndex = restTemplate.getForObject(new URL(source.getUrl()).toURI(), String.class);
         ChartIndex index = yamlParser.download(chartIndex);
-        Map<String, List<ChartEntry>> existedCharts = chartService.getIndex(userId).getEntries();
+
         try (PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
             CloseableHttpClient client = HttpClients.custom().setConnectionManager(connectionManager).build()) {
             return index.getEntries().values().stream()
                     .flatMap(Collection::stream)
                     .parallel()
+                    .filter(a -> selectedChartEntries.containsKey(a.getName()) && selectedChartEntries.get(a.getName()).getVersions().contains(a.getVersion()))
                     .filter(a -> existedCharts.getOrDefault(a.getName(), Collections.emptyList()).stream().noneMatch(b -> Objects.equals(a.getVersion(), b.getVersion())))
                     .map(chartEntry -> {
                         log.info("Saving chart {} {}", chartEntry.getName(), chartEntry.getVersion());
@@ -74,7 +92,7 @@ public class ChartProxyController {
                             return false;
                         }
                         try {
-                            chartService.save(chartEntry, chart, AssetKind.HELM_PACKAGE, userId, false);
+                            chartService.save(chartEntry, chart, AssetKind.HELM_PACKAGE, userName, source,false);
                             return true;
                         } catch (Exception e) {
                             log.error("Saving chart failed: {} {}", chartEntry.getName(), chartEntry.getVersion(), e);

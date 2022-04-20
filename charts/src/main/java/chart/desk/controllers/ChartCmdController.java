@@ -27,15 +27,15 @@ public class ChartCmdController {
     }
 
     // TODO: cache here with caffeine cache etc because creating chart index could take a while
-    @GetMapping("{userId}/index.yaml")
-    public String getIndexYaml(@PathVariable("userId") String userId) throws JsonProcessingException {
-        ChartIndex index = chartService.getIndex(userId);
+    @GetMapping("{userName}/index.yaml")
+    public String getIndexYaml(@PathVariable("userName") String userName) throws JsonProcessingException {
+        ChartIndex index = chartService.getIndex(userName);
         return yamlObjectMapper.writeValueAsString(index);
     }
 
-    @GetMapping(value = "/{userId}/{name}-{version}.tgz")
-    public ResponseEntity<Mono<byte[]>> getChartArchive(@PathVariable("name") String name, @PathVariable("version") String version, @PathVariable("userId") String userId) {
-        byte[] chart = chartService.getChartArchive(name, version, AssetKind.HELM_PACKAGE, userId);
+    @GetMapping(value = "/{userName}/{name}-{version}.tgz")
+    public ResponseEntity<Mono<byte[]>> getChartArchive(@PathVariable("name") String name, @PathVariable("version") String version, @PathVariable("userName") String userName) {
+        byte[] chart = chartService.getChartArchive(name, version, AssetKind.HELM_PACKAGE, userName);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(Mono.just(chart));
