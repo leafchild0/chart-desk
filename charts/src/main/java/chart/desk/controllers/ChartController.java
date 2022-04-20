@@ -2,8 +2,8 @@ package chart.desk.controllers;
 
 import chart.desk.model.AssetKind;
 import chart.desk.model.ChartEntry;
-import chart.desk.model.to.ChartTo;
 import chart.desk.model.db.ChartModel;
+import chart.desk.model.to.ChartTo;
 import chart.desk.parsers.HelmAttributeParser;
 import chart.desk.services.ChartService;
 import com.google.common.io.ByteStreams;
@@ -48,14 +48,14 @@ public class ChartController {
     }
 
     @GetMapping
-    public List<ChartTo> getIndexJson(@PathVariable("userName") String userName) {
+    public List<ChartTo> getChartsList(@PathVariable("userName") String userName) {
         return chartService.getChartList(userName);
     }
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Mono<ChartModel>> uploadChart(@RequestPart("chart") Flux<FilePart> fileParts, @PathVariable("userName") String userName) {
         Mono<ChartModel> attributes = toByteArray(fileParts).map(bytes -> {
-            ChartEntry helmAttributes = getHelmAttributes(bytes, AssetKind.HELM_PACKAGE);
+            ChartEntry helmAttributes = getHelmAttributes(bytes);
             return chartService.save(helmAttributes, bytes, AssetKind.HELM_PACKAGE, userName, null,true);
         });
 
@@ -84,10 +84,10 @@ public class ChartController {
         return ByteStreams.toByteArray(inputStream);
     }
 
-    private ChartEntry getHelmAttributes(byte[] chart, AssetKind assetKind) {
+    private ChartEntry getHelmAttributes(byte[] chart) {
         ChartEntry chartEntry;
         try (InputStream inputStream = new ByteArrayInputStream(chart)) {
-            chartEntry = helmAttributeParser.getAttributes(assetKind, inputStream);
+            chartEntry = helmAttributeParser.getAttributes(AssetKind.HELM_PACKAGE, inputStream);
             log.info(chartEntry.toString());
         } catch (IOException e) {
             log.error("Helm attribute parsing failed", e);

@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
@@ -41,6 +42,7 @@ import java.util.stream.Collectors;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @RestController
+@RequestMapping("/proxy")
 @Slf4j
 public class ChartProxyController {
 
@@ -58,14 +60,14 @@ public class ChartProxyController {
         this.restTemplate = restTemplate;
     }
 
-    @PostMapping("/proxy/index")
+    @PostMapping("/index")
     public List<ChartTo> convertIndex(@RequestBody ProxyTo body) throws JsonProcessingException, MalformedURLException, URISyntaxException {
         String thirdPartyUrl = body.getThirdPartyUrl();
         String chartIndex = restTemplate.getForObject(new URL(thirdPartyUrl).toURI(), String.class);
         return yamlParser.download(chartIndex).toChartsTo();
     }
 
-    @PostMapping("/proxy/{userName}")
+    @PostMapping("/{userName}")
     public Map<Boolean, Long> proxyIndex(@PathVariable("userName") String userName,
             @RequestBody ProxyTo body) throws JsonProcessingException, MalformedURLException, URISyntaxException {
         String thirdPartyUrl = body.getThirdPartyUrl();
