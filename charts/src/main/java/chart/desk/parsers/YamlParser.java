@@ -13,7 +13,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UncheckedIOException;
-import java.util.Collection;
 
 /**
  * Service for getting attributes from yaml files, writing to yaml files
