@@ -15,6 +15,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Date;
 import java.util.List;
@@ -71,10 +73,6 @@ public class ChartModel {
     private String urls;
 
     @NotNull
-    @Column(name = "prov_urls")
-    private String provUrls;
-
-    @NotNull
     @Column(name = "sources")
     private String sources;
 
@@ -83,15 +81,19 @@ public class ChartModel {
     private String maintainers;
 
     @NotNull
-    @Column(name = "user_id", nullable = false)
-    private String userId;
+    @Column(name = "user_name", nullable = false)
+    private String userName;
 
     @NotNull
     @Column(name = "created", nullable = false)
     private Date created;
 
+    @ManyToOne
+    @JoinColumn(name="source_id")
+    private SourceModel source;
+
     @SneakyThrows
-    public ChartModel(ChartEntry chartEntry, String digest, List<String> urls, List<String> provUrls, String userId) {
+    public ChartModel(ChartEntry chartEntry, String digest, List<String> urls, String userName, SourceModel source) {
         this.name = chartEntry.getName();
         this.version = chartEntry.getVersion();
         this.description = chartEntry.getDescription();
@@ -104,14 +106,14 @@ public class ChartModel {
         this.sources = objectMapper.writeValueAsString(chartEntry.getSources());
         this.maintainers = objectMapper.writeValueAsString(chartEntry.getMaintainers());
         this.urls = objectMapper.writeValueAsString(urls);
-        this.provUrls = objectMapper.writeValueAsString(provUrls);
         this.created = new Date();
         this.digest = digest;
-        this.userId = userId;
+        this.userName = userName;
+        this.source = source;
     }
 
     @SneakyThrows
-    public ChartModel(Long id, ChartEntry chartEntry, String digest, List<String> urls, List<String> provUrls, String userId) {
+    public ChartModel(Long id, ChartEntry chartEntry, String digest, List<String> urls, String userName) {
         this.id = id;
         this.name = chartEntry.getName();
         this.version = chartEntry.getVersion();
@@ -125,10 +127,9 @@ public class ChartModel {
         this.sources = objectMapper.writeValueAsString(chartEntry.getSources());
         this.maintainers = objectMapper.writeValueAsString(chartEntry.getMaintainers());
         this.urls = objectMapper.writeValueAsString(urls);
-        this.provUrls = objectMapper.writeValueAsString(provUrls);
         this.created = new Date();
         this.digest = digest;
-        this.userId = userId;
+        this.userName = userName;
     }
 
     @SneakyThrows

@@ -2,7 +2,7 @@ package chart.desk.controllers;
 
 import chart.desk.model.AssetKind;
 import chart.desk.model.ChartEntry;
-import chart.desk.model.ChartTo;
+import chart.desk.model.to.ChartTo;
 import chart.desk.model.db.ChartModel;
 import chart.desk.parsers.HelmAttributeParser;
 import chart.desk.services.ChartService;
@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/{userId}/charts")
+@RequestMapping("/api/{userName}/charts")
 @Slf4j
 public class ChartController {
 
@@ -48,15 +48,15 @@ public class ChartController {
     }
 
     @GetMapping
-    public List<ChartTo> getIndexJson(@PathVariable("userId") String userId) {
-        return chartService.getChartList(userId);
+    public List<ChartTo> getIndexJson(@PathVariable("userName") String userName) {
+        return chartService.getChartList(userName);
     }
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Mono<ChartModel>> uploadChart(@RequestPart("chart") Flux<FilePart> fileParts, @PathVariable("userId") String userId) {
+    public ResponseEntity<Mono<ChartModel>> uploadChart(@RequestPart("chart") Flux<FilePart> fileParts, @PathVariable("userName") String userName) {
         Mono<ChartModel> attributes = toByteArray(fileParts).map(bytes -> {
             ChartEntry helmAttributes = getHelmAttributes(bytes, AssetKind.HELM_PACKAGE);
-            return chartService.save(helmAttributes, bytes, AssetKind.HELM_PACKAGE, userId, true);
+            return chartService.save(helmAttributes, bytes, AssetKind.HELM_PACKAGE, userName, null,true);
         });
 
         return ResponseEntity
@@ -65,8 +65,8 @@ public class ChartController {
     }
 
     @GetMapping(value = "/{name}/{version}")
-    public ResponseEntity<Mono<ChartEntry>> getChart(@PathVariable("name") String name, @PathVariable("version") String version, @PathVariable("userId") String userId) {
-        Optional<ChartEntry> chart = chartService.getChart(name, version, userId);
+    public ResponseEntity<Mono<ChartEntry>> getChart(@PathVariable("name") String name, @PathVariable("version") String version, @PathVariable("userName") String userName) {
+        Optional<ChartEntry> chart = chartService.getChart(name, version, userName);
         return chart.map(entry -> ResponseEntity.status(HttpStatus.OK).body(Mono.just(entry)))
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(Mono.empty()));
     }

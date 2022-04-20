@@ -7,6 +7,12 @@ auth-service:
   jwtSecret: a3ZzApRSDQF5E9cH3JFV1LNBzOtQEiv6OumGJudd3Ao=
   jwtExpirationInMs: 100000000
 
+management:
+  health:
+    livenessState.enabled: true
+    readinessState.enabled: true
+  endpoint.health.probes.enabled: true
+
 spring:
   application:
     name: auth-service
