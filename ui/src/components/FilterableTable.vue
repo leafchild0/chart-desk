@@ -8,7 +8,7 @@
 			paginated
 			narrowed
 			hoverable
-			:loading='data.length === 0'
+			:loading='loading'
 			per-page='30'
 			:data='filteredData'
 			:detailed='details'
@@ -32,6 +32,10 @@
 				<slot name='actions' v-bind='props.row'></slot>
 			</b-table-column>
 
+			<template #empty>
+				<div class='has-text-centered'>No Data</div>
+			</template>
+
 			<template #detail='props'>
 				<slot name='details' v-bind='props'></slot>
 			</template>
@@ -43,7 +47,7 @@
 
 	export default {
 		name: 'FilterableTable',
-		props: ['data', 'filterColumns', 'headers', 'details'],
+		props: ['data', 'filterColumns', 'headers', 'details', 'loading'],
 		data() {
 			return {
 				filterBy: '',

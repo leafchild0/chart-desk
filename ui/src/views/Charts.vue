@@ -2,7 +2,7 @@
 	<div class='charts'>
 		<Navbar/>
 		<UploadChartButton v-on:upload-chart='uploadChart' :title='"Upload chart (.tar.gz)"' :format='".tgz"'/>
-		<FilterableTable :data='charts' :filter-columns='filterColumns' :headers='headers' :details='true'>
+		<FilterableTable :data='charts' :filter-columns='filterColumns' :headers='headers' :details='true' :loading='loading'>
 			<template v-slot:details='props'>
 				<ChartsDetails :chart='props.row'/>
 			</template>
@@ -29,6 +29,7 @@
 		data() {
 			return {
 				charts: [],
+				loading: true,
 				headers: [
 					{field: 'name', label: 'Chart name'},
 					{field: 'version', label: 'Chart version'},
@@ -61,7 +62,7 @@
 				this.charts = [].concat(...Object.values(response.data.entries));
 			}).catch(() => {
 				this.$toastr.e('Something went wrong while getting charts');
-			});
+			}).finally(() => this.loading = false);
 		}
 	}
 </script>
