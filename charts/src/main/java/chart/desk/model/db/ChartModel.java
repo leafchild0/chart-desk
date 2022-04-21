@@ -163,9 +163,9 @@ public class ChartModel {
     }
 
     public ChartModel appendTag(TagModel tag) {
-        Set<TagModel> tags = getTags();
-        tags.add(tag);
-        setTags(tags);
+        Set<TagModel> tagSet = getTags();
+        tagSet.add(tag);
+        setTags(tagSet);
         return this;
     }
 }

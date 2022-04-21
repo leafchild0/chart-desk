@@ -81,6 +81,7 @@ public class ChartService {
      * @param userName user name
      * @return list o ChartTo
      */
+    @Transactional
     public List<ChartTo> getChartList(String userName) {
         return getIndex(userName).toChartsTo();
     }
