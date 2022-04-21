@@ -8,8 +8,8 @@ export const chartsList = () => {
 	return chartsApi.get('/2/charts')
 }
 
-export const getChart = (name, version) => {
-	return chartsApi.get(`2/${name} ${version ? '?version=' + version : ''}`)
+export const getChart = (id) => {
+	return chartsApi.get(`/2/charts/${id}`)
 }
 
 export const uploadChart = (payload) => {

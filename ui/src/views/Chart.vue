@@ -27,8 +27,8 @@
 		methods: {
 		},
 		mounted() {
-			if (this.$route.params.name) {
-				api.getChart(this.$route.params.name).then((response) => {
+			if (this.$route.params.id) {
+				api.getChart(this.$route.params.id).then((response) => {
 					this.chart = response.data
 				}).catch(() => {
 					this.$toastr.e('Something went wrong while getting chart');
