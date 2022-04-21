@@ -3,9 +3,9 @@ package chart.desk.services;
 import chart.desk.model.AssetKind;
 import chart.desk.model.ChartEntry;
 import chart.desk.model.ChartIndex;
+import chart.desk.model.db.ChartModel;
 import chart.desk.model.db.SourceModel;
 import chart.desk.model.to.ChartTo;
-import chart.desk.model.db.ChartModel;
 import chart.desk.repositories.ChartRepository;
 import chart.desk.services.storage.StorageService;
 import chart.desk.services.storage.StorageType;
@@ -87,8 +87,8 @@ public class ChartService {
      *
      * @return Optional of {@link ChartEntry}
      */
-    public Optional<ChartEntry> getChart(String name, String version, String userName) {
-        return chartRepository.findChartModelByUserNameAndNameAndVersion(userName, name, version)
+    public Optional<ChartEntry> getChart(String userName, Long id) {
+        return chartRepository.findChartModelByUserNameAndId(userName, id)
                 .map(ChartModel::toChartEntry);
     }
 
