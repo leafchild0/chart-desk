@@ -59,6 +59,7 @@ public class ChartIndex {
 
         ChartEntry lastVersionChart = chartEntries.get(chartEntries.size() - 1);
         return Optional.of(ChartTo.builder()
+                .id(lastVersionChart.getId())
                 .name(lastVersionChart.getName())
                 .versions(chartEntries.stream()
                         .map(ChartEntry::getVersion)

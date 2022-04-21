@@ -64,9 +64,9 @@ public class ChartController {
                 .body(attributes);
     }
 
-    @GetMapping(value = "/{name}/{version}")
-    public ResponseEntity<Mono<ChartEntry>> getChart(@PathVariable("name") String name, @PathVariable("version") String version, @PathVariable("userName") String userName) {
-        Optional<ChartEntry> chart = chartService.getChart(name, version, userName);
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Mono<ChartEntry>> getChart(@PathVariable("id") Long id, @PathVariable("userName") String userName) {
+        Optional<ChartEntry> chart = chartService.getChart(userName, id);
         return chart.map(entry -> ResponseEntity.status(HttpStatus.OK).body(Mono.just(entry)))
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(Mono.empty()));
     }

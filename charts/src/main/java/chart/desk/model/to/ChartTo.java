@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChartTo {
+    private Long id;
     private String name;
     private List<String> versions;
     private LocalDate created;

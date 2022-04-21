@@ -19,6 +19,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class ChartEntry {
     private String description;
+    private Long id;
     private String name;
     private String version;
     @JsonSerialize(using = JodaDateTimeSerializer.class)
