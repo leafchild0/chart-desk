@@ -15,11 +15,22 @@
 			detail-key='name'
 		>
 			<template v-for='header in headers'>
-				<b-table-column :key='header.field' v-if='header.field === "username"' v-bind='header'>
+				<b-table-column centered :key='header.field' v-if='header.field === "versions"' v-bind='header'>
 					<template v-slot='props'>
-						<span class='tag is-info'>
-							{{ props.row[header.field] }}
-						</span>
+						<div class='tags'  v-if='props.row["versions"]'>
+							<span class='tag is-primary' :key='version' v-for='version in props.row["versions"]'>
+								{{ version }}
+							</span>
+						</div>
+					</template>
+				</b-table-column>
+				<b-table-column centered :key='header.field' v-else-if='header.field === "tags"' v-bind='header'>
+					<template v-slot='props'>
+						<div class='tags'  v-if='props.row["tags"]'>
+							<span class='tag is-info' :key='tag' v-for='tag in props.row["tags"]'>
+								{{ tag }}
+							</span>
+						</div>
 					</template>
 				</b-table-column>
 				<b-table-column :key='header.field' v-else v-bind='header'>
@@ -59,7 +70,8 @@
 
 				return this.data.filter(entry => {
 					for (const f of this.filterColumns) {
-						if (entry[f].includes(this.filterBy)) return true
+						if (!entry[f]) return false
+						if (entry[f].toString().includes(this.filterBy)) return true
 					}
 					return false
 				})
@@ -79,6 +91,11 @@
 
 		.filter {
 			width: 200px;
+		}
+
+		.tags {
+			display: flex;
+			justify-content: center;
 		}
 
 		.b-table div.top.level {
