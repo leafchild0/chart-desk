@@ -1,17 +1,13 @@
-import axios from 'axios'
-
-const chartsApi = axios.create({
-	baseURL: '/charts_api/api'
-});
+import api from './api';
 
 export const chartsList = () => {
-	return chartsApi.get('/2/charts')
+	return api.get('charts/2')
 }
 
 export const getChart = (id) => {
-	return chartsApi.get(`/2/charts/${id}`)
+	return api.get(`charts/2/${id}`)
 }
 
 export const uploadChart = (payload) => {
-	return chartsApi.post('/2/charts', payload);
+	return api.post('charts/2', payload);
 }

@@ -1,14 +1,14 @@
 module.exports = {
 	devServer: {
 		proxy: {
-			'^/api': {
+			'^/api/auth': {
 				target: 'http://localhost:3003',
 				ws: true,
 				changeOrigin: true
 			},
-			'^/charts_api': {
+			'^/api/charts': {
 				target: 'http://localhost:8081',
-				pathRewrite: { '^/charts_api': '' },
+				pathRewrite: { '^/api/charts': '/charts' },
 				ws: true,
 				changeOrigin: true
 			}
