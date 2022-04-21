@@ -8,6 +8,10 @@ export const chartsList = () => {
 	return chartsApi.get('/2/charts')
 }
 
+export const getChart = (name) => {
+	return chartsApi.get('2/' + name)
+}
+
 export const uploadChart = (payload) => {
 	return chartsApi.post('/2/charts', payload);
 }
