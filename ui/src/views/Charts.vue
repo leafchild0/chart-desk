@@ -2,11 +2,7 @@
 	<div class='charts'>
 		<Navbar/>
 		<UploadChartButton v-on:upload-chart='uploadChart' :title='"Upload chart (.tar.gz)"' :format='".tgz"'/>
-		<FilterableTable :data='charts' :filter-columns='filterColumns' :headers='headers' :details='true' :loading='loading'>
-			<template v-slot:details='props'>
-				<ChartsDetails :chart='props.row'/>
-			</template>
-		</FilterableTable>
+		<FilterableTable :data='charts' :filter-columns='filterColumns' :headers='headers' :loading='loading'/>
 	</div>
 </template>
 
@@ -16,12 +12,10 @@
 	import Navbar from '@/components/Navbar';
 	import UploadChartButton from '@/components/UploadChartButton';
 	import api from '@/api';
-	import ChartsDetails from '@/components/ChartsDetails';
 
 	export default {
 		name: 'Charts',
 		components: {
-			ChartsDetails,
 			Navbar,
 			UploadChartButton,
 			FilterableTable
@@ -32,8 +26,8 @@
 				loading: true,
 				headers: [
 					{field: 'name', label: 'Chart name'},
-					{field: 'version', label: 'Chart version'},
-					{field: 'description', label: 'Description'},
+					{field: 'versions', label: 'Chart versions'},
+					{field: 'tags', label: 'Tags'},
 					{field: 'created', label: 'Date'},
 				]
 			}
