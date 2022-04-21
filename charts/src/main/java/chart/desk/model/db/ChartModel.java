@@ -12,15 +12,18 @@ import org.joda.time.DateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Entity
 @Table(name = "charts")
@@ -92,6 +95,9 @@ public class ChartModel {
     @JoinColumn(name="source_id")
     private SourceModel source;
 
+    @ManyToMany
+    Set<TagModel> tags;
+
     @SneakyThrows
     public ChartModel(ChartEntry chartEntry, String digest, List<String> urls, String userName, SourceModel source) {
         this.name = chartEntry.getName();
@@ -154,5 +160,12 @@ public class ChartModel {
                 .home(getHome())
                 .keywords(keywordsList)
                 .build();
+    }
+
+    public ChartModel appendTag(TagModel tag) {
+        Set<TagModel> tags = getTags();
+        tags.add(tag);
+        setTags(tags);
+        return this;
     }
 }

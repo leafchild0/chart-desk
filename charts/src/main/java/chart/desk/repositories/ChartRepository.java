@@ -12,4 +12,6 @@ public interface ChartRepository extends JpaRepository<ChartModel, Long> {
     Optional<ChartModel> findChartModelByUserNameAndNameAndVersion(String userName, String name, String version);
 
     List<ChartModel> findAllByUserName(String userName);
+
+    List<ChartModel> findAllByUserNameAndName(String userName, String name);
 }
