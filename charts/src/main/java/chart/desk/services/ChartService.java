@@ -81,10 +81,8 @@ public class ChartService {
     /**
      * Fetch {@link ChartEntry} from DB if present
      *
-     * @param name chart name
-     * @param version chart version
-     * @param userName user name
-     *
+     * @param userName username of current user
+     * @param id       is of the entity to query
      * @return Optional of {@link ChartEntry}
      */
     public Optional<ChartEntry> getChart(String userName, Long id) {
