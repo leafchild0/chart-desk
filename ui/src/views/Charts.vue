@@ -3,9 +3,13 @@
 		<Navbar/>
 		<div class='controls'>
 			<b-button
-				class='upload-modal-button'
-				label='Upload'
+				id='upload-modal-button'
+				label='Upload chart'
 				type='is-primary' @click='isUploadModalActive = true'/>
+			<b-button
+				id='third-party-import-modal-button'
+				label='Third-party import'
+				type='is-primary' @click='isThirdpartyModalActive = true'/>
 			<b-modal
 				v-model='isUploadModalActive'
 				has-modal-card
@@ -25,6 +29,23 @@
 					</div>
 				</template>
 			</b-modal>
+
+			<b-modal
+				v-model='isThirdpartyModalActive'
+				has-modal-card
+				trap-focus
+				:destroy-on-hide='false'
+				aria-role='dialog'
+				close-button-aria-label='Close'
+				aria-modal>
+				<template>
+					<ThirdPartImport
+						:data='pulledCharts'
+						@pull='pullCharts'
+						@cancel='isThirdpartyModalActive = false'
+					/>
+				</template>
+			</b-modal>
 		</div>
 		<FilterableTable :data='charts' :filter-columns='filterColumns' :headers='headers' :loading='loading'>
 			<template v-slot:actions='props'>
@@ -41,11 +62,13 @@
 	import FilterableTable from '@/components/FilterableTable';
 	import Navbar from '@/components/Navbar';
 	import UploadChartButton from '@/components/UploadChartButton';
+	import ThirdPartImport from '@/components/ThirdPartImport';
 	import api from '@/api';
 
 	export default {
 		name: 'Charts',
 		components: {
+			ThirdPartImport,
 			Navbar,
 			UploadChartButton,
 			FilterableTable
@@ -55,6 +78,25 @@
 				charts: [],
 				loading: true,
 				isUploadModalActive: false,
+				isThirdpartyModalActive: false,
+				pulledCharts: [
+					{text: 'Item 1'},
+					{
+						text: 'Item 2', children: [
+							{text: 'Item 2.1'},
+							{text: 'Item 2.2'},
+							{text: 'Item 2.3'}
+						]
+					},
+					{
+						text: 'Item 3', children: [
+							{text: 'Item 3.1'},
+							{text: 'Item 3.2'},
+							{text: 'Item 3.3'}
+						]
+					},
+					{text: 'Item 4'}
+				],
 				headers: [
 					{field: 'name', label: 'Chart name'},
 					{field: 'versions', label: 'Chart versions'},
@@ -80,7 +122,10 @@
 			},
 			showDetails(id) {
 				this.$router.push({name: 'chart', params: {id: id}})
-			}
+			},
+			pullCharts(url) {
+				console.log(url)
+			},
 		},
 		mounted() {
 			api.chartsList().then((response) => {
@@ -100,6 +145,10 @@
 			display: flex;
 			justify-content: end;
 			margin: 15px
+		}
+
+		#upload-modal-button {
+			margin-right: 5px;
 		}
 	}
 
