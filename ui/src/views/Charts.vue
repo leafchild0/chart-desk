@@ -1,7 +1,31 @@
 <template>
 	<div class='charts'>
 		<Navbar/>
-		<UploadChartButton v-on:upload-chart='uploadChart' :title='"Upload chart (.tar.gz)"' :format='".tgz"'/>
+		<div class='controls'>
+			<b-button
+				class='upload-modal-button'
+				label='Upload'
+				type='is-primary' @click='isUploadModalActive = true'/>
+			<b-modal
+				v-model='isUploadModalActive'
+				has-modal-card
+				trap-focus
+				:destroy-on-hide='false'
+				aria-role='dialog'
+				close-button-aria-label='Close'
+				aria-modal>
+				<template>
+					<div class='modal-card' style='width: auto'>
+						<header class='modal-card-head'>
+							<p class='modal-card-title'>Upload Chart</p>
+						</header>
+						<section class='modal-card-body'>
+							<UploadChartButton v-on:upload-chart='uploadChart' :title='"Click to select chart (.tar.gz)"' :format='".tgz"'/>
+						</section>
+					</div>
+				</template>
+			</b-modal>
+		</div>
 		<FilterableTable :data='charts' :filter-columns='filterColumns' :headers='headers' :loading='loading'>
 			<template v-slot:actions='props'>
 				<b-tooltip label='View details' position='is-left' type='is-info'>
@@ -30,6 +54,7 @@
 			return {
 				charts: [],
 				loading: true,
+				isUploadModalActive: false,
 				headers: [
 					{field: 'name', label: 'Chart name'},
 					{field: 'versions', label: 'Chart versions'},
@@ -70,6 +95,12 @@
 <style scoped lang='scss'>
 
 	.charts {
+
+		.controls {
+			display: flex;
+			justify-content: end;
+			margin: 15px
+		}
 	}
 
 </style>
