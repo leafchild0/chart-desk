@@ -4,7 +4,7 @@
 		<UploadChartButton v-on:upload-chart='uploadChart' :title='"Upload chart (.tar.gz)"' :format='".tgz"'/>
 		<FilterableTable :data='charts' :filter-columns='filterColumns' :headers='headers' :loading='loading'>
 			<template v-slot:actions='props'>
-				<b-tooltip label='Edit chart' position='is-left' type='is-info'>
+				<b-tooltip label='View details' position='is-left' type='is-info'>
 					<b-button size='is-small' type='is-primary' icon-left='format-list-bulleted' @click='() => showDetails(props.id)'></b-button>
 				</b-tooltip>
 			</template>
