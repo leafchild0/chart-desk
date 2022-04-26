@@ -140,6 +140,7 @@ public class ChartModel {
         List<String> keywordsList = objectMapper.readValue(getKeywords(), List.class);
         List<Map<String, String>> maintainersList = objectMapper.readValue(getMaintainers(), List.class);
         return ChartEntry.builder()
+                .id(getId())
                 .description(getDescription())
                 .name(getName())
                 .version(getVersion())
