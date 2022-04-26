@@ -1,6 +1,7 @@
 <template>
 	<div class='chart-details'>
-		<article>
+		<b-loading v-if='isLoading' :is-full-page='false' v-model='isLoading' :can-cancel='false'></b-loading>
+		<article v-else>
 			<header class='chart-header'>
 				<p class='image is-128x128'>
 					<img :src='chart.icon'>
@@ -17,7 +18,7 @@
 						<div class='field'>
 							<div class='control'>
 								<span> version: <b-tag type='is-success'> {{ chart.version }}</b-tag></span>
-								<span> app version: <b-tag type='is-success'> {{ chart.appVersion }}</b-tag></span>
+								<span v-if='chart.appVersion'> app version: <b-tag type='is-success'> {{ chart.appVersion }}</b-tag></span>
 							</div>
 						</div>
 					</div>
@@ -94,6 +95,11 @@
 		name: 'ChartsDetails',
 		props: {
 			chart: {required: true}
+		},
+		computed: {
+			isLoading() {
+				return Object.keys(this.chart).length === 0
+			}
 		}
 	}
 </script>
