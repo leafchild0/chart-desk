@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
 import Charts from '../views/Charts.vue'
 import SignUp from '@/views/SignUp'
 import Login from '@/views/Login'
@@ -23,14 +22,6 @@ const routes = [
 	},
 	{
 		path: '/',
-		name: 'home',
-		component: Home,
-		meta: {
-			requiresAuth: true
-		}
-	},
-	{
-		path: '/charts',
 		name: 'charts',
 		component: Charts,
 		meta: {
