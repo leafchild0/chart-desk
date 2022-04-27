@@ -9,6 +9,6 @@ import java.util.Optional;
 @Repository
 public interface TagRepository extends JpaRepository<TagModel, Long> {
 
-    Optional<TagModel> findFirstByNameAndColor(String name, String color);
+    Optional<TagModel> findFirstByName(String name);
 
 }

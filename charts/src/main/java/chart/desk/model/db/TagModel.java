@@ -30,16 +30,12 @@ public class TagModel {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "color")
-    private String color;
-
     @NotNull
     @Column(name = "created", nullable = false)
     private Date created;
 
-    public TagModel(String name, String color) {
+    public TagModel(String name) {
         this.name = name;
-        this.color = color;
         this.created = new Date();
     }
 }

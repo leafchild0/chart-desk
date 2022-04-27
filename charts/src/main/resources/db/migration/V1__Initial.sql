@@ -9,7 +9,6 @@ CREATE TABLE TAGS
 (
     id           SERIAL PRIMARY KEY,
     name         VARCHAR(255) NOT NULL,
-    color        VARCHAR(255),
     created     timestamp without time zone NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'UTC')
 );
 

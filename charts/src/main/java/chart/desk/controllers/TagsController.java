@@ -23,7 +23,7 @@ public class TagsController {
 
     @PostMapping
     public TagModel createTag(@RequestBody TagTo tag) {
-        return tagService.createTagIfNotExist(tag.getName(), tag.getColor());
+        return tagService.createTagIfNotExist(tag.getName());
     }
 
     @PostMapping("/{tagId}/assign")

@@ -22,12 +22,12 @@ public class TagService {
     private final TagRepository tagRepository;
     private final ChartService chartService;
 
-    public TagModel createTagIfNotExist(String tagName, String color) {
-        Optional<TagModel> firstByNameAndColor = tagRepository.findFirstByNameAndColor(tagName, color);
+    public TagModel createTagIfNotExist(String tagName) {
+        Optional<TagModel> firstByNameAndColor = tagRepository.findFirstByName(tagName);
         if (firstByNameAndColor.isPresent()) {
             throw new HttpClientErrorException(HttpStatus.UNPROCESSABLE_ENTITY, "Tag already exists");
         }
-        return tagRepository.save(new TagModel(tagName, color));
+        return tagRepository.save(new TagModel(tagName));
     }
 
     public TagModel getTag(Long tagId) {

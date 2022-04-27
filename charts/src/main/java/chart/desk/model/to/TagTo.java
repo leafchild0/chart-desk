@@ -10,6 +10,12 @@ import org.joda.time.LocalDate;
 @NoArgsConstructor
 public class TagTo {
     private String name;
-    private String color;
+    private boolean isCustom;
     private LocalDate created;
+
+    public TagTo(String name, boolean isCustom) {
+        this.name = name;
+        this.isCustom = isCustom;
+        this.created = new LocalDate();
+    }
 }

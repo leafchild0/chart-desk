@@ -1,6 +1,7 @@
 package chart.desk.model.db;
 
 import chart.desk.model.ChartEntry;
+import chart.desk.model.to.TagTo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -24,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 @Entity
 @Table(name = "charts")
@@ -145,6 +147,8 @@ public class ChartModel {
         List<String> sourcesList = objectMapper.readValue(getSources(), List.class);
         List<String> keywordsList = objectMapper.readValue(getKeywords(), List.class);
         List<Map<String, String>> maintainersList = objectMapper.readValue(getMaintainers(), List.class);
+        List<TagTo> customTags = getTags().stream().map(a-> new TagTo(a.getName(), true)).toList();
+        List<TagTo> helmTags = keywordsList.stream().map(a-> new TagTo(a, false)).toList();
         return ChartEntry.builder()
                 .id(getId())
                 .description(getDescription())
@@ -160,6 +164,7 @@ public class ChartModel {
                 .engine(getEngine())
                 .home(getHome())
                 .keywords(keywordsList)
+                .tags(Stream.concat(customTags.stream(), helmTags.stream()).toList())
                 .build();
     }
 
