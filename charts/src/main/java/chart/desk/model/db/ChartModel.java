@@ -145,6 +145,7 @@ public class ChartModel {
         ObjectMapper objectMapper = new ObjectMapper();
         List<String> urlsList = objectMapper.readValue(getUrls(), List.class);
         List<String> sourcesList = objectMapper.readValue(getSources(), List.class);
+        // TODO: move keywords in tags table
         List<String> keywordsList = objectMapper.readValue(getKeywords(), List.class);
         List<Map<String, String>> maintainersList = objectMapper.readValue(getMaintainers(), List.class);
         List<TagTo> customTags = getTags().stream().map(a-> new TagTo(a.getName(), true)).toList();

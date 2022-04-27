@@ -17,7 +17,7 @@
 			<template v-for='header in headers'>
 				<b-table-column centered :key='header.field' v-if='header.field === "versions"' v-bind='header'>
 					<template v-slot='props'>
-						<div class='tags'  v-if='props.row["versions"]'>
+						<div class='tags' v-if='props.row["versions"]'>
 							<span class='tag is-primary' :key='version' v-for='version in props.row["versions"]'>
 								{{ version }}
 							</span>
@@ -26,10 +26,13 @@
 				</b-table-column>
 				<b-table-column centered :key='header.field' v-else-if='header.field === "tags"' v-bind='header'>
 					<template v-slot='props'>
-						<div class='tags'  v-if='props.row["tags"]'>
-							<span class='tag is-info' :key='tag' v-for='tag in props.row["tags"]'>
-								{{ tag }}
-							</span>
+						<div class='tags' v-if='props.row["tags"]'>
+							<tags-input element-id='tags'
+										id-field='id'
+										text-field='name'
+										v-model='props.row["tags"]'
+										:existing-tags='tags'
+										:typeahead='true'></tags-input>
 						</div>
 					</template>
 				</b-table-column>
@@ -55,10 +58,14 @@
 </template>
 
 <script>
+	import VoerroTagsInput from '@voerro/vue-tagsinput';
+	import Vue from 'vue';
+
+	Vue.component('tags-input', VoerroTagsInput);
 
 	export default {
 		name: 'FilterableTable',
-		props: ['data', 'filterColumns', 'headers', 'details', 'loading'],
+		props: ['data', 'filterColumns', 'headers', 'details', 'loading', 'tags'],
 		data() {
 			return {
 				filterBy: '',
@@ -84,6 +91,8 @@
 </script>
 
 <style lang='scss'>
+
+	@import '~@voerro/vue-tagsinput/dist/style.css';
 
 	#filterable-table {
 

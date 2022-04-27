@@ -17,5 +17,5 @@ public class ChartTo {
     private String name;
     private List<String> versions;
     private LocalDate created;
-    private List<String> tags;
+    private List<TagTo> tags;
 }

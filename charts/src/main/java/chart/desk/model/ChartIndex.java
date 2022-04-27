@@ -65,7 +65,7 @@ public class ChartIndex {
                         .map(ChartEntry::getVersion)
                         .toList())
                 .created(lastVersionChart.getCreated().toLocalDate())
-                .tags(lastVersionChart.getKeywords())
+                .tags(lastVersionChart.getTags())
                 .build());
     }
 
