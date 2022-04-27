@@ -3,7 +3,7 @@
 		<Navbar/>
 		<div class='is-admin' v-if='!currentUser.isAdmin'>You don't have permission to access this page</div>
 		<div v-else>
-			<FilterableTable :data='users' :filter-columns='filterColumns' :headers='headers'>
+			<FilterableTable :data='users' :filter-columns='filterColumns' :headers='headers' :loading='loading'>
 				<template v-slot:actions='props'>
 					<b-tooltip label='Deactivate user' position='is-left' type='is-warning'>
 						<b-button size='is-small' type='is-danger' outlined rounded icon-left='account-off' @click='() => deactivateUser(props.id)'></b-button>
@@ -27,6 +27,7 @@
 		data() {
 			return {
 				users: [],
+				loading: true,
 				headers: [
 					{field: 'username', label: 'User name'},
 					{field: 'firstName', label: 'First Name'},
@@ -65,7 +66,7 @@
 				})
 				.catch(() => {
 					this.$toastr.e('Ups... Something went wrong during users fetch');
-				})
+				}).finally(() => this.loading = false)
 		}
 	}
 </script>

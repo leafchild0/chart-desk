@@ -6,6 +6,7 @@ import SignUp from '@/views/SignUp'
 import Login from '@/views/Login'
 import store from '@/store'
 import Admin from '@/views/Admin';
+import Chart from '@/views/Chart';
 
 Vue.use(VueRouter)
 
@@ -32,6 +33,15 @@ const routes = [
 		path: '/charts',
 		name: 'charts',
 		component: Charts,
+		meta: {
+			requiresAuth: true
+		}
+	},
+	{
+		path: '/chart/:id',
+		name: 'chart',
+		component: Chart,
+		props: true,
 		meta: {
 			requiresAuth: true
 		}

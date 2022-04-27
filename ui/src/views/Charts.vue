@@ -2,9 +2,11 @@
 	<div class='charts'>
 		<Navbar/>
 		<UploadChartButton v-on:upload-chart='uploadChart' :title='"Upload chart (.tar.gz)"' :format='".tgz"'/>
-		<FilterableTable :data='charts' :filter-columns='filterColumns' :headers='headers' :details='true'>
-			<template v-slot:details='props'>
-				<ChartsDetails :chart='props.row'/>
+		<FilterableTable :data='charts' :filter-columns='filterColumns' :headers='headers' :loading='loading'>
+			<template v-slot:actions='props'>
+				<b-tooltip label='View details' position='is-left' type='is-info'>
+					<b-button size='is-small' type='is-primary' icon-left='format-list-bulleted' @click='() => showDetails(props.id)'></b-button>
+				</b-tooltip>
 			</template>
 		</FilterableTable>
 	</div>
@@ -16,12 +18,10 @@
 	import Navbar from '@/components/Navbar';
 	import UploadChartButton from '@/components/UploadChartButton';
 	import api from '@/api';
-	import ChartsDetails from '@/components/ChartsDetails';
 
 	export default {
 		name: 'Charts',
 		components: {
-			ChartsDetails,
 			Navbar,
 			UploadChartButton,
 			FilterableTable
@@ -29,10 +29,11 @@
 		data() {
 			return {
 				charts: [],
+				loading: true,
 				headers: [
 					{field: 'name', label: 'Chart name'},
-					{field: 'version', label: 'Chart version'},
-					{field: 'description', label: 'Description'},
+					{field: 'versions', label: 'Chart versions'},
+					{field: 'tags', label: 'Tags'},
 					{field: 'created', label: 'Date'},
 				]
 			}
@@ -58,10 +59,10 @@
 		},
 		mounted() {
 			api.chartsList().then((response) => {
-				this.charts = [].concat(...Object.values(response.data.entries));
+				this.charts = response.data;
 			}).catch(() => {
 				this.$toastr.e('Something went wrong while getting charts');
-			});
+			}).finally(() => this.loading = false);
 		}
 	}
 </script>

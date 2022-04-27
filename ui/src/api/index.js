@@ -5,19 +5,8 @@
  * @date 09.03.2022
  */
 
-import {
-	login,
-	signUp,
-	getCurrentUser,
-	updatePassword,
-	updateUserDetails,
-	getAllUsers,
-	deactivateUser
-} from './auth';
-import {
-	chartsList,
-	uploadChart
-} from './chartsApi';
+import {deactivateUser, getAllUsers, getCurrentUser, login, signUp, updatePassword, updateUserDetails} from './auth';
+import {chartsList, getChart, uploadChart} from './chartsApi';
 
 export default {
 	login,
@@ -28,5 +17,6 @@ export default {
 	getAllUsers,
 	deactivateUser,
 	chartsList,
-	uploadChart
+	uploadChart,
+	getChart
 };
