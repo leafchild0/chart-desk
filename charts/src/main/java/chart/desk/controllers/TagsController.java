@@ -7,11 +7,14 @@ import chart.desk.services.TagService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/tags")
@@ -24,6 +27,11 @@ public class TagsController {
     @PostMapping
     public TagModel createTag(@RequestBody TagTo tag) {
         return tagService.createTagIfNotExist(tag.getName());
+    }
+
+    @GetMapping
+    public List<TagModel> getTags() {
+        return tagService.getTags();
     }
 
     @PostMapping("/{tagId}/assign")

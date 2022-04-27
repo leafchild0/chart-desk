@@ -42,4 +42,8 @@ public class TagService {
                 .map(c -> c.appendTag(tag))
                 .forEach(chartService::save);
     }
+
+    public List<TagModel> getTags() {
+        return tagRepository.findAll();
+    }
 }
