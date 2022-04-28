@@ -23,3 +23,7 @@ export const createTag = (tag) => {
 export const assignTag = (tagId, payload) => {
 	return api.post('tags/' + tagId + '/assign', payload);
 }
+
+export const unassignTag = (tagId, payload) => {
+	return api.post('tags/' + tagId + '/unassign', payload);
+}

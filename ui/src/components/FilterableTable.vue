@@ -32,6 +32,8 @@
 										text-field='name'
 										v-model='props.row["tags"]'
 										:existing-tags='tags'
+										@tag-added='onTagAdded($event, props.row["name"])'
+										@tag-removed='onTagUnassign($event, props.row["name"])'
 										:typeahead='true'></tags-input>
 						</div>
 					</template>
@@ -85,6 +87,22 @@
 			},
 			isActions() {
 				return this.$slots.actions || this.$scopedSlots.actions
+			}
+		},
+		methods: {
+			onTagAdded(tag, chartName) {
+				const payload = {tag: tag, name: chartName};
+				if (tag.id === '') {
+					// create and assign new tag
+					this.$emit('tag-add', payload);
+				} else if (this.tags.filter(t => t.name === tag.name).length !== 0) {
+					// assign existing tag if not assigned previously
+					this.$emit('tag-assign', payload);
+				}
+			},
+			onTagUnassign(tag, chartName) {
+				const payload = {tag: tag, name: chartName};
+				this.$emit('tag-unassign', payload);
 			}
 		}
 	}

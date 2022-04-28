@@ -39,4 +39,10 @@ public class TagsController {
         TagModel tag = tagService.getTag(tagId);
         tagService.assignTag(tag, assignTagTo.getChartNames(), assignTagTo.getUserName());
     }
+
+    @PostMapping("/{tagId}/unassign")
+    public void unassignTag(@PathVariable Long tagId, @RequestBody AssignTagTo assignTagTo) {
+        TagModel tag = tagService.getTag(tagId);
+        tagService.unassignTag(tag, assignTagTo.getChartNames(), assignTagTo.getUserName());
+    }
 }

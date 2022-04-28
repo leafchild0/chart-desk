@@ -148,8 +148,8 @@ public class ChartModel {
         // TODO: move keywords in tags table
         List<String> keywordsList = objectMapper.readValue(getKeywords(), List.class);
         List<Map<String, String>> maintainersList = objectMapper.readValue(getMaintainers(), List.class);
-        List<TagTo> customTags = getTags().stream().map(a-> new TagTo(a.getName(), true)).toList();
-        List<TagTo> helmTags = keywordsList.stream().map(a-> new TagTo(a, false)).toList();
+        List<TagTo> customTags = getTags().stream().map(a-> new TagTo(a.getId(), a.getName(), true)).toList();
+        List<TagTo> helmTags = keywordsList.stream().map(a-> new TagTo(0L, a, false)).toList();
         return ChartEntry.builder()
                 .id(getId())
                 .description(getDescription())
@@ -172,6 +172,13 @@ public class ChartModel {
     public ChartModel appendTag(TagModel tag) {
         Set<TagModel> tagSet = getTags();
         tagSet.add(tag);
+        setTags(tagSet);
+        return this;
+    }
+
+    public ChartModel removeTag(TagModel tag) {
+        Set<TagModel> tagSet = getTags();
+        tagSet.remove(tag);
         setTags(tagSet);
         return this;
     }

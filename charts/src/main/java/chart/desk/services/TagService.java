@@ -43,6 +43,14 @@ public class TagService {
                 .forEach(chartService::save);
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    public void unassignTag(TagModel tag, List<String> chartNames, String userName) {
+        chartNames.stream()
+                .flatMap(chartName -> chartService.getChartList(userName, chartName).stream())
+                .map(c -> c.removeTag(tag))
+                .forEach(chartService::save);
+    }
+
     public List<TagModel> getTags() {
         return tagRepository.findAll();
     }
