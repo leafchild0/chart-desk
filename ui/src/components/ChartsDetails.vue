@@ -52,6 +52,27 @@
 					</div>
 					<div class='field is-horizontal'>
 						<div class='field-label is-normal'>
+							<label class='label'>Keywords</label>
+						</div>
+						<div class='field-body'>
+							<div class='field'>
+								<div class='control'>
+									<div class='tags' v-if='chart.tags'>
+										<tags-input element-id='tags'
+													id-field='id'
+													text-field='name'
+													v-model='chart.tags'
+													:existing-tags='tags'
+													@tag-added='onTagAdded($event, chart.name)'
+													@tag-removed='onTagUnassign($event, chart.name)'
+													:typeahead='true'></tags-input>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class='field is-horizontal'>
+						<div class='field-label is-normal'>
 							<label class='label'>Maintainers</label>
 						</div>
 						<div class='field-body'>
@@ -94,11 +115,28 @@
 	export default {
 		name: 'ChartsDetails',
 		props: {
-			chart: {required: true}
+			chart: {required: true},
+			tags: {required: true}
 		},
 		computed: {
 			isLoading() {
 				return Object.keys(this.chart).length === 0
+			}
+		},
+		methods: {
+			onTagAdded(tag, chartName) {
+				const payload = {tag: tag, name: chartName};
+				if (tag.id === '') {
+					// create and assign new tag
+					this.$emit('tag-add', payload);
+				} else if (this.tags.filter(t => t.name === tag.name).length !== 0) {
+					// assign existing tag if not assigned previously
+					this.$emit('tag-assign', payload);
+				}
+			},
+			onTagUnassign(tag, chartName) {
+				const payload = {tag: tag, name: chartName};
+				this.$emit('tag-unassign', payload);
 			}
 		}
 	}
@@ -122,6 +160,11 @@
 			padding-bottom: 15px;
 			margin-bottom: 10px;
 			border-bottom: 1px solid lightgray;
+		}
+
+		.tags {
+			display: flex;
+			justify-content: center;
 		}
 
 	}
