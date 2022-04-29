@@ -23,7 +23,6 @@ CREATE TABLE CHARTS
     icon        VARCHAR(2048),
     engine      VARCHAR(2048),
     home        VARCHAR(2048),
-    keywords    TEXT,
     sources     TEXT,
     maintainers TEXT,
     urls        TEXT,

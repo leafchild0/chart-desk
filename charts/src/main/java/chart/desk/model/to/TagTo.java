@@ -11,13 +11,11 @@ import org.joda.time.LocalDate;
 public class TagTo {
     private Long id;
     private String name;
-    private boolean isCustom;
     private LocalDate created;
 
-    public TagTo(Long id, String name, boolean isCustom) {
+    public TagTo(Long id, String name) {
         this.id = id;
         this.name = name;
-        this.isCustom = isCustom;
         this.created = new LocalDate();
     }
 }

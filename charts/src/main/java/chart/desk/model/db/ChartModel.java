@@ -11,9 +11,9 @@ import lombok.SneakyThrows;
 import lombok.ToString;
 import org.joda.time.DateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,6 +22,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -70,10 +71,6 @@ public class ChartModel {
     private String home;
 
     @NotNull
-    @Column(name = "keywords")
-    private String keywords;
-
-    @NotNull
     @Column(name = "urls", nullable = false)
     private String urls;
 
@@ -97,8 +94,8 @@ public class ChartModel {
     @JoinColumn(name="source_id")
     private SourceModel source;
 
-    @ManyToMany
-    Set<TagModel> tags;
+    @ManyToMany(cascade = CascadeType.ALL)
+    Set<TagModel> tags = new HashSet<>();
 
     @SneakyThrows
     public ChartModel(ChartEntry chartEntry, String digest, List<String> urls, String userName, SourceModel source) {
@@ -110,7 +107,9 @@ public class ChartModel {
         this.engine = chartEntry.getEngine();
         this.home = chartEntry.getHome();
         ObjectMapper objectMapper = new ObjectMapper();
-        this.keywords = objectMapper.writeValueAsString(chartEntry.getKeywords());
+        chartEntry.getKeywords().stream()
+                .map(TagModel::new)
+                .forEach(this::appendTag);
         this.sources = objectMapper.writeValueAsString(chartEntry.getSources());
         this.maintainers = objectMapper.writeValueAsString(chartEntry.getMaintainers());
         this.urls = objectMapper.writeValueAsString(urls);
@@ -131,7 +130,9 @@ public class ChartModel {
         this.engine = chartEntry.getEngine();
         this.home = chartEntry.getHome();
         ObjectMapper objectMapper = new ObjectMapper();
-        this.keywords = objectMapper.writeValueAsString(chartEntry.getKeywords());
+        chartEntry.getKeywords().stream()
+                .map(TagModel::new)
+                .forEach(this::appendTag);
         this.sources = objectMapper.writeValueAsString(chartEntry.getSources());
         this.maintainers = objectMapper.writeValueAsString(chartEntry.getMaintainers());
         this.urls = objectMapper.writeValueAsString(urls);
@@ -146,10 +147,9 @@ public class ChartModel {
         List<String> urlsList = objectMapper.readValue(getUrls(), List.class);
         List<String> sourcesList = objectMapper.readValue(getSources(), List.class);
         // TODO: move keywords in tags table
-        List<String> keywordsList = objectMapper.readValue(getKeywords(), List.class);
         List<Map<String, String>> maintainersList = objectMapper.readValue(getMaintainers(), List.class);
-        List<TagTo> customTags = getTags().stream().map(a-> new TagTo(a.getId(), a.getName(), true)).toList();
-        List<TagTo> helmTags = keywordsList.stream().map(a-> new TagTo(0L, a, false)).toList();
+        List<TagTo> tags = getTags().stream().map(a -> new TagTo(a.getId(), a.getName())).toList();
+        List<String> keywordsList = tags.stream().map(TagTo::getName).toList();
         return ChartEntry.builder()
                 .id(getId())
                 .description(getDescription())
@@ -165,7 +165,7 @@ public class ChartModel {
                 .engine(getEngine())
                 .home(getHome())
                 .keywords(keywordsList)
-                .tags(Stream.concat(customTags.stream(), helmTags.stream()).toList())
+                .tags(tags)
                 .build();
     }
 
