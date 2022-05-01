@@ -47,7 +47,7 @@
 				</template>
 			</b-modal>
 		</div>
-		<FilterableTable :data='charts' :filter-columns='filterColumns' :headers='headers' :loading='loading'>
+		<FilterableTable v-if='Object.keys(charts).length' :data='charts' :filter-columns='filterColumns' :headers='headers' :loading='loading'>
 			<template v-slot:actions='props'>
 				<b-tooltip label='View details' position='is-left' type='is-info'>
 					<b-button size='is-small' type='is-primary' icon-left='format-list-bulleted' @click='() => showDetails(props.id)'></b-button>
@@ -64,6 +64,7 @@
 	import UploadChartButton from '@/components/UploadChartButton';
 	import ThirdPartImport from '@/components/ThirdPartImport';
 	import api from '@/api';
+	import {mapGetters} from 'vuex';
 
 	export default {
 		name: 'Charts',
@@ -108,11 +109,20 @@
 		computed: {
 			filterColumns() {
 				return this.headers.map(h => h.field)
+			},
+			...mapGetters([
+				'currentUser',
+			]),
+		},
+		watch: {
+			currentUser(newUser) {
+				// Get charts on user loaded, do not use in production
+				this.loadCharts(newUser.id);
 			}
 		},
 		methods: {
 			uploadChart(formData) {
-				api.uploadChart('2', formData).then((response) => {
+				api.uploadChart(this.currentUser.id, formData).then((response) => {
 					if (response.status === 201) {
 						this.$toastr.s('Helm chart ' + response.data.name + ', version: ' + response.data.version + ' was uploaded.');
 					}
@@ -126,14 +136,16 @@
 			pullCharts(url) {
 				console.log(url)
 			},
+			loadCharts(userId) {
+				if (userId) {
+					return api.chartsList(userId).then((response) => {
+						this.charts = response.data;
+					}).catch(() => {
+						this.$toastr.e('Something went wrong while getting charts');
+					}).finally(() => this.loading = false);
+				}
+			}
 		},
-		mounted() {
-			api.chartsList('2').then((response) => {
-				this.charts = response.data;
-			}).catch(() => {
-				this.$toastr.e('Something went wrong while getting charts');
-			}).finally(() => this.loading = false);
-		}
 	}
 </script>
 

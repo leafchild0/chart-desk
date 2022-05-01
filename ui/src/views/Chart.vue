@@ -10,6 +10,7 @@
 	import Navbar from '@/components/Navbar';
 	import api from '@/api';
 	import ChartsDetails from '@/components/ChartsDetails';
+	import {mapGetters} from 'vuex';
 
 	export default {
 		name: 'Chart',
@@ -23,12 +24,15 @@
 			}
 		},
 		computed: {
+			...mapGetters([
+				'currentUser',
+			])
 		},
 		methods: {
 		},
 		mounted() {
 			if (this.$route.params.id) {
-				api.getChart('2', this.$route.params.id).then((response) => {
+				api.getChart(this.currentUser.id, this.$route.params.id).then((response) => {
 					this.chart = response.data
 				}).catch(() => {
 					this.$toastr.e('Something went wrong while getting chart');
