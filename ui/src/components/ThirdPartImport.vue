@@ -15,7 +15,8 @@
 			<div class='divider'/>
 			<p class='tree-data'>Charts:</p>
 			<div class='content'>
-				<tree  v-if='data.length > 0'
+				<tree
+					v-if='data.length > 0'
 					ref='tree'
 					:data='data'
 					:options='options'
@@ -55,8 +56,13 @@
 		},
 		methods: {
 			uploadCharts() {
-				const selectedNodes = this.$refs.tree.findAll({state: { checked: true } })
-				this.selected = selectedNodes.map(n => n.text)
+				const selectedNodes = this.$refs.tree.findAll({state: {checked: true}})
+				this.selected = selectedNodes.filter(n => n.data.version).map(n => {
+					return {
+						name: n.data.name,
+						versions: [n.data.version]
+					}
+				})
 
 				this.$emit('upload', {
 					url: this.url,

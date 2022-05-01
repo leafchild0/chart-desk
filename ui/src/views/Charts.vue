@@ -43,6 +43,7 @@
 						:data='pulledCharts'
 						@pull-charts='pullCharts'
 						@cancel='isThirdpartyModalActive = false'
+						@upload='uploadCharts'
 					/>
 				</template>
 			</b-modal>
@@ -124,8 +125,11 @@
 							text: chart.name,
 							children: chart.versions.map(version => {
 								return {
-									text: chart.name + ' - ' + version,
-									version
+									text: ' version ' + version,
+									data: {
+										version,
+										name: chart.name
+									}
 								}
 							})
 						})
@@ -134,6 +138,22 @@
 					this.$toastr.e('Something went wrong while pulling charts list from url')
 				});
 
+			},
+			uploadCharts(payload) {
+
+				api.uploadCharts(
+					this.currentUser.id,
+					{
+						thirdPartyUrl: payload.url,
+						entries: payload.charts
+					})
+					.then((response) => {
+						if (response.status === 200) {
+							this.$toastr.s('Charts were successfully uploaded');
+						}
+					}).catch(() => {
+						this.$toastr.e('Something went wrong while uploading chart')
+					});
 			},
 			loadCharts(userId) {
 				if (userId) {
