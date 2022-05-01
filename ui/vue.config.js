@@ -11,6 +11,12 @@ module.exports = {
 				pathRewrite: { '^/api/charts': '/charts' },
 				ws: true,
 				changeOrigin: true
+			},
+			'^/api/proxy': {
+				target: 'http://localhost:8081',
+				pathRewrite: { '^/api/proxy': '/proxy' },
+				ws: true,
+				changeOrigin: true
 			}
 		}
 	}
