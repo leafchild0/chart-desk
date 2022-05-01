@@ -47,7 +47,7 @@
 		},
 		data() {
 			return {
-				url: 'https://prometheus-community.github.io/helm-charts/index.yaml',
+				url: '',
 				selected: [],
 				options: {
 					emptyText: 'No charts found!',
