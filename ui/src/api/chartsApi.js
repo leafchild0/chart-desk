@@ -11,3 +11,7 @@ export const getChart = (userId, id) => {
 export const uploadChart = (userId, payload) => {
 	return api.post('charts/' + userId, payload);
 }
+
+export const pullCharts = (payload) => {
+	return api.post('/proxy/index', payload);
+}
