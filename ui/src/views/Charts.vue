@@ -149,6 +149,7 @@
 					})
 					.then((response) => {
 						if (response.status === 200) {
+							this.isThirdpartyModalActive = false;
 							this.$toastr.s('Charts were successfully uploaded');
 						}
 					}).catch(() => {

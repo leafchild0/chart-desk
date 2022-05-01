@@ -27,6 +27,7 @@
 			<b-button
 				label='Upload'
 				@click='uploadCharts'
+				:disabled='data.length === 0'
 				type='is-primary'/>
 			<b-button
 				label='Cancel'
@@ -52,6 +53,11 @@
 					emptyText: 'No charts found!',
 					checkbox: true
 				}
+			}
+		},
+		watch: {
+			url() {
+				this.data = [];
 			}
 		},
 		methods: {
