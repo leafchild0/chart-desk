@@ -6,16 +6,17 @@
 		<section class='modal-card-body'>
 			<div class='field'>
 				<b-field label='Import url' :label-position='"on-border"'>
-					<b-input v-model='url' expanded></b-input>
+					<b-input v-model='url' placeholder='Index url' type='url' expanded/>
 					<p class='control'>
-						<b-button class='button is-primary'>Pull</b-button>
+						<b-button class='button is-primary' :disabled='!url' @click='pullCharts'>Pull</b-button>
 					</p>
 				</b-field>
 			</div>
 			<div class='divider'/>
 			<p class='tree-data'>Charts:</p>
 			<div class='content'>
-				<tree ref='tree'
+				<tree  v-if='data.length > 0'
+					ref='tree'
 					:data='data'
 					:options='options'
 				/>
@@ -44,7 +45,7 @@
 		},
 		data() {
 			return {
-				url: '',
+				url: 'https://prometheus-community.github.io/helm-charts/index.yaml',
 				selected: [],
 				options: {
 					emptyText: 'No charts found!',
@@ -61,6 +62,9 @@
 					url: this.url,
 					charts: this.selected
 				})
+			},
+			pullCharts() {
+				this.$emit('pull-charts', this.url)
 			}
 		}
 	}

@@ -41,7 +41,7 @@
 				<template>
 					<ThirdPartImport
 						:data='pulledCharts'
-						@pull='pullCharts'
+						@pull-charts='pullCharts'
 						@cancel='isThirdpartyModalActive = false'
 					/>
 				</template>
@@ -80,24 +80,7 @@
 				loading: true,
 				isUploadModalActive: false,
 				isThirdpartyModalActive: false,
-				pulledCharts: [
-					{text: 'Item 1'},
-					{
-						text: 'Item 2', children: [
-							{text: 'Item 2.1'},
-							{text: 'Item 2.2'},
-							{text: 'Item 2.3'}
-						]
-					},
-					{
-						text: 'Item 3', children: [
-							{text: 'Item 3.1'},
-							{text: 'Item 3.2'},
-							{text: 'Item 3.3'}
-						]
-					},
-					{text: 'Item 4'}
-				],
+				pulledCharts: [],
 				headers: [
 					{field: 'name', label: 'Chart name'},
 					{field: 'versions', label: 'Chart versions'},
@@ -134,7 +117,23 @@
 				this.$router.push({name: 'chart', params: {id: id}})
 			},
 			pullCharts(url) {
-				console.log(url)
+				api.pullCharts({thirdPartyUrl: url}).then((response) => {
+					this.pulledCharts = [];
+					response.data.forEach(chart => {
+						this.pulledCharts.push({
+							text: chart.name,
+							children: chart.versions.map(version => {
+								return {
+									text: chart.name + ' - ' + version,
+									version
+								}
+							})
+						})
+					})
+				}).catch(() => {
+					this.$toastr.e('Something went wrong while pulling charts list from url')
+				});
+
 			},
 			loadCharts(userId) {
 				if (userId) {
