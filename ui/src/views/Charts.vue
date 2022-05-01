@@ -112,7 +112,7 @@
 		},
 		methods: {
 			uploadChart(formData) {
-				api.uploadChart(formData).then((response) => {
+				api.uploadChart('2', formData).then((response) => {
 					if (response.status === 201) {
 						this.$toastr.s('Helm chart ' + response.data.name + ', version: ' + response.data.version + ' was uploaded.');
 					}
@@ -128,7 +128,7 @@
 			},
 		},
 		mounted() {
-			api.chartsList().then((response) => {
+			api.chartsList('2').then((response) => {
 				this.charts = response.data;
 			}).catch(() => {
 				this.$toastr.e('Something went wrong while getting charts');
