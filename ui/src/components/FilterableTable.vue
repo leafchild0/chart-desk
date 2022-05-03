@@ -61,13 +61,13 @@
 
 <script>
 	import VoerroTagsInput from '@voerro/vue-tagsinput';
-	import Vue from 'vue';
-
-	Vue.component('tags-input', VoerroTagsInput);
 
 	export default {
 		name: 'FilterableTable',
 		props: ['data', 'filterColumns', 'headers', 'details', 'loading', 'tags'],
+		components: {
+			'tags-input': VoerroTagsInput
+		},
 		data() {
 			return {
 				filterBy: '',

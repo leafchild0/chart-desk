@@ -112,11 +112,16 @@
 </template>
 
 <script>
+	import VoerroTagsInput from '@voerro/vue-tagsinput';
+
 	export default {
 		name: 'ChartsDetails',
 		props: {
 			chart: {required: true},
 			tags: {required: true}
+		},
+		components: {
+			'tags-input': VoerroTagsInput
 		},
 		computed: {
 			isLoading() {

@@ -26,7 +26,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Stream;
 
 @Entity
 @Table(name = "charts")
@@ -146,7 +145,6 @@ public class ChartModel {
         ObjectMapper objectMapper = new ObjectMapper();
         List<String> urlsList = objectMapper.readValue(getUrls(), List.class);
         List<String> sourcesList = objectMapper.readValue(getSources(), List.class);
-        // TODO: move keywords in tags table
         List<Map<String, String>> maintainersList = objectMapper.readValue(getMaintainers(), List.class);
         List<TagTo> tags = getTags().stream().map(a -> new TagTo(a.getId(), a.getName())).toList();
         List<String> keywordsList = tags.stream().map(TagTo::getName).toList();

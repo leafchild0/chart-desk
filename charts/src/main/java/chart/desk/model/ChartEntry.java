@@ -35,6 +35,6 @@ public class ChartEntry {
     private List<String> urls;
     private List<String> sources;
     private List<Map<String, String>> maintainers;
-    private List<String> keywords;
+    private List<String> keywords = Collections.emptyList();
     private List<TagTo> tags = Collections.emptyList();
 }

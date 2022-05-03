@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,11 +32,11 @@ public class TagModel {
     private String name;
 
     @NotNull
+    @CreationTimestamp
     @Column(name = "created", nullable = false)
     private Date created;
 
     public TagModel(String name) {
         this.name = name;
-        this.created = new Date();
     }
 }
