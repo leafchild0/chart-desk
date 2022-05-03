@@ -55,7 +55,7 @@ public class ChartService {
                 .map(s -> s.save(chart, chartEntry.getName(), chartEntry.getVersion(), assetKind, userName))
                 .toList();
         String digestHex = DigestUtils.sha256Hex(chart);
-        return chartRepository.save(new ChartModel(chartEntry, digestHex, urls, userName, source));
+        return save(new ChartModel(chartEntry, digestHex, urls, userName, source));
     }
 
     public ChartModel save(ChartModel chartModel) {
