@@ -25,6 +25,7 @@ import java.util.Optional;
 @Service
 @Slf4j
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@Transactional
 public class ChartService {
 
     private final ChartRepository chartRepository;
@@ -41,7 +42,6 @@ public class ChartService {
      *
      * @return {@link ChartModel}
      */
-    @Transactional
     public ChartModel save(ChartEntry chartEntry, byte[] chart, AssetKind assetKind, String userName, SourceModel source, boolean checkExist) {
         if (checkExist) {
             Optional<ChartModel> existChart = chartRepository.findChartModelByUserNameAndNameAndVersion(userName, chartEntry.getName(), chartEntry.getVersion());
@@ -68,7 +68,6 @@ public class ChartService {
      * @param userName user name
      * @return {@link ChartIndex}
      */
-    @Transactional
     public ChartIndex getIndex(String userName) {
         List<ChartModel> userCharts = chartRepository.findAllByUserName(userName);
         // TODO: handle private charts
@@ -81,7 +80,6 @@ public class ChartService {
      * @param userName user name
      * @return list o ChartTo
      */
-    @Transactional
     public List<ChartTo> getChartList(String userName) {
         return getIndex(userName).toChartsTo();
     }
@@ -93,7 +91,6 @@ public class ChartService {
      * @param chartName chart name
      * @return list o ChartTo
      */
-    @Transactional
     public List<ChartModel> getChartList(String userName, String chartName) {
         return chartRepository.findAllByUserNameAndName(userName, chartName);
     }
@@ -105,7 +102,6 @@ public class ChartService {
      * @param id       is of the entity to query
      * @return Optional of {@link ChartEntry}
      */
-    @Transactional
     public Optional<ChartEntry> getChart(String userName, Long id) {
         return chartRepository.findChartModelByUserNameAndId(userName, id)
                 .map(ChartModel::toChartEntry);

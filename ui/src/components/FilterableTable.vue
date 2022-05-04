@@ -26,16 +26,8 @@
 				</b-table-column>
 				<b-table-column centered :key='header.field' v-else-if='header.field === "tags"' v-bind='header'>
 					<template v-slot='props'>
-						<div class='tags' v-if='props.row["tags"]'>
-							<tags-input element-id='tags'
-										id-field='id'
-										text-field='name'
-										v-model='props.row["tags"]'
-										:existing-tags='tags'
-										@tag-added='onTagAdded($event, props.row["name"])'
-										@tag-removed='onTagUnassign($event, props.row["name"])'
-										:typeahead='true'></tags-input>
-						</div>
+						<ChartTags :all-tags='tags' :chart-name='props.row["name"]' :chart-tags='props.row["tags"]'>
+						</ChartTags>
 					</template>
 				</b-table-column>
 				<b-table-column :key='header.field' v-else v-bind='header'>
@@ -60,13 +52,13 @@
 </template>
 
 <script>
-	import VoerroTagsInput from '@voerro/vue-tagsinput';
+	import ChartTags from '@/components/ChartTags';
 
 	export default {
 		name: 'FilterableTable',
 		props: ['data', 'filterColumns', 'headers', 'details', 'loading', 'tags'],
 		components: {
-			'tags-input': VoerroTagsInput
+			ChartTags,
 		},
 		data() {
 			return {
@@ -88,22 +80,6 @@
 			isActions() {
 				return this.$slots.actions || this.$scopedSlots.actions
 			}
-		},
-		methods: {
-			onTagAdded(tag, chartName) {
-				const payload = {tag: tag, name: chartName};
-				if (tag.id === '') {
-					// create and assign new tag
-					this.$emit('tag-add', payload);
-				} else if (this.tags.filter(t => t.name === tag.name).length !== 0) {
-					// assign existing tag if not assigned previously
-					this.$emit('tag-assign', payload);
-				}
-			},
-			onTagUnassign(tag, chartName) {
-				const payload = {tag: tag, name: chartName};
-				this.$emit('tag-unassign', payload);
-			}
 		}
 	}
 </script>
@@ -118,11 +94,6 @@
 
 		.filter {
 			width: 200px;
-		}
-
-		.tags {
-			display: flex;
-			justify-content: center;
 		}
 
 		.b-table div.top.level {
