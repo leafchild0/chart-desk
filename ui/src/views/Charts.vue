@@ -48,7 +48,7 @@
 				</template>
 			</b-modal>
 		</div>
-		<FilterableTable v-if='Object.keys(charts).length' :data='charts' :filter-columns='filterColumns' :headers='headers' :loading='loading'>
+		<FilterableTable :data='charts' :filter-columns='filterColumns' :headers='headers' :loading='loading'>
 			<template v-slot:actions='props'>
 				<b-tooltip label='View details' position='is-left' type='is-info'>
 					<b-button size='is-small' type='is-primary' icon-left='format-list-bulleted' @click='() => showDetails(props.id)'></b-button>
