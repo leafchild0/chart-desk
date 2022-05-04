@@ -16,9 +16,9 @@
 			<p class='tree-data'>Charts:</p>
 			<div class='content'>
 				<tree
-					v-if='data.length > 0'
+					v-if='treeData.length > 0'
 					ref='tree'
-					:data='data'
+					:data='treeData'
 					:options='options'
 				/>
 			</div>
@@ -27,7 +27,7 @@
 			<b-button
 				label='Upload'
 				@click='uploadCharts'
-				:disabled='data.length === 0'
+				:disabled='treeData.length === 0'
 				type='is-primary'/>
 			<b-button
 				label='Cancel'
@@ -48,6 +48,7 @@
 		data() {
 			return {
 				url: '',
+				treeData: [],
 				selected: [],
 				options: {
 					emptyText: 'No charts found!',
@@ -57,7 +58,10 @@
 		},
 		watch: {
 			url() {
-				this.data = [];
+				this.treeData = [];
+			},
+			data(newValue) {
+				this.treeData = newValue;
 			}
 		},
 		methods: {
