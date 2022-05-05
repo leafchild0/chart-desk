@@ -15,6 +15,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.Optional;
 @Service
 @Slf4j
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@Transactional
 public class ChartService {
 
     private final ChartRepository chartRepository;
@@ -53,7 +55,11 @@ public class ChartService {
                 .map(s -> s.save(chart, chartEntry.getName(), chartEntry.getVersion(), assetKind, userName))
                 .toList();
         String digestHex = DigestUtils.sha256Hex(chart);
-        return chartRepository.save(new ChartModel(chartEntry, digestHex, urls, userName, source));
+        return save(new ChartModel(chartEntry, digestHex, urls, userName, source));
+    }
+
+    public ChartModel save(ChartModel chartModel) {
+        return chartRepository.save(chartModel);
     }
 
     /**
@@ -76,6 +82,17 @@ public class ChartService {
      */
     public List<ChartTo> getChartList(String userName) {
         return getIndex(userName).toChartsTo();
+    }
+
+    /**
+     * Return list with all available charts with all available versions
+     *
+     * @param userName user name
+     * @param chartName chart name
+     * @return list o ChartTo
+     */
+    public List<ChartModel> getChartList(String userName, String chartName) {
+        return chartRepository.findAllByUserNameAndName(userName, chartName);
     }
 
     /**

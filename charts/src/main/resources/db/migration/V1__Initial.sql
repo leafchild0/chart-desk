@@ -5,9 +5,16 @@ CREATE TABLE SOURCES
     refresh_time INT
 );
 
+CREATE TABLE TAGS
+(
+    id           SERIAL PRIMARY KEY,
+    name         VARCHAR(255) NOT NULL,
+    created     timestamp without time zone NOT NULL DEFAULT (current_timestamp AT TIME ZONE 'UTC')
+);
+
 CREATE TABLE CHARTS
 (
-    id          SERIAL,
+    id          SERIAL PRIMARY KEY,
     name        VARCHAR(255),
     version     VARCHAR(255),
     digest      VARCHAR(255),
@@ -16,7 +23,6 @@ CREATE TABLE CHARTS
     icon        VARCHAR(2048),
     engine      VARCHAR(2048),
     home        VARCHAR(2048),
-    keywords    TEXT,
     sources     TEXT,
     maintainers TEXT,
     urls        TEXT,

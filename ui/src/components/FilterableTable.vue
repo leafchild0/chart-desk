@@ -17,7 +17,7 @@
 			<template v-for='header in headers'>
 				<b-table-column centered :key='header.field' v-if='header.field === "versions"' v-bind='header'>
 					<template v-slot='props'>
-						<div class='tags'  v-if='props.row["versions"]'>
+						<div class='tags' v-if='props.row["versions"]'>
 							<span class='tag is-primary' :key='version' v-for='version in props.row["versions"]'>
 								{{ version }}
 							</span>
@@ -26,11 +26,8 @@
 				</b-table-column>
 				<b-table-column centered :key='header.field' v-else-if='header.field === "tags"' v-bind='header'>
 					<template v-slot='props'>
-						<div class='tags'  v-if='props.row["tags"]'>
-							<span class='tag is-info' :key='tag' v-for='tag in props.row["tags"]'>
-								{{ tag }}
-							</span>
-						</div>
+						<ChartTags :all-tags='tags' :chart-name='props.row["name"]' :chart-tags='props.row["tags"]'>
+						</ChartTags>
 					</template>
 				</b-table-column>
 				<b-table-column :key='header.field' v-else v-bind='header'>
@@ -55,10 +52,14 @@
 </template>
 
 <script>
+	import ChartTags from '@/components/ChartTags';
 
 	export default {
 		name: 'FilterableTable',
-		props: ['data', 'filterColumns', 'headers', 'details', 'loading'],
+		props: ['data', 'filterColumns', 'headers', 'details', 'loading', 'tags'],
+		components: {
+			ChartTags,
+		},
 		data() {
 			return {
 				filterBy: '',
@@ -85,17 +86,14 @@
 
 <style lang='scss'>
 
+	@import '~@voerro/vue-tagsinput/dist/style.css';
+
 	#filterable-table {
 
 		padding: 15px;
 
 		.filter {
 			width: 200px;
-		}
-
-		.tags {
-			display: flex;
-			justify-content: center;
 		}
 
 		.b-table div.top.level {
