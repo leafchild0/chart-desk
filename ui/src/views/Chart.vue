@@ -1,7 +1,7 @@
 <template>
 	<div class='chart'>
 		<Navbar/>
-		<ChartsDetails :chart='chart' :tags='tags' v-on:tag-add='addTag' v-on:tag-assign='assignTag' v-on:tag-unassign='unassignTag'>
+		<ChartsDetails :chart='chart' :tags='tags' :username='currentUserName' v-on:tag-add='addTag' v-on:tag-assign='assignTag' v-on:tag-unassign='unassignTag'>
 		</ChartsDetails>
 	</div>
 </template>
@@ -21,7 +21,8 @@
 		data() {
 			return {
 				chart: {},
-				tags: []
+				tags: [],
+				currentUserName: ''
 			}
 		},
 		computed: {
@@ -64,6 +65,12 @@
 				}).catch(() => {
 					this.$toastr.e('Something went wrong while getting tags');
 				}).finally(() => this.loading = false);
+
+				api.getCurrentUser().then(response => {
+					this.currentUserName = response.data.username;
+				}).catch(() => {
+					this.$toastr.e('Ups... Something went wrong during user fetch');
+				});
 			}
 		}
 	}
