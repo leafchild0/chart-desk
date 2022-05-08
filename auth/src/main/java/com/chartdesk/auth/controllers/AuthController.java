@@ -42,10 +42,17 @@ public class AuthController {
      */
     @PostMapping("/login")
     public Mono<ResponseEntity<String>> login(@RequestBody LoginDTO loginDTO) {
-        return userDetailsService.findByUsername(loginDTO.getUsername())
-                .filter(userDetails -> passwordEncoder.matches(loginDTO.getPassword(), userDetails.getPassword()))
-                .map(userDetails -> ResponseEntity.ok(jwtTokenUtil.generateToken(userDetails)))
-                .switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).build()));
+
+	    return userDetailsService.findByUsername(loginDTO.getUsername())
+		    .map(userDetails -> {
+			    if (!passwordEncoder.matches(loginDTO.getPassword(), userDetails.getPassword())) {
+				    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Wrong username or password");
+			    }
+				else {
+				    return ResponseEntity.ok(jwtTokenUtil.generateToken(userDetails));
+			    }
+		    })
+		    .switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).build()));
     }
 
     /**
