@@ -72,7 +72,12 @@
 						name: n.data.name,
 						versions: [n.data.version]
 					}
-				})
+				}).reduce((acc, curr) => {
+					const found = acc.findIndex(f => f.name === curr.name);
+					if (found >= 0) acc[found].versions.push(...curr.versions);
+					else acc.push(curr);
+					return acc;
+				}, []);
 
 				this.$emit('upload', {
 					url: this.url,
