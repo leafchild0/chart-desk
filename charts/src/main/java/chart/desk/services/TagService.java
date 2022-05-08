@@ -1,7 +1,6 @@
 package chart.desk.services;
 
 import chart.desk.model.db.TagModel;
-import chart.desk.model.to.TagTo;
 import chart.desk.repositories.TagRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +24,7 @@ public class TagService {
     public TagModel createTagIfNotExist(String tagName) {
         Optional<TagModel> firstByNameAndColor = tagRepository.findFirstByName(tagName);
         if (firstByNameAndColor.isPresent()) {
-            throw new HttpClientErrorException(HttpStatus.UNPROCESSABLE_ENTITY, "Tag already exists");
+            throw new HttpClientErrorException(HttpStatus.CONFLICT, "Tag already exists");
         }
         return tagRepository.save(new TagModel(tagName));
     }

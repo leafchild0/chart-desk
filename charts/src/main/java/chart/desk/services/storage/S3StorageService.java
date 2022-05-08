@@ -1,15 +1,16 @@
 package chart.desk.services.storage;
 
+import chart.desk.errors.FetchingException;
 import chart.desk.model.AssetKind;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -22,6 +23,7 @@ import java.net.URL;
 
 @ConditionalOnExpression("'${storage.type}'.contains('AWS_S3')")
 @Service
+@Slf4j
 public class S3StorageService implements StorageService {
 
     @Value("${storage.aws.bucket}")
@@ -36,7 +38,8 @@ public class S3StorageService implements StorageService {
             getS3Client().putObject(bucketName, key, is, new ObjectMetadata());
             return getUrl(key).toString();
         } catch (IOException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Chart " + name + "-" + version + " fetching error", e);
+            log.error("Error fetching chart " + name, e);
+            throw new FetchingException(HttpStatus.INTERNAL_SERVER_ERROR, "Chart " + name + "-" + version + " fetching error");
         }
     }
 
