@@ -1,7 +1,13 @@
 <template>
 	<div class='chart'>
 		<Navbar/>
-		<ChartsDetails :chart='chart' :tags='tags' v-on:tag-add='addTag' v-on:tag-assign='assignTag' v-on:tag-unassign='unassignTag'>
+		<ChartsDetails
+			:chart='chart'
+			:versions='versions'
+			:tags='tags'
+			:tag-add='addTag'
+			:tag-assign='assignTag'
+			:tag-unassign='unassignTag'>
 		</ChartsDetails>
 	</div>
 </template>
@@ -22,7 +28,8 @@
 		data() {
 			return {
 				chart: {},
-				tags: []
+				tags: [],
+				versions: []
 			}
 		},
 		computed: {
@@ -64,8 +71,16 @@
 			getChart() {
 				api.getChart(this.currentUser.username, this.$route.params.id).then((response) => {
 					this.chart = response.data;
+					this.getChartVersions();
 				}).catch(() => {
 					this.$toastr.e('Something went wrong while getting chart');
+				});
+			},
+			getChartVersions() {
+				api.getAllChartVersions(this.currentUser.username, this.chart.name).then((response) => {
+					this.versions = response.data;
+				}).catch(() => {
+					this.$toastr.e('Something went wrong while getting versions');
 				});
 			}
 		}, mounted() {

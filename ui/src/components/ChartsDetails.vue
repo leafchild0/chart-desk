@@ -17,8 +17,13 @@
 					<div class='field-body'>
 						<div class='field'>
 							<div class='control'>
-								<span> version: <b-tag type='is-success'> {{ chart.version }}</b-tag></span>
-								<span v-if='chart.appVersion'> app version: <b-tag type='is-success'> {{ chart.appVersion }}</b-tag></span>
+								<b-select :value='chart.version' @input='versionChanged'>
+									<option
+										v-for='v in versions'
+										:key='v.first'>
+										{{ v.second }}
+									</option>
+								</b-select>
 							</div>
 						</div>
 					</div>
@@ -110,7 +115,8 @@
 		name: 'ChartsDetails',
 		props: {
 			chart: {required: true},
-			tags: {required: true}
+			tags: {required: true},
+			versions: {required: true}
 		},
 		components: {
 			ChartTags
@@ -118,6 +124,11 @@
 		computed: {
 			isLoading() {
 				return Object.keys(this.chart).length === 0
+			}
+		},
+		methods: {
+			versionChanged(v) {
+				this.$emit('version-change', v);
 			}
 		}
 	}
@@ -130,9 +141,11 @@
 			justify-content: center;
 			align-items: center;
 		}
+
 		.chart-details {
 
 		}
+
 		.subtitle {
 			margin-top: 0;
 		}
