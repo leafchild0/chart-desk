@@ -101,12 +101,12 @@
 		watch: {
 			currentUser(newUser) {
 				// Get charts on user loaded, do not use in production
-				this.loadCharts(newUser.id);
+				this.loadCharts(newUser.username);
 			}
 		},
 		methods: {
 			uploadChart(formData) {
-				api.uploadChart(this.currentUser.id, formData).then((response) => {
+				api.uploadChart(this.currentUser.username, formData).then((response) => {
 					if (response.status === 201) {
 						this.$toastr.s('Helm chart ' + response.data.name + ', version: ' + response.data.version + ' was uploaded.');
 					}
@@ -142,7 +142,7 @@
 			uploadCharts(payload) {
 
 				api.uploadCharts(
-					this.currentUser.id,
+					this.currentUser.username,
 					{
 						thirdPartyUrl: payload.url,
 						entries: payload.charts
@@ -156,9 +156,9 @@
 						this.$toastr.e('Something went wrong while uploading chart')
 					});
 			},
-			loadCharts(userId) {
-				if (userId) {
-					return api.chartsList(userId).then((response) => {
+			loadCharts(username) {
+				if (username) {
+					return api.chartsList(username).then((response) => {
 						this.charts = response.data;
 					}).catch(() => {
 						this.$toastr.e('Something went wrong while getting charts');

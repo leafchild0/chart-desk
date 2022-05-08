@@ -32,7 +32,7 @@
 		},
 		mounted() {
 			if (this.$route.params.id) {
-				api.getChart(this.currentUser.id, this.$route.params.id).then((response) => {
+				api.getChart(this.currentUser.username, this.$route.params.id).then((response) => {
 					this.chart = response.data
 				}).catch(() => {
 					this.$toastr.e('Something went wrong while getting chart');
