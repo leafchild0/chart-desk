@@ -53,21 +53,29 @@
 					userName: '2'
 				}
 				api.unassignTag(payload.tag.id, assignPayload);
-			}
-		},
-		mounted() {
-			if (this.$route.params.id) {
-				api.getChart(this.currentUser.username, this.$route.params.id).then((response) => {
-					this.chart = response.data
-				}).catch(() => {
-					this.$toastr.e('Something went wrong while getting chart');
-				});
-
+			},
+			getTags() {
 				api.tagList().then((response) => {
 					this.tags = response.data;
 				}).catch(() => {
 					this.$toastr.e('Something went wrong while getting tags');
-				}).finally(() => this.loading = false);
+				});
+			},
+			getChart() {
+				api.getChart(this.currentUser.username, this.$route.params.id).then((response) => {
+					this.chart = response.data;
+				}).catch(() => {
+					this.$toastr.e('Something went wrong while getting chart');
+				});
+			}
+		}, mounted() {
+			if (this.$route.params.id) {
+				try {
+					this.getChart();
+					this.getTags();
+				} finally {
+					this.loading = false
+				}
 			}
 		}
 	}
