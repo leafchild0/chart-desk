@@ -183,16 +183,14 @@
 			assignTag(payload) {
 				const assignPayload = {
 					chartNames: Array.of(payload.name),
-					// TODO: get username here
-					userName: '2'
+					userName: this.currentUser.username
 				}
 				api.assignTag(payload.tag.id, assignPayload);
 			},
 			unassignTag(payload) {
 				const assignPayload = {
 					chartNames: Array.of(payload.name),
-					// TODO: get username here
-					userName: '2'
+					userName: this.currentUser.username
 				}
 				api.unassignTag(payload.tag.id, assignPayload);
 			}
