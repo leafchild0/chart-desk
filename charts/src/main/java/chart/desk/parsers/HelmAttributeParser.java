@@ -1,12 +1,12 @@
 package chart.desk.parsers;
 
+import chart.desk.errors.ParseException;
 import chart.desk.model.AssetKind;
 import chart.desk.model.ChartEntry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -45,7 +45,7 @@ public class HelmAttributeParser {
             log.info(chartEntry.toString());
         } catch (IOException e) {
             log.error("Helm attribute parsing failed", e);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Helm attribute parsing failed", e);
+            throw new ParseException(HttpStatus.BAD_REQUEST, "Helm attribute parsing failed");
         }
         return chartEntry;
     }
