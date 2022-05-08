@@ -52,6 +52,19 @@
 					</div>
 					<div class='field is-horizontal'>
 						<div class='field-label is-normal'>
+							<label class='label'>Keywords</label>
+						</div>
+						<div class='field-body'>
+							<div class='field'>
+								<div class='control'>
+									<ChartTags :all-tags='tags' :chart-name='chart.name' :chart-tags='chart.tags'>
+									</ChartTags>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class='field is-horizontal'>
+						<div class='field-label is-normal'>
 							<label class='label'>Maintainers</label>
 						</div>
 						<div class='field-body'>
@@ -91,10 +104,16 @@
 </template>
 
 <script>
+	import ChartTags from '@/components/ChartTags';
+
 	export default {
 		name: 'ChartsDetails',
 		props: {
-			chart: {required: true}
+			chart: {required: true},
+			tags: {required: true}
+		},
+		components: {
+			ChartTags
 		},
 		computed: {
 			isLoading() {
@@ -122,6 +141,11 @@
 			padding-bottom: 15px;
 			margin-bottom: 10px;
 			border-bottom: 1px solid lightgray;
+		}
+
+		.tags {
+			display: flex;
+			justify-content: center;
 		}
 
 	}

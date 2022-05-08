@@ -19,3 +19,19 @@ export const pullCharts = (payload) => {
 export const uploadCharts = (username, payload) => {
 	return api.post('/proxy/' + username, payload);
 }
+
+export const tagList = () => {
+	return api.get('tags');
+}
+
+export const createTag = (tag) => {
+	return api.post('tags', {name: tag});
+}
+
+export const assignTag = (tagId, payload) => {
+	return api.post('tags/' + tagId + '/assign', payload);
+}
+
+export const unassignTag = (tagId, payload) => {
+	return api.post('tags/' + tagId + '/unassign', payload);
+}

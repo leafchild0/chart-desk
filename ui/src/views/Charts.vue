@@ -48,7 +48,14 @@
 				</template>
 			</b-modal>
 		</div>
-		<FilterableTable :data='charts' :filter-columns='filterColumns' :headers='headers' :loading='loading'>
+		<FilterableTable
+			:data='charts'
+			:filter-columns='filterColumns'
+			:headers='headers' :loading='loading'
+			:tags='tags'
+			:tag-add='addTag'
+			:tag-assign='assignTag'
+			:tag-unassign='unassignTag'>
 			<template v-slot:actions='props'>
 				<b-tooltip label='View details' position='is-left' type='is-info'>
 					<b-button size='is-small' type='is-primary' icon-left='format-list-bulleted' @click='() => showDetails(props.id)'></b-button>
@@ -78,6 +85,7 @@
 		data() {
 			return {
 				charts: [],
+				tags: [],
 				loading: true,
 				isUploadModalActive: false,
 				isThirdpartyModalActive: false,
@@ -164,6 +172,29 @@
 						this.$toastr.e('Something went wrong while getting charts');
 					}).finally(() => this.loading = false);
 				}
+			},
+			addTag(payload) {
+				api.createTag(payload.tag.name)
+					.then(response => {
+						payload.tag.id = response.data.id
+						return this.assignTag(payload);
+					})
+			},
+			assignTag(payload) {
+				const assignPayload = {
+					chartNames: Array.of(payload.name),
+					// TODO: get username here
+					userName: '2'
+				}
+				api.assignTag(payload.tag.id, assignPayload);
+			},
+			unassignTag(payload) {
+				const assignPayload = {
+					chartNames: Array.of(payload.name),
+					// TODO: get username here
+					userName: '2'
+				}
+				api.unassignTag(payload.tag.id, assignPayload);
 			}
 		},
 	}

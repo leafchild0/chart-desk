@@ -17,6 +17,12 @@ module.exports = {
 				pathRewrite: { '^/api/proxy': '/proxy' },
 				ws: true,
 				changeOrigin: true
+			},
+			'^/api/tags': {
+				target: 'http://localhost:8081',
+				pathRewrite: { '^/api/tags': '/tags' },
+				ws: true,
+				changeOrigin: true
 			}
 		}
 	}

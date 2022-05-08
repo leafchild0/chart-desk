@@ -13,6 +13,7 @@
   },
   "main": "server.js",
   "dependencies": {
+    "@voerro/vue-tagsinput": "^2.7.1",
     "axios": "^0.26.0",
     "body-parser": "^1.19.2",
     "buefy": "^0.9.19",

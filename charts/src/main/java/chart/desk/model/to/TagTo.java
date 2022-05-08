@@ -1,21 +1,21 @@
 package chart.desk.model.to;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.joda.time.LocalDate;
 
-import java.util.List;
-
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChartTo {
+public class TagTo {
     private Long id;
     private String name;
-    private List<String> versions;
     private LocalDate created;
-    private List<TagTo> tags;
+
+    public TagTo(Long id, String name) {
+        this.id = id;
+        this.name = name;
+        this.created = new LocalDate();
+    }
 }
