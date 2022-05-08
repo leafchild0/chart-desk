@@ -7,7 +7,8 @@
 			:tags='tags'
 			:tag-add='addTag'
 			:tag-assign='assignTag'
-			:tag-unassign='unassignTag'>
+			:tag-unassign='unassignTag'
+			@version-change='versionChanged'>
 		</ChartsDetails>
 	</div>
 </template>
@@ -68,10 +69,13 @@
 					this.$toastr.e('Something went wrong while getting tags');
 				});
 			},
-			getChart() {
-				api.getChart(this.currentUser.username, this.$route.params.id).then((response) => {
+			versionChanged(id) {
+				this.loading = true;
+				this.getChart(id).finally(() => this.loading = false);
+			},
+			getChart(id) {
+				return api.getChart(this.currentUser.username, id).then(response => {
 					this.chart = response.data;
-					this.getChartVersions();
 				}).catch(() => {
 					this.$toastr.e('Something went wrong while getting chart');
 				});
@@ -83,11 +87,14 @@
 					this.$toastr.e('Something went wrong while getting versions');
 				});
 			}
-		}, mounted() {
+		},
+		mounted() {
 			if (this.$route.params.id) {
 				try {
-					this.getChart();
-					this.getTags();
+					this.getChart(this.$route.params.id).then(() => {
+						this.getChartVersions();
+						this.getTags();
+					});
 				} finally {
 					this.loading = false
 				}

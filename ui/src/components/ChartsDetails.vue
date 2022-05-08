@@ -17,9 +17,10 @@
 					<div class='field-body'>
 						<div class='field'>
 							<div class='control'>
-								<b-select :value='chart.version' @input='versionChanged'>
+								<b-select :value='chart.id' @input='versionChanged'>
 									<option
 										v-for='v in versions'
+										:value='v.first'
 										:key='v.first'>
 										{{ v.second }}
 									</option>
