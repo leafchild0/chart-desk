@@ -7,9 +7,6 @@
 				</b-navbar-item>
 			</template>
 			<template #start>
-				<b-navbar-item href='/charts'>
-					Charts
-				</b-navbar-item>
 				<b-navbar-item v-if='currentUser.isAdmin' href='/admin'>
 					Admin
 				</b-navbar-item>

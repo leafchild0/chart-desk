@@ -9,7 +9,7 @@ const router = express.Router();
 const dummyToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0Ijox' +
 	'NTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
 const user = {
-	id: 1,
+	id: 2,
 	firstName: 'John',
 	lastName: 'Doe',
 	email: 'johndoe@email.com',

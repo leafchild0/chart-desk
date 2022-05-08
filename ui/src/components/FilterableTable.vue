@@ -6,7 +6,6 @@
 		<b-table
 			striped
 			paginated
-			narrowed
 			hoverable
 			:loading='loading'
 			per-page='30'

@@ -1,15 +1,23 @@
 import api from './api';
 
-export const chartsList = () => {
-	return api.get('charts/2')
+export const chartsList = (username) => {
+	return api.get('charts/' + username)
 }
 
-export const getChart = (id) => {
-	return api.get(`charts/2/${id}`)
+export const getChart = (username, id) => {
+	return api.get(`charts/${username}/${id}`)
 }
 
-export const uploadChart = (payload) => {
-	return api.post('charts/2', payload);
+export const uploadChart = (username, payload) => {
+	return api.post('charts/' + username, payload);
+}
+
+export const pullCharts = (payload) => {
+	return api.post('/proxy/index', payload);
+}
+
+export const uploadCharts = (username, payload) => {
+	return api.post('/proxy/' + username, payload);
 }
 
 export const tagList = () => {
