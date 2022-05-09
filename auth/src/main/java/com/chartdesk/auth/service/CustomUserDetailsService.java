@@ -10,10 +10,9 @@ import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,7 +47,7 @@ public class CustomUserDetailsService implements ReactiveUserDetailsService {
 	public Mono<User> createNewUser(SignUpDTO registerDTO) {
 
 		if (existsByUsername(registerDTO.getUsername())) {
-			throw new HttpClientErrorException(HttpStatus.UNPROCESSABLE_ENTITY, "User with this username already exists");
+			throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "User with this username already exists");
 		}
 		User user = new User(registerDTO.getUsername(), registerDTO.getFirstName(), registerDTO.getLastName(),
 			registerDTO.getEmail(), passwordEncoder.encode(registerDTO.getPassword()));
