@@ -15,8 +15,6 @@ spring:
     gateway:
       loadbalancer:
         use404: false
-      default-filters:
-        - name: ErrorFilter
       discovery:
         locator:
           enabled: true
