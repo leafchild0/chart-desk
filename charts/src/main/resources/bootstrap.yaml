@@ -1,7 +1,5 @@
 server:
   port: 8081
-  error:
-    include-message: always
 spring:
   application:
     name: charts-service
@@ -33,6 +31,9 @@ spring:
         healthCheckPath: /actuator/health
         healthCheckInterval: 20s
         instanceId: ${spring.application.name}:${random.value}
+      config:
+        enabled: true
+        format: yaml
 storage:
   type: LOCAL
   aws:
