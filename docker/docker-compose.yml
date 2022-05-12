@@ -11,3 +11,14 @@ services:
       - lan
     ports:
       - "8500:8500"
+  ui:
+    container_name: ui-service
+    image: ui-service
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+    restart: always
+    networks:
+      - lan
+    ports:
+      - "8080:8080"
