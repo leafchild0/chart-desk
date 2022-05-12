@@ -8,16 +8,12 @@
 import store from '@/store'
 import axios from 'axios'
 
-export const auth = axios.create({
-	baseURL: process.env.API_URL + '/auth/'
+export const api = axios.create({
+	baseURL: process.env.API_URL
 })
 
-auth.interceptors.request.use(config => {
+api.interceptors.request.use(config => {
 
 	config.headers.common['Authorization'] = 'Bearer ' + store.getters['token']
 	return config
 })
-
-export const charts = axios.create({
-	baseURL: process.env.API_URL + '/charts/'
-});
