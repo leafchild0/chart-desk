@@ -1,6 +1,7 @@
 package chart.desk.model.db;
 
 import chart.desk.model.ChartEntry;
+import chart.desk.model.to.TagTo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -10,17 +11,21 @@ import lombok.SneakyThrows;
 import lombok.ToString;
 import org.joda.time.DateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Entity
 @Table(name = "charts")
@@ -65,10 +70,6 @@ public class ChartModel {
     private String home;
 
     @NotNull
-    @Column(name = "keywords")
-    private String keywords;
-
-    @NotNull
     @Column(name = "urls", nullable = false)
     private String urls;
 
@@ -92,6 +93,9 @@ public class ChartModel {
     @JoinColumn(name="source_id")
     private SourceModel source;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    Set<TagModel> tags = new HashSet<>();
+
     @SneakyThrows
     public ChartModel(ChartEntry chartEntry, String digest, List<String> urls, String userName, SourceModel source) {
         this.name = chartEntry.getName();
@@ -102,7 +106,9 @@ public class ChartModel {
         this.engine = chartEntry.getEngine();
         this.home = chartEntry.getHome();
         ObjectMapper objectMapper = new ObjectMapper();
-        this.keywords = objectMapper.writeValueAsString(chartEntry.getKeywords());
+        chartEntry.getKeywords().stream()
+                .map(TagModel::new)
+                .forEach(this::appendTag);
         this.sources = objectMapper.writeValueAsString(chartEntry.getSources());
         this.maintainers = objectMapper.writeValueAsString(chartEntry.getMaintainers());
         this.urls = objectMapper.writeValueAsString(urls);
@@ -123,7 +129,9 @@ public class ChartModel {
         this.engine = chartEntry.getEngine();
         this.home = chartEntry.getHome();
         ObjectMapper objectMapper = new ObjectMapper();
-        this.keywords = objectMapper.writeValueAsString(chartEntry.getKeywords());
+        chartEntry.getKeywords().stream()
+                .map(TagModel::new)
+                .forEach(this::appendTag);
         this.sources = objectMapper.writeValueAsString(chartEntry.getSources());
         this.maintainers = objectMapper.writeValueAsString(chartEntry.getMaintainers());
         this.urls = objectMapper.writeValueAsString(urls);
@@ -137,9 +145,11 @@ public class ChartModel {
         ObjectMapper objectMapper = new ObjectMapper();
         List<String> urlsList = objectMapper.readValue(getUrls(), List.class);
         List<String> sourcesList = objectMapper.readValue(getSources(), List.class);
-        List<String> keywordsList = objectMapper.readValue(getKeywords(), List.class);
         List<Map<String, String>> maintainersList = objectMapper.readValue(getMaintainers(), List.class);
+        List<TagTo> tags = getTags().stream().map(a -> new TagTo(a.getId(), a.getName())).toList();
+        List<String> keywordsList = tags.stream().map(TagTo::getName).toList();
         return ChartEntry.builder()
+                .id(getId())
                 .description(getDescription())
                 .name(getName())
                 .version(getVersion())
@@ -153,6 +163,21 @@ public class ChartModel {
                 .engine(getEngine())
                 .home(getHome())
                 .keywords(keywordsList)
+                .tags(tags)
                 .build();
+    }
+
+    public ChartModel appendTag(TagModel tag) {
+        Set<TagModel> tagSet = getTags();
+        tagSet.add(tag);
+        setTags(tagSet);
+        return this;
+    }
+
+    public ChartModel removeTag(TagModel tag) {
+        Set<TagModel> tagSet = getTags();
+        tagSet.remove(tag);
+        setTags(tagSet);
+        return this;
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 /**
@@ -42,10 +43,17 @@ public class AuthController {
      */
     @PostMapping("/login")
     public Mono<ResponseEntity<String>> login(@RequestBody LoginDTO loginDTO) {
-        return userDetailsService.findByUsername(loginDTO.getUsername())
-                .filter(userDetails -> passwordEncoder.matches(loginDTO.getPassword(), userDetails.getPassword()))
-                .map(userDetails -> ResponseEntity.ok(jwtTokenUtil.generateToken(userDetails)))
-                .switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).build()));
+
+	    return userDetailsService.findByUsername(loginDTO.getUsername())
+		    .map(userDetails -> {
+			    if (!passwordEncoder.matches(loginDTO.getPassword(), userDetails.getPassword())) {
+				    throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong username or password");
+			    }
+				else {
+				    return ResponseEntity.ok(jwtTokenUtil.generateToken(userDetails));
+			    }
+		    })
+		    .switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).build()));
     }
 
     /**
@@ -57,8 +65,6 @@ public class AuthController {
     @PostMapping("/register")
     public Mono<ResponseEntity<UserDTO>> register(@RequestBody SignUpDTO signUpDTO) {
 
-        return userDetailsService.createNewUser(signUpDTO)
-                .map(user -> ResponseEntity.ok(user.toDto()))
-                .switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build()));
+        return userDetailsService.createNewUser(signUpDTO).map(user -> ResponseEntity.ok(user.toDto()));
     }
 }

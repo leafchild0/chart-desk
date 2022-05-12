@@ -1,5 +1,6 @@
 package chart.desk.model;
 
+import chart.desk.model.to.TagTo;
 import chart.desk.util.JodaDateTimeDeserializer;
 import chart.desk.util.JodaDateTimeSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -10,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.joda.time.DateTime;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +21,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class ChartEntry {
     private String description;
+    private Long id;
     private String name;
     private String version;
     @JsonSerialize(using = JodaDateTimeSerializer.class)
@@ -32,5 +35,6 @@ public class ChartEntry {
     private List<String> urls;
     private List<String> sources;
     private List<Map<String, String>> maintainers;
-    private List<String> keywords;
+    private List<String> keywords = Collections.emptyList();
+    private List<TagTo> tags = Collections.emptyList();
 }

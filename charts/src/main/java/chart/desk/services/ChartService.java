@@ -3,9 +3,9 @@ package chart.desk.services;
 import chart.desk.model.AssetKind;
 import chart.desk.model.ChartEntry;
 import chart.desk.model.ChartIndex;
+import chart.desk.model.db.ChartModel;
 import chart.desk.model.db.SourceModel;
 import chart.desk.model.to.ChartTo;
-import chart.desk.model.db.ChartModel;
 import chart.desk.repositories.ChartRepository;
 import chart.desk.services.storage.StorageService;
 import chart.desk.services.storage.StorageType;
@@ -15,6 +15,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.Optional;
 @Service
 @Slf4j
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@Transactional
 public class ChartService {
 
     private final ChartRepository chartRepository;
@@ -53,7 +55,11 @@ public class ChartService {
                 .map(s -> s.save(chart, chartEntry.getName(), chartEntry.getVersion(), assetKind, userName))
                 .toList();
         String digestHex = DigestUtils.sha256Hex(chart);
-        return chartRepository.save(new ChartModel(chartEntry, digestHex, urls, userName, source));
+        return save(new ChartModel(chartEntry, digestHex, urls, userName, source));
+    }
+
+    public ChartModel save(ChartModel chartModel) {
+        return chartRepository.save(chartModel);
     }
 
     /**
@@ -79,16 +85,25 @@ public class ChartService {
     }
 
     /**
+     * Return list with all available charts with all available versions
+     *
+     * @param userName user name
+     * @param chartName chart name
+     * @return list o ChartTo
+     */
+    public List<ChartModel> getChartList(String userName, String chartName) {
+        return chartRepository.findAllByUserNameAndName(userName, chartName);
+    }
+
+    /**
      * Fetch {@link ChartEntry} from DB if present
      *
-     * @param name chart name
-     * @param version chart version
-     * @param userName user name
-     *
+     * @param userName username of current user
+     * @param id       is of the entity to query
      * @return Optional of {@link ChartEntry}
      */
-    public Optional<ChartEntry> getChart(String name, String version, String userName) {
-        return chartRepository.findChartModelByUserNameAndNameAndVersion(userName, name, version)
+    public Optional<ChartEntry> getChart(String userName, Long id) {
+        return chartRepository.findChartModelByUserNameAndId(userName, id)
                 .map(ChartModel::toChartEntry);
     }
 

@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
 import Charts from '../views/Charts.vue'
 import SignUp from '@/views/SignUp'
 import Login from '@/views/Login'
 import store from '@/store'
 import Admin from '@/views/Admin';
+import Chart from '@/views/Chart';
 
 Vue.use(VueRouter)
 
@@ -22,16 +22,17 @@ const routes = [
 	},
 	{
 		path: '/',
-		name: 'home',
-		component: Home,
+		name: 'charts',
+		component: Charts,
 		meta: {
 			requiresAuth: true
 		}
 	},
 	{
-		path: '/charts',
-		name: 'charts',
-		component: Charts,
+		path: '/chart/:id',
+		name: 'chart',
+		component: Chart,
+		props: true,
 		meta: {
 			requiresAuth: true
 		}

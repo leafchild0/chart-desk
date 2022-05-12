@@ -13,6 +13,8 @@ spring:
         enabled: true
         format: yaml
     gateway:
+      loadbalancer:
+        use404: false
       discovery:
         locator:
           enabled: true
@@ -37,16 +39,16 @@ spring:
 
 server:
   port: 8765
-  error:
-    whitelabel:
-      enabled: true
 
 logging:
   level:
     org.springframework.web: INFO
+
 management:
-  endpoint.gateway.enabled: true
-  endpoints.web.exposure.include: gateway
+  health:
+    livenessState.enabled: true
+    readinessState.enabled: true
+  endpoint.health.probes.enabled: true
 
 # Secret to generate tokens, used in both auth service and in gateway
 auth-service:

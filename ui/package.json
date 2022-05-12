@@ -11,9 +11,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "@voerro/vue-tagsinput": "^2.7.1",
     "axios": "^0.26.0",
     "buefy": "^0.9.19",
     "core-js": "^3.6.5",
+    "liquor-tree": "^0.2.70",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vue-toastr": "^2.1.2",

@@ -1,14 +1,19 @@
 package chart.desk.parsers;
 
+import chart.desk.errors.ParseException;
 import chart.desk.model.AssetKind;
 import chart.desk.model.ChartEntry;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 @Service
+@Slf4j
 public class HelmAttributeParser {
     private final TgzParser tgzParser;
     private final YamlParser yamlParser;
@@ -30,6 +35,19 @@ public class HelmAttributeParser {
             case HELM_PROVENANCE -> getAttributesProvenanceFromInputStream(inputStream);
             default -> new ChartEntry();
         };
+    }
+
+
+    public ChartEntry getHelmAttributes(byte[] chart) {
+        ChartEntry chartEntry;
+        try (InputStream inputStream = new ByteArrayInputStream(chart)) {
+            chartEntry = getAttributes(AssetKind.HELM_PACKAGE, inputStream);
+            log.info(chartEntry.toString());
+        } catch (IOException e) {
+            log.error("Helm attribute parsing failed", e);
+            throw new ParseException(HttpStatus.BAD_REQUEST, "Helm attribute parsing failed");
+        }
+        return chartEntry;
     }
 
     private ChartEntry getAttributesProvenanceFromInputStream(final InputStream inputStream) throws IOException {

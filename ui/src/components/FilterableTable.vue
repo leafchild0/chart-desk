@@ -6,20 +6,27 @@
 		<b-table
 			striped
 			paginated
-			narrowed
 			hoverable
-			:loading='data.length === 0'
+			:loading='loading'
 			per-page='30'
 			:data='filteredData'
 			:detailed='details'
 			detail-key='name'
 		>
 			<template v-for='header in headers'>
-				<b-table-column :key='header.field' v-if='header.field === "username"' v-bind='header'>
+				<b-table-column centered :key='header.field' v-if='header.field === "versions"' v-bind='header'>
 					<template v-slot='props'>
-						<span class='tag is-info'>
-							{{ props.row[header.field] }}
-						</span>
+						<div class='tags' v-if='props.row["versions"]'>
+							<span class='tag is-primary' :key='version' v-for='version in props.row["versions"]'>
+								{{ version }}
+							</span>
+						</div>
+					</template>
+				</b-table-column>
+				<b-table-column centered :key='header.field' v-else-if='header.field === "tags"' v-bind='header'>
+					<template v-slot='props'>
+						<ChartTags :all-tags='tags' :chart-name='props.row["name"]' :chart-tags='props.row["tags"]'>
+						</ChartTags>
 					</template>
 				</b-table-column>
 				<b-table-column :key='header.field' v-else v-bind='header'>
@@ -32,6 +39,10 @@
 				<slot name='actions' v-bind='props.row'></slot>
 			</b-table-column>
 
+			<template #empty>
+				<div class='has-text-centered'>No Data</div>
+			</template>
+
 			<template #detail='props'>
 				<slot name='details' v-bind='props'></slot>
 			</template>
@@ -40,10 +51,14 @@
 </template>
 
 <script>
+	import ChartTags from '@/components/ChartTags';
 
 	export default {
 		name: 'FilterableTable',
-		props: ['data', 'filterColumns', 'headers', 'details'],
+		props: ['data', 'filterColumns', 'headers', 'details', 'loading', 'tags'],
+		components: {
+			ChartTags,
+		},
 		data() {
 			return {
 				filterBy: '',
@@ -55,7 +70,8 @@
 
 				return this.data.filter(entry => {
 					for (const f of this.filterColumns) {
-						if (entry[f].includes(this.filterBy)) return true
+						if (!entry[f]) return false
+						if (entry[f].toString().includes(this.filterBy)) return true
 					}
 					return false
 				})
@@ -68,6 +84,8 @@
 </script>
 
 <style lang='scss'>
+
+	@import '~@voerro/vue-tagsinput/dist/style.css';
 
 	#filterable-table {
 
