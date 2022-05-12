@@ -1,8 +1,10 @@
 package chart.desk.parsers;
 
+import chart.desk.errors.ParseException;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
@@ -29,6 +31,6 @@ public class TgzParser {
                 }
             }
         }
-        throw new IllegalArgumentException(String.format("%s not found", CHART_NAME));
+        throw new ParseException(HttpStatus.UNPROCESSABLE_ENTITY, String.format("%s not found", CHART_NAME));
     }
 }
