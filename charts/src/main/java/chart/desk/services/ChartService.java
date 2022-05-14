@@ -25,7 +25,7 @@ import java.util.Optional;
 @Service
 @Slf4j
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@Transactional
+@Transactional("transactionManager")
 public class ChartService {
 
     private final ChartRepository chartRepository;
