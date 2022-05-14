@@ -1,7 +1,14 @@
 <template>
 	<div class='chart'>
 		<Navbar/>
-		<ChartsDetails :chart='chart' :tags='tags' v-on:tag-add='addTag' v-on:tag-assign='assignTag' v-on:tag-unassign='unassignTag'>
+		<ChartsDetails
+			:chart='chart'
+			:versions='versions'
+			:tags='tags'
+			:tag-add='addTag'
+			:tag-assign='assignTag'
+			:tag-unassign='unassignTag'
+			@version-change='versionChanged'>
 		</ChartsDetails>
 	</div>
 </template>
@@ -22,7 +29,8 @@
 		data() {
 			return {
 				chart: {},
-				tags: []
+				tags: [],
+				versions: []
 			}
 		},
 		computed: {
@@ -53,21 +61,43 @@
 					userName: '2'
 				}
 				api.unassignTag(payload.tag.id, assignPayload);
-			}
-		},
-		mounted() {
-			if (this.$route.params.id) {
-				api.getChart(this.currentUser.username, this.$route.params.id).then((response) => {
-					this.chart = response.data
-				}).catch(() => {
-					this.$toastr.e('Something went wrong while getting chart');
-				});
-
+			},
+			getTags() {
 				api.tagList().then((response) => {
 					this.tags = response.data;
 				}).catch(() => {
 					this.$toastr.e('Something went wrong while getting tags');
-				}).finally(() => this.loading = false);
+				});
+			},
+			versionChanged(id) {
+				this.loading = true;
+				this.getChart(id).finally(() => this.loading = false);
+			},
+			getChart(id) {
+				return api.getChart(this.currentUser.username, id).then(response => {
+					this.chart = response.data;
+				}).catch(() => {
+					this.$toastr.e('Something went wrong while getting chart');
+				});
+			},
+			getChartVersions() {
+				api.getAllChartVersions(this.currentUser.username, this.chart.name).then((response) => {
+					this.versions = response.data;
+				}).catch(() => {
+					this.$toastr.e('Something went wrong while getting versions');
+				});
+			}
+		},
+		mounted() {
+			if (this.$route.params.id) {
+				try {
+					this.getChart(this.$route.params.id).then(() => {
+						this.getChartVersions();
+						this.getTags();
+					});
+				} finally {
+					this.loading = false
+				}
 			}
 		}
 	}

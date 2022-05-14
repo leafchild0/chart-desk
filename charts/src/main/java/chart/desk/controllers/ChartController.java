@@ -9,6 +9,7 @@ import chart.desk.services.ChartService;
 import chart.desk.util.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -65,6 +66,14 @@ public class ChartController {
         Optional<ChartEntry> chart = chartService.getChart(userName, id);
         return chart.map(entry -> ResponseEntity.status(HttpStatus.OK).body(Mono.just(entry)))
             .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(Mono.empty()));
+    }
+
+    @GetMapping(value = "/{name}/versions")
+    public ResponseEntity<Mono<List<Pair<Long, String>>>> getChart(@PathVariable("name") String name, @PathVariable("userName") String userName) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(Mono.just(chartService.getChartList(userName, name)
+            .stream().map(chart -> Pair.of(chart.getId(), chart.getVersion())).toList()));
+
     }
 
 }

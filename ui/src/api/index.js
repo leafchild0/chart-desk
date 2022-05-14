@@ -24,5 +24,6 @@ export default {
 	tagList,
 	createTag,
 	assignTag,
-	unassignTag
+	unassignTag,
+	getAllChartVersions
 };
