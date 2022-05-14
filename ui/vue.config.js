@@ -1,29 +1,18 @@
 module.exports = {
 	devServer: {
 		proxy: {
-			'^/api/auth': {
-				target: 'http://localhost:3003',
+			'http://localhost:8765/auth': {
+				target: 'http://localhost:9091',
+				pathRewrite: { '^/auth': '/' },
 				ws: true,
 				changeOrigin: true
 			},
-			'^/api/charts': {
+			'http://localhost:8765/charts': {
 				target: 'http://localhost:8081',
-				pathRewrite: { '^/api/charts': '/charts' },
+				pathRewrite: { '^/charts': '/' },
 				ws: true,
 				changeOrigin: true
 			},
-			'^/api/proxy': {
-				target: 'http://localhost:8081',
-				pathRewrite: { '^/api/proxy': '/proxy' },
-				ws: true,
-				changeOrigin: true
-			},
-			'^/api/tags': {
-				target: 'http://localhost:8081',
-				pathRewrite: { '^/api/tags': '/tags' },
-				ws: true,
-				changeOrigin: true
-			}
 		}
 	}
 }
