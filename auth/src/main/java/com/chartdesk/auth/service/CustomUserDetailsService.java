@@ -65,6 +65,10 @@ public class CustomUserDetailsService implements ReactiveUserDetailsService {
 		return Mono.justOrEmpty(UserPrincipal.create(userRepository.findByUsername(username)));
 	}
 
+	public Mono<User> getByUsername(String username) {
+		return Mono.justOrEmpty(userRepository.findByUsername(username));
+	}
+
 	/**
 	 * Find user by passed id, should be long
 	 */
