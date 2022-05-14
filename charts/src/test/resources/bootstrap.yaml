@@ -1,0 +1,13 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: charts-service
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        enabled: off
+      config:
+        enabled: off
