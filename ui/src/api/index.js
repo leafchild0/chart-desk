@@ -6,7 +6,7 @@
  */
 
 import {deactivateUser, getAllUsers, getCurrentUser, login, signUp, updatePassword, updateUserDetails} from './auth';
-import {chartsList, pullCharts, uploadCharts, getChart, uploadChart, createTag, tagList, unassignTag, assignTag} from './chartsApi';
+import {assignTag, chartsList, createTag, getChart, pullCharts, tagList, unassignTag, uploadChart, uploadCharts} from './charts';
 
 export default {
 	login,

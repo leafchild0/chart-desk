@@ -65,7 +65,7 @@
 						username: this.username,
 						password: this.password
 					}).then(response => {
-						this.$store.dispatch('setToken', response.data.accessToken);
+						this.$store.dispatch('setToken', response.data);
 						this.$router.replace('/');
 					}).catch(err => {
 						if (err.response?.status === 401) {

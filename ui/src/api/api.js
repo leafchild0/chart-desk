@@ -14,6 +14,8 @@ export const api = axios.create({
 
 api.interceptors.request.use(config => {
 
-	config.headers.common['Authorization'] = 'Bearer ' + store.getters['token']
+	if (store.getters['userToken']) {
+		config.headers.common['Authorization'] = 'Bearer ' + store.getters['userToken']
+	}
 	return config
 })
