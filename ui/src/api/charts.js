@@ -35,3 +35,7 @@ export const assignTag = (tagId, payload) => {
 export const unassignTag = (tagId, payload) => {
 	return api.post('/charts/tags/' + tagId + '/unassign', payload);
 }
+
+export const getAllChartVersions = (username, name) => {
+	return api.get(`charts/${username}/${name}/versions`);
+}
