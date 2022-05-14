@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -41,7 +42,7 @@ public class JwtTokenProvider {
 
 			return true;
 		}
-		catch (MalformedJwtException ex) {
+		catch (MalformedJwtException | SignatureException ex) {
 			log.error("Invalid JWT token");
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid JWT token");
 		}
