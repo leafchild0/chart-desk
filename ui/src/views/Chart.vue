@@ -1,7 +1,7 @@
 <template>
 	<div class='chart'>
 		<Navbar/>
-		<ChartsDetails :chart='chart' :tags='tags' :username='currentUserName' v-on:tag-add='addTag' v-on:tag-assign='assignTag' v-on:tag-unassign='unassignTag'>
+		<ChartsDetails :chart='chart' :tags='tags' :username='currentUser.username' v-on:tag-add='addTag' v-on:tag-assign='assignTag' v-on:tag-unassign='unassignTag'>
 		</ChartsDetails>
 	</div>
 </template>
@@ -11,6 +11,7 @@
 	import Navbar from '@/components/Navbar';
 	import api from '@/api';
 	import ChartsDetails from '@/components/ChartsDetails';
+	import {mapGetters} from 'vuex';
 
 	export default {
 		name: 'Chart',
@@ -21,11 +22,13 @@
 		data() {
 			return {
 				chart: {},
-				tags: [],
-				currentUserName: ''
+				tags: []
 			}
 		},
 		computed: {
+			...mapGetters([
+				'currentUser',
+			])
 		},
 		methods: {
 			addTag(payload) {
@@ -38,16 +41,14 @@
 			assignTag(payload) {
 				const assignPayload = {
 					chartNames: Array.of(payload.name),
-					// TODO: get username here
-					userName: '2'
+					userName: this.currentUser.username
 				}
 				api.assignTag(payload.tag.id, assignPayload);
 			},
 			unassignTag(payload) {
 				const assignPayload = {
 					chartNames: Array.of(payload.name),
-					// TODO: get username here
-					userName: '2'
+					userName: this.currentUser.username
 				}
 				api.unassignTag(payload.tag.id, assignPayload);
 			}
@@ -65,12 +66,6 @@
 				}).catch(() => {
 					this.$toastr.e('Something went wrong while getting tags');
 				}).finally(() => this.loading = false);
-
-				api.getCurrentUser().then(response => {
-					this.currentUserName = response.data.username;
-				}).catch(() => {
-					this.$toastr.e('Ups... Something went wrong during user fetch');
-				});
 			}
 		}
 	}
