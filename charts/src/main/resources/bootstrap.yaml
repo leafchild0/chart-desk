@@ -1,8 +1,8 @@
 server:
   port: 8081
-  error:
-    include-message: always
 spring:
+  application:
+    name: charts-service
   jpa:
     generate-ddl: true
     properties:
@@ -23,6 +23,17 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: postgres
     url: jdbc:postgresql://localhost:5432/charts
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        healthCheckPath: /actuator/health
+        healthCheckInterval: 20s
+        instanceId: ${spring.application.name}:${random.value}
+      config:
+        enabled: true
+        format: yaml
 storage:
   type: LOCAL
   aws:

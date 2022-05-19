@@ -30,7 +30,7 @@ import java.util.Optional;
  * Controller for UI
  */
 @RestController
-@RequestMapping("/charts/{userName}")
+@RequestMapping("/{userName}")
 @Slf4j
 public class ChartController {
 
